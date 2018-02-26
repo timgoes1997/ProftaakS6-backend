@@ -1,0 +1,33 @@
+// Apply the java-library plugin to add support for Java Library
+apply plugin: 'java'
+apply plugin: 'idea' // These will be used if the user uses an IntelliJ IDE
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.5'
+    testImplementation 'junit:junit:4.12'
+}
+
+// These functions tell gradle (and possibly intellij) where the project files will be located
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+}
