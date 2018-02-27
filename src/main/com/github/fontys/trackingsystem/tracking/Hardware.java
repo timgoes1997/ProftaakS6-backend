@@ -8,4 +8,8 @@ public class Hardware {
         this.id = id;
         this.type = type;
     }
+
+    public String getType() {
+        return type;
+    }
 }
