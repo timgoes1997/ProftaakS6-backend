@@ -1,4 +1,4 @@
-package user;
+package com.github.fontys.user;
 
 public abstract class User {
     private String name;

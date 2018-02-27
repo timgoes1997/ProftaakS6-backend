@@ -1,6 +1,7 @@
-package user;
+package com.github.fontys.user;
 
-import javax.management.relation.Role;
+import com.github.fontys.CustomerVehicle;
+
 import java.util.List;
 
 public class Customer extends User{
