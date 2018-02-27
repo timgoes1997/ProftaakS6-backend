@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Rekeningrijden.iml" filepath="$PROJECT_DIR$/.idea/modules/Rekeningrijden.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Rekeningrijden_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Rekeningrijden_main.iml" group="Rekeningrijden" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Rekeningrijden_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Rekeningrijden_test.iml" group="Rekeningrijden" />
+    </modules>
+  </component>
+</project>

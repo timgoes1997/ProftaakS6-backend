@@ -3,10 +3,11 @@
  */
 public class App {
     public String getGreeting() {
-        return "Hello world.";
+        return "buhbye world.";
     }
 
     public static void main(String[] args) {
+        User user = new User("Naam", "gekkestraat","Residency", User.Role.ROLE1);
         System.out.println(new App().getGreeting());
     }
 }

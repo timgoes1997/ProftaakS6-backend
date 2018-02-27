@@ -5,7 +5,7 @@ apply plugin: 'java'
 apply plugin: 'application'
 
 // These will be used if the user uses an IntelliJ IDE
-apply plugin: 'idea' 
+apply plugin: 'idea'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -34,6 +34,12 @@ sourceSets {
         resources {
             srcDirs = ['src/test/resources']
         }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'App'
     }
 }
 
