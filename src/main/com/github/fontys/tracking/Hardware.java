@@ -1,4 +1,4 @@
-package com.github.fontys;
+package com.github.fontys.tracking;
 
 public class Hardware {
     private int id;

@@ -1,4 +1,4 @@
-package com.github.fontys;
+package com.github.fontys.vehicle;
 
 import java.util.Date;
 

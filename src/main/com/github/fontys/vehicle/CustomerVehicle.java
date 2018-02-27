@@ -1,9 +1,8 @@
-package com.github.fontys;
+package com.github.fontys.vehicle;
 
+import com.github.fontys.payment.Bill;
 import com.github.fontys.user.Customer;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 public class CustomerVehicle {

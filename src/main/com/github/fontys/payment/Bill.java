@@ -1,4 +1,7 @@
-package com.github.fontys;
+package com.github.fontys.payment;
+
+import com.github.fontys.tracking.Tracking;
+import com.github.fontys.vehicle.CustomerVehicle;
 
 import java.math.BigDecimal;
 import java.util.Date;

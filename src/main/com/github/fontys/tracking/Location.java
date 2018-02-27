@@ -1,4 +1,4 @@
-package com.github.fontys;
+package com.github.fontys.tracking;
 
 import java.awt.geom.Point2D;
 import java.util.Date;

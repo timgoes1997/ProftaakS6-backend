@@ -1,4 +1,4 @@
-package com.github.fontys;
+package com.github.fontys.payment;
 
 public enum PaymentStatus {
     OPEN,

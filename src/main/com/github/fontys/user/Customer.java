@@ -1,6 +1,6 @@
 package com.github.fontys.user;
 
-import com.github.fontys.CustomerVehicle;
+import com.github.fontys.vehicle.CustomerVehicle;
 
 import java.util.List;
 

@@ -1,4 +1,7 @@
-package com.github.fontys;
+package com.github.fontys.vehicle;
+
+import com.github.fontys.EnergyLabel;
+import com.github.fontys.FuelType;
 
 public class VehicleModel {
     private String modelName;
