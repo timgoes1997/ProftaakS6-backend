@@ -1,7 +1,8 @@
 package com.github.fontys.trackingsystem.vehicle;
 
-import com.github.fontys.payment.Bill;
-import com.github.fontys.user.Customer;
+
+import com.github.fontys.trackingsystem.payment.Bill;
+import com.github.fontys.trackingsystem.user.Customer;
 
 import java.util.List;
 

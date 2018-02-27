@@ -1,6 +1,7 @@
 package com.github.fontys.trackingsystem.tracking;
 
-import com.github.fontys.vehicle.CustomerVehicle;
+
+import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
 public class TrackedVehicle {
     private CustomerVehicle customerVehicle;

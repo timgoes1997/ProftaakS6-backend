@@ -1,6 +1,7 @@
 package com.github.fontys.trackingsystem.user;
 
-import com.github.fontys.vehicle.CustomerVehicle;
+
+import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package com.github.fontys.trackingsystem;
 
-import com.github.fontys.payment.Currency;
+
+import com.github.fontys.trackingsystem.payment.Currency;
 
 import java.math.BigDecimal;
 import java.util.Date;
