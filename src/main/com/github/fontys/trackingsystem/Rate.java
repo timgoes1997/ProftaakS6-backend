@@ -1,4 +1,4 @@
-package com.github.fontys;
+package com.github.fontys.trackingsystem;
 
 import com.github.fontys.payment.Currency;
 

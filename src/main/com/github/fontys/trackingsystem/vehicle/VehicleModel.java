@@ -1,7 +1,6 @@
-package com.github.fontys.vehicle;
+package com.github.fontys.trackingsystem.vehicle;
 
 import com.github.fontys.EnergyLabel;
-import com.github.fontys.FuelType;
 
 public class VehicleModel {
     private String modelName;

@@ -1,4 +1,4 @@
-package com.github.fontys.user;
+package com.github.fontys.trackingsystem.user;
 
 public abstract class User {
     private String name;

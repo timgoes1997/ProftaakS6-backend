@@ -1,4 +1,4 @@
-package com.github.fontys.vehicle;
+package com.github.fontys.trackingsystem.vehicle;
 
 import com.github.fontys.payment.Bill;
 import com.github.fontys.user.Customer;

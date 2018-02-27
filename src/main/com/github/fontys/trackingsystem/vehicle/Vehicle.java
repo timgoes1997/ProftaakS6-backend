@@ -1,4 +1,4 @@
-package com.github.fontys.vehicle;
+package com.github.fontys.trackingsystem.vehicle;
 
 import java.util.Date;
 

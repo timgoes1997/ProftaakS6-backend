@@ -1,4 +1,4 @@
-package com.github.fontys;
+package com.github.fontys.trackingsystem.vehicle;
 
 public enum FuelType {
     GASOLINE,
