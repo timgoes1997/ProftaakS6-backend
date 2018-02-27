@@ -5,11 +5,10 @@ public abstract class User {
     private Role role;
     private Account account;
 
-    public User(String name, String address, String residency, Role role, Account account) {
+    public User(String name, String address, String residency, Role role) {
         this.name = name;
         this.address = address;
         this.residency = residency;
         this.role = role;
-        this.account = account;
     }
 }

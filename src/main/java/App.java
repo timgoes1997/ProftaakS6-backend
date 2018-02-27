@@ -7,7 +7,6 @@ public class App {
     }
 
     public static void main(String[] args) {
-        User user = new User("Naam", "gekkestraat","Residency", User.Role.ROLE1);
         System.out.println(new App().getGreeting());
     }
 }
