@@ -1,3 +1,5 @@
+package user;
+
 public class Employee extends User{
     private Department department;
 

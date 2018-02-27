@@ -1,4 +1,6 @@
-import java.util.ArrayList;
+package user;
+
+import javax.management.relation.Role;
 import java.util.List;
 
 public class Customer extends User{
@@ -6,6 +8,5 @@ public class Customer extends User{
 
     public Customer(String name, String address, String residency, Role role) {
         super(name, address, residency, role);
-        customerVehicles = new ArrayList<>();
     }
 }

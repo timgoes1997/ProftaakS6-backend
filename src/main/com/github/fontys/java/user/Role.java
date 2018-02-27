@@ -1,3 +1,5 @@
+package user;
+
 public enum Role {
     CUSTOMER,
     SYSTEM_ADMINISTRATOR,
