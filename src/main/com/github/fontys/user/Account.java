@@ -1,4 +1,4 @@
-package user;
+package com.github.fontys;
 
 public class Account {
     private String email;
