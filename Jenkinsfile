@@ -14,10 +14,10 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                echo "Hello deploy!"
-		gradle jar 
-		java -jar build/libs/Rekeningrijden.jar
-                echo "Bye deploy!"
+                sh 'echo "Hello deploy!"'
+		sh 'gradle jar'
+		sh 'java -jar build/libs/Rekeningrijden.ja'
+                sh 'echo "Bye deploy!'
             }
         }
     }
