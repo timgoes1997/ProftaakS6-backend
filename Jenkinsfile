@@ -11,7 +11,7 @@ pipeline {
     }
 	post {
 	       success {
-echo "The stuff has succeeded!" > ~/infofile
+		sh 'echo "The stuff has succeeded!" > ~/infofile'
 	       }
 	   }
 }
