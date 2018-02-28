@@ -10,6 +10,7 @@ stages {
 	stage('test') {
             steps {
 sh 'echo "Some echo"'
+sh 'curl http://localhost:1000'
 }
 }
 }
