@@ -1,6 +1,5 @@
 pipeline {
     agent any
-}
 
 
 
@@ -16,6 +15,7 @@ sh 'done'
 }
 }
 
+}
     //stages {
         //stage('helloworld') {
             //steps {
@@ -28,4 +28,3 @@ sh 'done'
 //sh 'cp build/libs/Rekeningrijden.jar ~/'
 	       //}
 	   //}
-}
