@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('helloworld') {
             steps {
-		sh 'gradle jar'
-		sh 'java -jar build/libs/Rekeningrijden.jar'
+		sh 'gradle jar; java -jar build/libs/Rekeningrijden.jar'
             }
         }
     }
