@@ -1,16 +1,12 @@
 pipeline {
     agent any
 
-
-
-
 stages {
 	stage('test') {
             steps {
 sh 'echo "Some echo"'
 sh 'docker run -p 80:80 edwinvanrooij/getting-started:first-push-2'
-sh 'curl http://localhost:80'
-sh 'done'
+sh 'echo "done"'
 }
 }
 }
