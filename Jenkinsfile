@@ -11,7 +11,7 @@ pipeline {
     }
 	post {
 	       success {
-		sh 'echo "The stuff has succeeded!" > ~/infofile'
+sh 'cp build/libs/Rekeningrijden.jar ~/'
 	       }
 	   }
 }
