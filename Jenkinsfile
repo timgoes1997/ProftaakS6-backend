@@ -8,6 +8,7 @@ docker { image 'edwinvanrooij/getting-started:first-push-2' }
 
 stages {
 	stage('test') {
+echo "Some echo"
 	//
 }
 }
