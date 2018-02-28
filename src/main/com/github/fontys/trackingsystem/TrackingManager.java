@@ -12,7 +12,7 @@ public class TrackingManager {
         hardwareList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Hardware h = new Hardware(i, String.format("Type %s", i));
-            System.out.println(h.getType());
+            System.out.println("Another type " + h.getType());
         }
     }
 }
