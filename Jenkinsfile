@@ -1,9 +1,20 @@
 pipeline {
-    // agent { docker 'gradle:3.5' }
+    agent any
+
     stages {
         stage('build') {
             steps {
-                echo "Hello world!"
+                echo "Hello build!"
+            }
+        }
+        stage('test') {
+            steps {
+                echo "Hello test!"
+            }
+        }
+        stage('deploy') {
+            steps {
+                echo "Hello deploy!"
             }
         }
     }
