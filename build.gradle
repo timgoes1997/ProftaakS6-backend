@@ -33,7 +33,7 @@ sourceSets {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'App'
+        attributes 'Main-Class': 'com.github.fontys.App'
     }
 }
 
