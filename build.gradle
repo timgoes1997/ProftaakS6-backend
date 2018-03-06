@@ -13,7 +13,14 @@ repositories {
 }
 
 dependencies {
+    compile group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.0.0'
+    compile group: 'org.glassfish', name: 'javax.ejb', version: '3.1.1'
+
     compile 'org.slf4j:slf4j-api:1.7.5' // idk waar dit voor is tbh
+
+    testCompile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.5.0'
+    testCompile group: 'org.apache.derby', name: 'derby', version: '10.13.1.1'
+
     testImplementation 'junit:junit:4.12'
 }
 
