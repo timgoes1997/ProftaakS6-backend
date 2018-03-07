@@ -5,7 +5,7 @@ stages {
 	stage('test') {
             steps {
 sh 'echo "Some echo"'
-sh 'docker run -p 80:80 edwinvanrooij/getting-started:first-push-2'
+sh 'gradle jar; and java -jar build/libs/Rekeningrijden.jar'
 sh 'echo "done"'
 }
 }
