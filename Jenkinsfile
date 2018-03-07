@@ -5,7 +5,7 @@ stages {
 	stage('test') {
             steps {
 sh 'echo "Some echo"'
-sh 'gradle jar; and java -jar build/libs/Rekeningrijden.jar'
+sh 'gradle jar && java -jar build/libs/Rekeningrijden.jar'
 sh 'echo "done"'
 }
 }
