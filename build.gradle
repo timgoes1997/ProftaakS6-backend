@@ -50,6 +50,3 @@ jar {
 
 // Define the main class for the application
 mainClassName = 'App'
-wrapper {
-    distributionType = Wrapper.DistributionType.ALL
-}
