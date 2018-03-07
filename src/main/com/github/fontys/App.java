@@ -8,6 +8,6 @@ import com.github.fontys.trackingsystem.TrackingManager;
  */
 public class App {
     public static void main(String[] args) {
-       new TrackingManager();
+        new TrackingManager();
     }
 }
