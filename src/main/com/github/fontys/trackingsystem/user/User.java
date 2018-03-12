@@ -1,6 +1,8 @@
 package com.github.fontys.trackingsystem.user;
 
-public abstract class User {
+import java.io.Serializable;
+
+public abstract class User implements Serializable {
     private String name;
     private String address;
     private String residency;

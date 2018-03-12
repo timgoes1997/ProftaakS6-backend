@@ -3,7 +3,9 @@ package com.github.fontys.trackingsystem.vehicle;
 
 import com.github.fontys.trackingsystem.EnergyLabel;
 
-public class VehicleModel {
+import java.io.Serializable;
+
+public class VehicleModel implements Serializable{
     private String modelName;
     private String edition;
     private FuelType fuelType;

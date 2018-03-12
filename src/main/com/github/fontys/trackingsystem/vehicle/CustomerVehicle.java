@@ -4,9 +4,10 @@ package com.github.fontys.trackingsystem.vehicle;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.user.Customer;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CustomerVehicle {
+public class CustomerVehicle implements Serializable {
 
     private int id;
     private Customer customer;
@@ -36,5 +37,11 @@ public class CustomerVehicle {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("CV: id %s, licensePlate %s", id, licensePlate);
+//        return super.toString();
     }
 }
