@@ -1,7 +1,9 @@
 package com.github.fontys;
 
 
-import com.github.fontys.trackingsystem.TrackingManager;
+import com.github.fontys.trackingsystem.beans.VehicleBean;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
@@ -12,5 +14,22 @@ import javax.ws.rs.core.Application;
 @ApplicationPath("/api")
 public class App extends Application
 {
+
+
+    /*
+    public App(){
+        register(MultiPartFeature.class);
+        packages("com.github.fontys.beans");
+       // register(new LoggingFeature(Logger.getLogger(App.class.getName()), LoggingFeature.Verbosity.PAYLOAD_ANY));
+    }*/
+
+    /*
+    @Override
+    public Set<Class<?>> getClasses() {
+        final Set<Class<?>> classes = new HashSet<Class<?>>();
+        // register resources and features
+        classes.add(MultiPartFeature.class);
+        return classes;
+    }*/
 
 }

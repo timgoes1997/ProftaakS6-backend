@@ -23,12 +23,14 @@ import java.util.List;
 @ApplicationScoped
 public class DatabaseMock {
 
-    private List<CustomerVehicle> vehicles = new ArrayList<>();
+    private List<CustomerVehicle> cVehicles = new ArrayList<>();
+    private List<Vehicle> veh = new ArrayList<>();
 
     @PostConstruct
     public void init() {
         System.out.println("Hello");
-        for (int i = 0; i < 3; i++) {
+        int lastIndex = 3;
+        for (int i = 0; i < lastIndex; i++) {
 
             Customer c = new Customer(
                     String.format("Name %s", i),
@@ -36,7 +38,7 @@ public class DatabaseMock {
                     String.format("Residency %s", i),
                     Role.BILL_ADMINISTRATOR);
 
-            VehicleModel m = new VehicleModel(
+            VehicleModel m = new VehicleModel(i,
                     String.format("Modelname %s", i),
                     String.format("Edition %s", i),
                     FuelType.DIESEL,
@@ -53,16 +55,58 @@ public class DatabaseMock {
                     v,
                     String.format("Proof %s", i));
 
-            vehicles.add(cv);
+            veh.add(v);
+            cVehicles.add(cv);
             System.out.println(String.format("Added cv: %s", cv));
         }
+        generateVehicles(lastIndex);
     }
 
-    public void setVehicles(List<CustomerVehicle> vehicles) {
-        this.vehicles = vehicles;
+    public void setCustomerVehicles(List<CustomerVehicle> vehicles) {
+        this.cVehicles = vehicles;
     }
 
-    public List<CustomerVehicle> getVehicles() {
+    public List<CustomerVehicle> getCustomerVehicles() {
+        return cVehicles;
+    }
+
+    public List<Vehicle> getVehicles() {
+        return veh;
+    }
+
+    public void setcVehicles(List<Vehicle> veh) {
+        this.veh = veh;
+    }
+
+    public List<String> getBrands(){
+        List<String> brands = new ArrayList<>();
+        for (Vehicle v : veh ) {
+            if(!brands.contains(v.getBrand())) brands.add(v.getBrand());
+        }
+        return brands;
+    }
+
+    public List<Vehicle> getVehicles(String brand){
+        List<Vehicle> vehicles = new ArrayList<>();
+        for (Vehicle v: veh) {
+            if(v.getBrand().equals(brand)){
+                vehicles.add(v);
+            }
+        }
         return vehicles;
+    }
+
+    public void generateVehicles(int lastindex){
+        veh.add(new Vehicle(String.format("Dikke BMW"), new VehicleModel(lastindex + 1, String.format("i8"), String.format(""), FuelType.ELECTRIC, EnergyLabel.A), new Date()));
+        veh.add(new Vehicle(String.format("Dikke BMW"), new VehicleModel(lastindex + 2, String.format("m4"), String.format(""), FuelType.GASOLINE, EnergyLabel.B), new Date()));
+        veh.add(new Vehicle(String.format("Audi"), new VehicleModel(lastindex + 3,String.format("A4"), String.format("Sport"), FuelType.DIESEL, EnergyLabel.D), new Date()));
+        veh.add(new Vehicle(String.format("Porsche"), new VehicleModel(lastindex + 4,String.format("911"), String.format("Turbo S"), FuelType.DIESEL, EnergyLabel.E), new Date()));
+        veh.add(new Vehicle(String.format("Koeningsegg"), new VehicleModel(lastindex + 5,String.format("Agrerra"), String.format("R"), FuelType.LPG, EnergyLabel.C), new Date()));
+        veh.add(new Vehicle(String.format("Lamborghini"), new VehicleModel(lastindex + 6,String.format("Aventador"), String.format(""), FuelType.DIESEL, EnergyLabel.F), new Date()));
+        veh.add(new Vehicle(String.format("Volkswagen"), new VehicleModel(lastindex + 7,String.format("Polo"), String.format("GT"), FuelType.DIESEL, EnergyLabel.D), new Date()));
+        veh.add(new Vehicle(String.format("Opel"), new VehicleModel(lastindex + 8,String.format("Ampera"), String.format(""), FuelType.ELECTRIC, EnergyLabel.A), new Date()));
+        veh.add(new Vehicle(String.format("Tesla"), new VehicleModel(lastindex + 9,String.format("Model S"), String.format("P100D"), FuelType.ELECTRIC, EnergyLabel.A), new Date()));
+        veh.add(new Vehicle(String.format("Tesla"), new VehicleModel(lastindex + 10,String.format("Model 3"), String.format("65"), FuelType.ELECTRIC, EnergyLabel.A), new Date()));
+        veh.add(new Vehicle(String.format("Tesla"), new VehicleModel(lastindex + 11,String.format("Model X"), String.format("P100D"), FuelType.ELECTRIC, EnergyLabel.A), new Date()));
     }
 }
