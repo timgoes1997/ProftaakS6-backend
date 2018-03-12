@@ -13,4 +13,28 @@ public class Vehicle implements Serializable{
         this.vehicleModel = vehicleModel;
         this.buildDate = buildDate;
     }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public VehicleModel getVehicleModel() {
+        return vehicleModel;
+    }
+
+    public void setVehicleModel(VehicleModel vehicleModel) {
+        this.vehicleModel = vehicleModel;
+    }
+
+    public Date getBuildDate() {
+        return buildDate;
+    }
+
+    public void setBuildDate(Date buildDate) {
+        this.buildDate = buildDate;
+    }
 }

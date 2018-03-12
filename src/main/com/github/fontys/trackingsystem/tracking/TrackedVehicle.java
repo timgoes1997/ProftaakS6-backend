@@ -13,4 +13,28 @@ public class TrackedVehicle {
         this.location = location;
         this.hardware = hardware;
     }
+
+    public CustomerVehicle getCustomerVehicle() {
+        return customerVehicle;
+    }
+
+    public void setCustomerVehicle(CustomerVehicle customerVehicle) {
+        this.customerVehicle = customerVehicle;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Hardware getHardware() {
+        return hardware;
+    }
+
+    public void setHardware(Hardware hardware) {
+        this.hardware = hardware;
+    }
 }

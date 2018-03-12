@@ -17,4 +17,36 @@ public class VehicleModel implements Serializable{
         this.fuelType = fuelType;
         this.energyLabel = energyLabel;
     }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
+    public FuelType getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public EnergyLabel getEnergyLabel() {
+        return energyLabel;
+    }
+
+    public void setEnergyLabel(EnergyLabel energyLabel) {
+        this.energyLabel = energyLabel;
+    }
 }

@@ -32,7 +32,7 @@ public class VehicleBean {
     public Response getVehicle(@PathParam("id") int id) {
         for (CustomerVehicle cv : db.getVehicles()) {
             if (cv.getId() == id) {
-                return Response.ok(new Gson().toJson(cv), MediaType.APPLICATION_JSON).build();
+                return Response.ok(cv).build();
             }
         }
         return Response.serverError().build();

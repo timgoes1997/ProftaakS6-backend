@@ -12,4 +12,12 @@ public class Customer extends User implements Serializable{
     public Customer(String name, String address, String residency, Role role) {
         super(name, address, residency, role);
     }
+
+    public List<CustomerVehicle> getCustomerVehicles() {
+        return customerVehicles;
+    }
+
+    public void setCustomerVehicles(List<CustomerVehicle> customerVehicles) {
+        this.customerVehicles = customerVehicles;
+    }
 }

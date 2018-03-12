@@ -11,4 +11,20 @@ public class Location {
         this.lastLocation = lastLocation;
         this.time = time;
     }
+
+    public Point2D.Double getLastLocation() {
+        return lastLocation;
+    }
+
+    public void setLastLocation(Point2D.Double lastLocation) {
+        this.lastLocation = lastLocation;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
 }

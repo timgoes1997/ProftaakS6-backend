@@ -58,6 +58,10 @@ public class DatabaseMock {
         }
     }
 
+    public void setVehicles(List<CustomerVehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
+
     public List<CustomerVehicle> getVehicles() {
         return vehicles;
     }
