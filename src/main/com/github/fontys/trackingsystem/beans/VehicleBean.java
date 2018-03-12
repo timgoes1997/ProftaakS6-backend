@@ -69,11 +69,35 @@ public class VehicleBean {
     public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetails) throws Exception {
 
+        String uploadedFileLocation = "D://School//S6//Proftaak//Git//Test//" + fileDetails.getFileName();
 
-        System.out.println(fileDetails.getFileName());
-        return Response.ok().build();
+        // save it
+        writeToFile(uploadedInputStream, uploadedFileLocation);
+
+        String output = "File uploaded to : " + uploadedFileLocation;
+
+        return Response.status(200).entity(output).build();
     }
 
-/*  Jersey 2 ruins REST itself unfortunately so i will try REST EASY instead, otherwise this will need to be implemented another time
-*/
+    // save uploaded file to new location
+    private void writeToFile(InputStream uploadedInputStream,
+                             String uploadedFileLocation) {
+
+        try {
+            OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            out = new FileOutputStream(new File(uploadedFileLocation));
+            while ((read = uploadedInputStream.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+    }
+
 }
