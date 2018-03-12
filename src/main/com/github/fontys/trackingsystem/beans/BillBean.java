@@ -52,6 +52,14 @@ public class BillBean {
         return Response.serverError().build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/")
+    public Response getVehicle() {
+        System.out.println("Result is false");
+        return Response.ok(db.getBills()).build();
+    }
+
     private boolean compareYearAndMonth(Bill b, int year, int month) {
         // Check if start date is within the same year/month
         Calendar cal1 = Calendar.getInstance();
