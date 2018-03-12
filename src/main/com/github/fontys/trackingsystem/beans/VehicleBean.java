@@ -63,7 +63,6 @@ public class VehicleBean {
         return Response.ok(vehicles).build();
     }
 
-/*  Jersey 2 ruins REST itself unfortunately so i will try REST EASY instead, otherwise this will need to be implemented another time
     @POST
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -73,5 +72,8 @@ public class VehicleBean {
 
         System.out.println(fileDetails.getFileName());
         return Response.ok().build();
-    }*/
+    }
+
+/*  Jersey 2 ruins REST itself unfortunately so i will try REST EASY instead, otherwise this will need to be implemented another time
+*/
 }
