@@ -3,7 +3,6 @@ package com.github.fontys.trackingsystem.beans;
 import com.github.fontys.trackingsystem.mock.DatabaseMock;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
-import com.google.gson.Gson;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
