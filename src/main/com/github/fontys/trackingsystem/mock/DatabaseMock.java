@@ -96,6 +96,27 @@ public class DatabaseMock {
         return vehicles;
     }
 
+    public Vehicle newVehicle(String brand, int modelID, Date buildDate){
+        Vehicle vehicle = null;
+        VehicleModel vm = null;
+        for (Vehicle v: veh) {
+            if(v.getVehicleModel().getId() == modelID) {
+                vm = v.getVehicleModel();
+            }
+            if(v.getBrand().equals(brand) && modelID == v.getVehicleModel().getId()){
+                vehicle = v;
+            }
+        }
+
+        if(vehicle != null) return vehicle;
+        if(vm != null) {
+            Vehicle v = new Vehicle(brand, vm, buildDate);
+            veh.add(v);
+            return v;
+        }
+        return null;
+    }
+
     public void generateVehicles(int lastindex){
         veh.add(new Vehicle(String.format("Dikke BMW"), new VehicleModel(lastindex + 1, String.format("i8"), String.format(""), FuelType.ELECTRIC, EnergyLabel.A), new Date()));
         veh.add(new Vehicle(String.format("Dikke BMW"), new VehicleModel(lastindex + 2, String.format("m4"), String.format(""), FuelType.GASOLINE, EnergyLabel.B), new Date()));

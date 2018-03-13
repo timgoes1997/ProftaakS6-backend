@@ -30,6 +30,7 @@ dependencies {
     compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.26'
     compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.26'
     compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet-core', version: '2.26'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
 //    compile "org.glassfish.jersey.core:jersey-client:2.26"
 //    compile "org.glassfish.jersey.inject:jersey-hk2:2.26"

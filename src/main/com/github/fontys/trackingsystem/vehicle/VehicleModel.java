@@ -51,4 +51,12 @@ public class VehicleModel implements Serializable{
     public void setEnergyLabel(EnergyLabel energyLabel) {
         this.energyLabel = energyLabel;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
