@@ -6,12 +6,14 @@ import com.github.fontys.trackingsystem.EnergyLabel;
 import java.io.Serializable;
 
 public class VehicleModel implements Serializable{
+    private int id;
     private String modelName;
     private String edition;
     private FuelType fuelType;
     private EnergyLabel energyLabel;
 
-    public VehicleModel(String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel) {
+    public VehicleModel(int id, String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel) {
+        this.id = id;
         this.modelName = modelName;
         this.edition = edition;
         this.fuelType = fuelType;
@@ -48,5 +50,13 @@ public class VehicleModel implements Serializable{
 
     public void setEnergyLabel(EnergyLabel energyLabel) {
         this.energyLabel = energyLabel;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
