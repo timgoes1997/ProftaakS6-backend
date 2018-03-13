@@ -46,7 +46,7 @@ public class DatabaseMock {
     private List<Vehicle> generateDummyVehicles() {
         List<Vehicle> result = new ArrayList<>();
         Date date = new Date();
-        result.add(new Vehicle("Dikke BMW", new VehicleModel(1, "i8", "", FuelType.ELECTRIC, EnergyLabel.A),date));
+        result.add(new Vehicle("Dikke BMW", new VehicleModel(1, "i8", "", FuelType.ELECTRIC, EnergyLabel.A), date));
         result.add(new Vehicle("Dikke BMW", new VehicleModel(2, "m4", "", FuelType.GASOLINE, EnergyLabel.B), date));
         result.add(new Vehicle("Audi", new VehicleModel(3, "A4", "Sport", FuelType.DIESEL, EnergyLabel.D), date));
         result.add(new Vehicle("Porsche", new VehicleModel(4, "911", "Turbo S", FuelType.DIESEL, EnergyLabel.E), date));
@@ -75,6 +75,7 @@ public class DatabaseMock {
                     String.format("Licenseplate %s", i),
                     vehicles.get(i),
                     String.format("Proof %s", i));
+            result.add(cv);
         }
         return result;
     }
@@ -106,7 +107,10 @@ public class DatabaseMock {
     public List<String> getBrands() {
         List<String> brands = new ArrayList<>();
         for (Vehicle v : vehicles) {
-            if (!brands.contains(v.getBrand())) brands.add(v.getBrand());
+            boolean brandAlreadyExists = brands.contains(v.getBrand());
+            if (!brandAlreadyExists) {
+                brands.add(v.getBrand());
+            }
         }
         return brands;
     }
