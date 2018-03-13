@@ -1,23 +1,28 @@
 package com.github.fontys.trackingsystem.tracking;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Location {
-    private Point2D.Double lastLocation;
+public class Location implements Serializable {
+    private double lastLocationX;
+    private double lastLocationY;
     private Date time;
 
-    public Location(Point2D.Double lastLocation, Date time) {
-        this.lastLocation = lastLocation;
-        this.time = time;
+    public double getLastLocationX() {
+        return lastLocationX;
     }
 
-    public Point2D.Double getLastLocation() {
-        return lastLocation;
+    public void setLastLocationX(double lastLocationX) {
+        this.lastLocationX = lastLocationX;
     }
 
-    public void setLastLocation(Point2D.Double lastLocation) {
-        this.lastLocation = lastLocation;
+    public double getLastLocationY() {
+        return lastLocationY;
+    }
+
+    public void setLastLocationY(double lastLocationY) {
+        this.lastLocationY = lastLocationY;
     }
 
     public Date getTime() {
@@ -25,6 +30,13 @@ public class Location {
     }
 
     public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public Location(double lastLocationX, double lastLocationY, Date time) {
+
+        this.lastLocationX = lastLocationX;
+        this.lastLocationY = lastLocationY;
         this.time = time;
     }
 }
