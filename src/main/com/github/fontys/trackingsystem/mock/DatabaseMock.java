@@ -37,7 +37,6 @@ public class DatabaseMock {
 
     @PostConstruct
     public void init() {
-        System.out.println("Hello");
         vehicles = generateDummyCustomerVehicles();
         bills = generateDummyBills(vehicles);
     }
@@ -74,7 +73,6 @@ public class DatabaseMock {
                     String.format("Proof %s", i));
 
             result.add(cv);
-            System.out.println(String.format("Added cv: %s", cv));
         }
         return result;
     }
@@ -84,17 +82,16 @@ public class DatabaseMock {
         for (int i = 0; i < 5; i++) {
             int oneday = 24 * 60 * 60 * 1000;
             Date startdate = new Date();
-            // Make a little variation in start/enddates
-            startdate = new Date(startdate.getTime() - i * oneday);
-            Date endDate = new Date(startdate.getTime() + i * 2 * oneday);
+             startdate = new Date(startdate.getTime() + i + (oneday * 4 * i));
+            Date endDate = new Date(startdate.getTime() + i + (oneday * 8 * i));
 
             TrackedVehicle tv = new TrackedVehicle(cvs.get(i), new Location(100, 200, startdate), new Hardware(10, "Hwtype"));
 
             Bill b = new Bill(
                     cvs.get(i),
                     Currency.EUR,
-                    new BigDecimal(i * 2),
-                    new BigDecimal(1 * 1.2),
+                    new BigDecimal(i * 200),
+                    new BigDecimal(i * 400),
                     startdate,
                     endDate,
                     tv,

@@ -12,7 +12,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 //end points
 //	/api/bill/{year}/{month}
@@ -42,12 +44,15 @@ public class BillBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{year}/{month}")
     public Response getVehicle(@PathParam("year") int year, @PathParam("month") int month) {
+        List<Bill> bills = new ArrayList<>();
         for (Bill b : db.getBills()) {
-            boolean result = compareYearAndMonth(b, year, month);
-            System.out.println("Result is false");
+            boolean result = compareYearAndMonth(b, year, month - 1);
             if (result) {
-                return Response.ok(b).build();
+                bills.add(b);
             }
+        }
+        if (bills.size() > 0) {
+            return Response.ok(bills).build();
         }
         return Response.serverError().build();
     }
@@ -61,6 +66,7 @@ public class BillBean {
     }
 
     private boolean compareYearAndMonth(Bill b, int year, int month) {
+        System.out.println(String.format("Comparing year %s month %s", year, month));
         // Check if start date is within the same year/month
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(b.getStartDate());
@@ -68,6 +74,7 @@ public class BillBean {
                 cal1.get(Calendar.MONTH) == month) {
             return true;
         }
+        System.out.println(String.format("Calendar year %s month %s", cal1.get(Calendar.YEAR), cal1.get(Calendar.MONTH)));
 
         // Check if end date is within the same year/month
         Calendar cal2 = Calendar.getInstance();
