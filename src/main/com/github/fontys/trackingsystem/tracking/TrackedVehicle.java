@@ -3,9 +3,7 @@ package com.github.fontys.trackingsystem.tracking;
 
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
-import java.io.Serializable;
-
-public class TrackedVehicle implements Serializable{
+public class TrackedVehicle {
     private CustomerVehicle customerVehicle;
     private Location location;
     private Hardware hardware;

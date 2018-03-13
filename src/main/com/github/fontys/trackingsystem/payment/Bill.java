@@ -3,11 +3,10 @@ package com.github.fontys.trackingsystem.payment;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Bill implements Serializable{
+public class Bill {
     private CustomerVehicle customerVehicle;
     private Currency currency;
     private BigDecimal price;
@@ -100,20 +99,5 @@ public class Bill implements Serializable{
 
     public void setMileage(double mileage) {
         this.mileage = mileage;
-    }
-
-    @Override
-    public String toString() {
-        return "Bill{" +
-                "customerVehicle=" + customerVehicle +
-                ", currency=" + currency +
-                ", price=" + price +
-                ", alreadyPaid=" + alreadyPaid +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", trackedVehicle=" + trackedVehicle +
-                ", paymentStatus=" + paymentStatus +
-                ", mileage=" + mileage +
-                '}';
     }
 }
