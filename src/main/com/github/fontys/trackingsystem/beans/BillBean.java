@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -35,13 +36,13 @@ import java.util.List;
 //			{billnr, licenseplate, price, status, month}
 
 @RequestScoped
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Path("/bills")
 public class BillBean {
     @Inject
     private DatabaseMock db;
 
     @GET
+    @Produces({MediaType.APPLICATION_JSON})
     @Path("/{year}/{month}")
     public Response getVehicle(@PathParam("year") int year, @PathParam("month") int month) {
         List<Bill> bills = new ArrayList<>();
@@ -58,17 +59,18 @@ public class BillBean {
     }
 
     @GET
+    @Produces({MediaType.APPLICATION_JSON})
     @Path("/all")
     public Response getVehicle() {
-        System.out.println("Result is false");
-        return Response.ok(db.getBills()).build();
+        List<Bill> bills = db.getBills();
+        GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {};
+        return Response.ok(list).build();
     }
 
     private boolean compareYearAndMonth(Bill b, int year, int month) {
         System.out.println(String.format("Comparing year %s month %s", year, month));
         // Check if start date is within the same year/month
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(b.getStartDate());
+        Calendar cal1 = b.getStartDate();
         if (cal1.get(Calendar.YEAR) == year &&
                 cal1.get(Calendar.MONTH) == month) {
             return true;
@@ -76,8 +78,7 @@ public class BillBean {
         System.out.println(String.format("Calendar year %s month %s", cal1.get(Calendar.YEAR), cal1.get(Calendar.MONTH)));
 
         // Check if end date is within the same year/month
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(b.getEndDate());
+        Calendar cal2 = b.getEndDate();
         if (cal2.get(Calendar.YEAR) == year &&
                 cal2.get(Calendar.MONTH) == month) {
             return true;

@@ -23,9 +23,7 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @ApplicationScoped
 public class DatabaseMock {
@@ -84,9 +82,10 @@ public class DatabaseMock {
         List<Bill> dummyBills = new ArrayList<>();
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
             int oneday = 24 * 60 * 60 * 1000;
-            Date startdate = new Date();
-            startdate = new Date(startdate.getTime() + i + (oneday * 4 * i));
-            Date endDate = new Date(startdate.getTime() + i + (oneday * 8 * i));
+            Calendar startdate = new GregorianCalendar();
+            startdate.set(2018, i, 1);
+            Calendar endDate = new GregorianCalendar();
+            endDate.set(2018, i, 28);
             TrackedVehicle tv = new TrackedVehicle(cvs.get(i), new Location(100, 200, startdate), new Hardware(10, "Hwtype"));
             Bill b = new Bill(
                     cvs.get(i),
@@ -98,6 +97,7 @@ public class DatabaseMock {
                     PaymentStatus.OPEN,
                     1000
             );
+            b.setBillnr(i+1000);
             dummyBills.add(b);
         }
         return dummyBills;
