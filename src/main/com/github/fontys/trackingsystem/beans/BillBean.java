@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.List;
 
 //end points
-//	/api/bill/{year}/{month}
+//	/api/bills/{year}/{month}
 //	GET facturen
 //		- GIVE
 //			string maand
@@ -35,13 +35,13 @@ import java.util.List;
 //			{billnr, licenseplate, price, status, month}
 
 @RequestScoped
-@Path("/bill")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Path("/bills")
 public class BillBean {
     @Inject
     private DatabaseMock db;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{year}/{month}")
     public Response getVehicle(@PathParam("year") int year, @PathParam("month") int month) {
         List<Bill> bills = new ArrayList<>();
@@ -58,8 +58,7 @@ public class BillBean {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/")
+    @Path("/all")
     public Response getVehicle() {
         System.out.println("Result is false");
         return Response.ok(db.getBills()).build();

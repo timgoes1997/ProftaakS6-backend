@@ -3,32 +3,34 @@ package com.github.fontys.trackingsystem.payment;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Bill {
+public class Bill implements Serializable {
     private CustomerVehicle customerVehicle;
     private Currency currency;
     private BigDecimal price;
     private BigDecimal alreadyPaid;
     private Date startDate;
     private Date endDate;
-    private TrackedVehicle trackedVehicle;
     private PaymentStatus paymentStatus;
     private double mileage;
 
-    public Bill(CustomerVehicle customerVehicle, Currency currency, BigDecimal price, BigDecimal alreadyPaid, Date startDate, Date endDate, TrackedVehicle trackedVehicle, PaymentStatus paymentStatus, double mileage) {
+    public Bill(CustomerVehicle customerVehicle, Currency currency, BigDecimal price, BigDecimal alreadyPaid, Date startDate, Date endDate, PaymentStatus paymentStatus, double mileage) {
         this.customerVehicle = customerVehicle;
         this.currency = currency;
         this.price = price;
         this.alreadyPaid = alreadyPaid;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.trackedVehicle = trackedVehicle;
         this.paymentStatus = paymentStatus;
         this.mileage = mileage;
     }
 
+    @XmlTransient
     public CustomerVehicle getCustomerVehicle() {
         return customerVehicle;
     }
@@ -77,12 +79,9 @@ public class Bill {
         this.endDate = endDate;
     }
 
-    public TrackedVehicle getTrackedVehicle() {
-        return trackedVehicle;
-    }
-
-    public void setTrackedVehicle(TrackedVehicle trackedVehicle) {
-        this.trackedVehicle = trackedVehicle;
+    @XmlAttribute
+    public String getLicense() {
+        return customerVehicle.getLicensePlate();
     }
 
     public PaymentStatus getPaymentStatus() {
