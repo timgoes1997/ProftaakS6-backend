@@ -30,6 +30,7 @@ public class DatabaseMock {
 
     private static int AMOUNT_TO_GENERATE = 5;
 
+    private List<TrackedVehicle> trackedVehicles = new ArrayList<>();
     private List<CustomerVehicle> customerVehicles = new ArrayList<>();
     private List<Vehicle> vehicles = new ArrayList<>();
     private List<Bill> bills = new ArrayList<>();
@@ -70,7 +71,7 @@ public class DatabaseMock {
             CustomerVehicle cv = new CustomerVehicle(
                     i,
                     c,
-                    String.format("Licenseplate %s", i),
+                    String.format("XXX-00%s", i),
                     vehicles.get(i),
                     String.format("Proof %s", i));
             result.add(cv);
@@ -81,12 +82,12 @@ public class DatabaseMock {
     private List<Bill> generateDummyBills(List<CustomerVehicle> cvs) {
         List<Bill> dummyBills = new ArrayList<>();
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
-            int oneday = 24 * 60 * 60 * 1000;
             Calendar startdate = new GregorianCalendar();
             startdate.set(2018, i, 1);
             Calendar endDate = new GregorianCalendar();
             endDate.set(2018, i, 28);
-            TrackedVehicle tv = new TrackedVehicle(cvs.get(i), new Location(100, 200, startdate), new Hardware(10, "Hwtype"));
+            TrackedVehicle tv = new TrackedVehicle(cvs.get(i), new Location(50 + i / 4, 9 + i / 4, startdate), new Hardware(10, "Hwtype"));
+            trackedVehicles.add(tv);
             Bill b = new Bill(
                     cvs.get(i),
                     Currency.EUR,
@@ -151,6 +152,10 @@ public class DatabaseMock {
 
     public List<CustomerVehicle> getCustomerVehicles() {
         return customerVehicles;
+    }
+
+    public List<TrackedVehicle> getTrackedVehicles() {
+        return trackedVehicles;
     }
 
     public List<Vehicle> getVehicles() {

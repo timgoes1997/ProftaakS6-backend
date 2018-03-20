@@ -1,26 +1,25 @@
 package com.github.fontys.trackingsystem.tracking;
 
-import java.awt.geom.Point2D;
 import java.util.Calendar;
-import java.util.Date;
 
 public class Location {
-    private double lastLocationX;
+    private double x;
+    private double y;
 
-    public double getLastLocationX() {
-        return lastLocationX;
+    public double getX() {
+        return x;
     }
 
-    public void setLastLocationX(double lastLocationX) {
-        this.lastLocationX = lastLocationX;
+    public void setX(double lastLocationX) {
+        this.x = lastLocationX;
     }
 
-    public double getLastLocationY() {
-        return lastLocationY;
+    public double getY() {
+        return y;
     }
 
-    public void setLastLocationY(double lastLocationY) {
-        this.lastLocationY = lastLocationY;
+    public void setY(double lastLocationY) {
+        this.y = lastLocationY;
     }
 
     public Calendar getTime() {
@@ -31,12 +30,17 @@ public class Location {
         this.time = time;
     }
 
-    private double lastLocationY;
     private Calendar time;
 
+    /*
+        For reflective code only
+     */
+    @Deprecated
+    public Location() {}
+
     public Location(double lastLocationX, double lastLocationY, Calendar time) {
-        this.lastLocationX = lastLocationX;
-        this.lastLocationY = lastLocationY;
+        this.x = lastLocationX;
+        this.y = lastLocationY;
         this.time = time;
     }
 }
