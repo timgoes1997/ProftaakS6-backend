@@ -33,6 +33,10 @@ dependencies {
     compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet-core', version: '2.26'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
+    // https://mvnrepository.com/artifact/org.apache.derby/derby
+    testCompile group: 'org.apache.derby', name: 'derby', version: '10.14.1.0'
+
+
 //    compile "org.glassfish.jersey.core:jersey-client:2.26"
 //    compile "org.glassfish.jersey.inject:jersey-hk2:2.26"
 //    compile "com.sun.jersey:jersey-servlet:1.19"
@@ -55,6 +59,9 @@ sourceSets {
     test {
         java {
             srcDirs = ['src/test']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
         }
     }
 }
