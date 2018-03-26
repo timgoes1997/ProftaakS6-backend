@@ -45,17 +45,17 @@ public class DatabaseMock {
     private List<Vehicle> generateDummyVehicles() {
         List<Vehicle> result = new ArrayList<>();
         Date date = new Date();
-        result.add(new Vehicle("Dikke BMW", new VehicleModel(1, "i8", "", FuelType.ELECTRIC, EnergyLabel.A), date));
-        result.add(new Vehicle("Dikke BMW", new VehicleModel(2, "m4", "", FuelType.GASOLINE, EnergyLabel.B), date));
-        result.add(new Vehicle("Audi", new VehicleModel(3, "A4", "Sport", FuelType.DIESEL, EnergyLabel.D), date));
-        result.add(new Vehicle("Porsche", new VehicleModel(4, "911", "Turbo S", FuelType.DIESEL, EnergyLabel.E), date));
-        result.add(new Vehicle("Koeningsegg", new VehicleModel(5, "Agrerra", "R", FuelType.LPG, EnergyLabel.C), date));
-        result.add(new Vehicle("Lamborghini", new VehicleModel(6, "Aventador", "", FuelType.DIESEL, EnergyLabel.F), date));
-        result.add(new Vehicle("Volkswagen", new VehicleModel(7, "Polo", "GT", FuelType.DIESEL, EnergyLabel.D), date));
-        result.add(new Vehicle("Opel", new VehicleModel(8, "Ampera", "", FuelType.ELECTRIC, EnergyLabel.A), date));
-        result.add(new Vehicle("Tesla", new VehicleModel(9, "Model S", "P100D", FuelType.ELECTRIC, EnergyLabel.A), date));
-        result.add(new Vehicle("Tesla", new VehicleModel(10, "Model 3", "65", FuelType.ELECTRIC, EnergyLabel.A), date));
-        result.add(new Vehicle("Tesla", new VehicleModel(11, "Model X", "P100D", FuelType.ELECTRIC, EnergyLabel.A), date));
+        result.add(new Vehicle("Dikke BMW", new VehicleModel(1L, "i8", "", FuelType.ELECTRIC, EnergyLabel.A), date));
+        result.add(new Vehicle("Dikke BMW", new VehicleModel(2L, "m4", "", FuelType.GASOLINE, EnergyLabel.B), date));
+        result.add(new Vehicle("Audi", new VehicleModel(3L, "A4", "Sport", FuelType.DIESEL, EnergyLabel.D), date));
+        result.add(new Vehicle("Porsche", new VehicleModel(4L, "911", "Turbo S", FuelType.DIESEL, EnergyLabel.E), date));
+        result.add(new Vehicle("Koeningsegg", new VehicleModel(5L, "Agrerra", "R", FuelType.LPG, EnergyLabel.C), date));
+        result.add(new Vehicle("Lamborghini", new VehicleModel(6L, "Aventador", "", FuelType.DIESEL, EnergyLabel.F), date));
+        result.add(new Vehicle("Volkswagen", new VehicleModel(7L, "Polo", "GT", FuelType.DIESEL, EnergyLabel.D), date));
+        result.add(new Vehicle("Opel", new VehicleModel(8L, "Ampera", "", FuelType.ELECTRIC, EnergyLabel.A), date));
+        result.add(new Vehicle("Tesla", new VehicleModel(9L, "Model S", "P100D", FuelType.ELECTRIC, EnergyLabel.A), date));
+        result.add(new Vehicle("Tesla", new VehicleModel(10L, "Model 3", "65", FuelType.ELECTRIC, EnergyLabel.A), date));
+        result.add(new Vehicle("Tesla", new VehicleModel(11L, "Model X", "P100D", FuelType.ELECTRIC, EnergyLabel.A), date));
         return result;
     }
 

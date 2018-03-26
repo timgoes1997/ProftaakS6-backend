@@ -7,6 +7,8 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <jta-data-source>java:comp/DefaultDataSource</jta-data-source>
 
+        <class>com.github.fontys.trackingsystem.vehicle.VehicleModel</class>
+
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>

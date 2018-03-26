@@ -3,21 +3,39 @@ package com.github.fontys.trackingsystem.vehicle;
 
 import com.github.fontys.trackingsystem.EnergyLabel;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity(name = "VEHICLE_MODEL")
 public class VehicleModel implements Serializable{
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
+
+    @Column(name = "MODELvNAME")
     private String modelName;
+
+    @Column(name = "EDITION")
     private String edition;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "FUELTYPE")
     private FuelType fuelType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ENERGYLABEL")
     private EnergyLabel energyLabel;
 
-    public VehicleModel(int id, String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel) {
+    public VehicleModel(Long id, String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel) {
         this.id = id;
         this.modelName = modelName;
         this.edition = edition;
         this.fuelType = fuelType;
         this.energyLabel = energyLabel;
+    }
+
+    public VehicleModel() {
     }
 
     public String getModelName() {
@@ -52,11 +70,11 @@ public class VehicleModel implements Serializable{
         this.energyLabel = energyLabel;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
