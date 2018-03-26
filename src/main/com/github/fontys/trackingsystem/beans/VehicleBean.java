@@ -1,8 +1,12 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.trackingsystem.EnergyLabel;
+import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
 import com.github.fontys.trackingsystem.mock.DatabaseMock;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
+import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -24,6 +28,9 @@ public class VehicleBean {
 
     @Inject
     private DatabaseMock db;
+
+    @Inject
+    private VehicleModelDAO vehicleModelDAO;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,14 +80,14 @@ public class VehicleBean {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/register/model")
-    public Response registerModel(@FormParam("brand") String brand,
-                                    @FormParam("model") int modelID,
-                                    @FormParam("licenseplate") String license,
-                                    @FormParam("buildDate") String date) {
-        List<Vehicle> vehicles = db.getVehiclesByBrand(brand);
+    public Response registerModel(@FormParam("modelName") String modelName,
+                                    @FormParam("edition") String edition,
+                                    @FormParam("fuelType") FuelType fuelType,
+                                    @FormParam("energyLabel") EnergyLabel energyLabel) {
+        VehicleModel model = new VehicleModel(modelName, edition, fuelType, energyLabel);
 
         //TODO: check for already existing vehicles of the same type and return a error when that happens.
-        return Response.ok(vehicles).build();
+        return Response.ok(model).build();
     }
 
     @POST

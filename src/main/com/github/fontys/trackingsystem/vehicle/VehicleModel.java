@@ -13,7 +13,7 @@ public class VehicleModel implements Serializable{
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "MODELvNAME")
+    @Column(name = "MODELNAME")
     private String modelName;
 
     @Column(name = "EDITION")
@@ -29,6 +29,13 @@ public class VehicleModel implements Serializable{
 
     public VehicleModel(Long id, String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel) {
         this.id = id;
+        this.modelName = modelName;
+        this.edition = edition;
+        this.fuelType = fuelType;
+        this.energyLabel = energyLabel;
+    }
+
+    public VehicleModel(String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel) {
         this.modelName = modelName;
         this.edition = edition;
         this.fuelType = fuelType;
