@@ -86,6 +86,8 @@ public class VehicleBean {
                                     @FormParam("energyLabel") EnergyLabel energyLabel) {
         VehicleModel model = new VehicleModel(modelName, edition, fuelType, energyLabel);
 
+        vehicleModelDAO.create(model);
+
         //TODO: check for already existing vehicles of the same type and return a error when that happens.
         return Response.ok(model).build();
     }

@@ -12,7 +12,7 @@ import java.util.List;
 @Stateless
 public class VehicleModelDAOImpl implements VehicleModelDAO {
 
-    @PersistenceContext
+    @PersistenceContext(name="Proftaak")
     private EntityManager em;
 
     @Override
