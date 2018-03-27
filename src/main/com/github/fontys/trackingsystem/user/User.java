@@ -1,13 +1,18 @@
 package com.github.fontys.trackingsystem.user;
 
-import java.io.Serializable;
+import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
-public abstract class User implements Serializable {
+import java.io.Serializable;
+import java.util.List;
+
+public class User implements Serializable {
     private String name;
     private String address;
     private String residency;
     private Role role;
     private Account account;
+    private Department department;
+    private List<CustomerVehicle> customerVehicles;
 
     public User(String name, String address, String residency, Role role) {
         this.name = name;
@@ -54,5 +59,21 @@ public abstract class User implements Serializable {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public List<CustomerVehicle> getCustomerVehicles() {
+        return customerVehicles;
+    }
+
+    public void setCustomerVehicles(List<CustomerVehicle> customerVehicles) {
+        this.customerVehicles = customerVehicles;
     }
 }

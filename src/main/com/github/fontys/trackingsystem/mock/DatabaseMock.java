@@ -8,20 +8,15 @@ import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.tracking.Hardware;
 import com.github.fontys.trackingsystem.tracking.Location;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
-import com.github.fontys.trackingsystem.user.Customer;
 import com.github.fontys.trackingsystem.user.Role;
+import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
 import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -62,7 +57,7 @@ public class DatabaseMock {
     private List<CustomerVehicle> generateDummyCustomerVehicles(List<Vehicle> vehicles) {
         List<CustomerVehicle> result = new ArrayList<>();
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
-            Customer c = new Customer(
+            User c = new User(
                     String.format("Name %s", i),
                     String.format("Address %s", i),
                     String.format("Residency %s", i),

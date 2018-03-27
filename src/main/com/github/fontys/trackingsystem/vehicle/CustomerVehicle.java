@@ -2,7 +2,7 @@ package com.github.fontys.trackingsystem.vehicle;
 
 
 import com.github.fontys.trackingsystem.payment.Bill;
-import com.github.fontys.trackingsystem.user.Customer;
+import com.github.fontys.trackingsystem.user.User;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,13 +10,13 @@ import java.util.List;
 public class CustomerVehicle implements Serializable {
 
     private int id;
-    private Customer customer;
+    private User customer;
     private String licensePlate;
     private Vehicle vehicle;
     private String proofOfOwnership;
     private List<Bill> bills;
 
-    public CustomerVehicle(int id, Customer customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
+    public CustomerVehicle(int id, User customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
         this.id = id;
         this.customer = customer;
         this.licensePlate = licensePlate;
@@ -24,7 +24,7 @@ public class CustomerVehicle implements Serializable {
         this.proofOfOwnership = proofOfOwnership;
     }
 
-    public CustomerVehicle(Customer customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
+    public CustomerVehicle(User customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
         this.customer = customer;
         this.licensePlate = licensePlate;
         this.vehicle = vehicle;
@@ -45,11 +45,11 @@ public class CustomerVehicle implements Serializable {
         this.id = id;
     }
 
-    public Customer getCustomer() {
+    public User getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(User customer) {
         this.customer = customer;
     }
 
