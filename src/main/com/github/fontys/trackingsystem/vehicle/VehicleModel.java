@@ -7,6 +7,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity(name = "VEHICLE_MODEL")
+@NamedQueries({
+        @NamedQuery(name="VehicleModel.findAll",
+                query="SELECT v FROM VEHICLE_MODEL v"),/*
+        @NamedQuery(name="VehicleModel.findByName",
+                query="SELECT v FROM VEHICLE_MODEL v WHERE v.MODELNAME = :MODELNAME"),*/
+})
 public class VehicleModel implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

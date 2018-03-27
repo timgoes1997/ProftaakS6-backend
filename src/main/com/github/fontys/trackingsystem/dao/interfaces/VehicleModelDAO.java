@@ -11,6 +11,8 @@ public interface VehicleModelDAO {
 
     VehicleModel find(long id);
 
+    List<VehicleModel> findAllModels();
+
     List<VehicleModel> findModelsByModelName(String modelName);
 
     List<VehicleModel> findModelsByEdition(String modelName);
