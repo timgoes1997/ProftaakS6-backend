@@ -3,12 +3,17 @@ package com.github.fontys.trackingsystem.tracking;
 
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
+import javax.persistence.Entity;
 import java.io.Serializable;
 
+//@Entity(name="TRACKED_VEHICLE")
 public class TrackedVehicle implements Serializable {
+
     private CustomerVehicle customerVehicle;
     private Location location;
     private Hardware hardware;
+
+    public TrackedVehicle(){}
 
     public TrackedVehicle(CustomerVehicle customerVehicle, Location location, Hardware hardware) {
         this.customerVehicle = customerVehicle;

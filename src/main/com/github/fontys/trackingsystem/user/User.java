@@ -2,16 +2,39 @@ package com.github.fontys.trackingsystem.user;
 
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Entity(name="CUSTOMER")
 public class User implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
+
+    @Column(name="NAME")
     private String name;
+
+    @Column(name="ADDRESS")
     private String address;
+
+    @Column(name="RESIDENCY")
     private String residency;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE")
     private Role role;
+
+    @OneToOne(fetch= FetchType.LAZY, mappedBy="user")
     private Account account;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DEPARTMENT")
     private Department department;
+
+    @OneToMany(mappedBy="customer")
     private List<CustomerVehicle> customerVehicles;
 
     public User(String name, String address, String residency, Role role) {
@@ -20,6 +43,8 @@ public class User implements Serializable {
         this.residency = residency;
         this.role = role;
     }
+
+    public User(){}
 
     public String getName() {
         return name;

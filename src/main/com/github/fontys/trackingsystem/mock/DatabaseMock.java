@@ -64,7 +64,7 @@ public class DatabaseMock {
                     Role.BILL_ADMINISTRATOR);
 
             CustomerVehicle cv = new CustomerVehicle(
-                    i,
+                    (long)i,
                     c,
                     String.format("XXX-00%s", i),
                     vehicles.get(i),
@@ -81,7 +81,7 @@ public class DatabaseMock {
             startdate.set(2018, i, 1);
             Calendar endDate = new GregorianCalendar();
             endDate.set(2018, i, 28);
-            TrackedVehicle tv = new TrackedVehicle(cvs.get(i), new Location(50 + i / 4, 9 + i / 4, startdate), new Hardware(10, "Hwtype"));
+            TrackedVehicle tv = new TrackedVehicle(cvs.get(i), new Location(50 + i / 4, 9 + i / 4, startdate), new Hardware((long)10, "Hwtype"));
             trackedVehicles.add(tv);
             Bill b = new Bill(
                     cvs.get(i),

@@ -4,19 +4,35 @@ package com.github.fontys.trackingsystem.vehicle;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.user.User;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Entity(name="CUSTOMER_VEHICLE")
 public class CustomerVehicle implements Serializable {
 
-    private int id;
-    private User customer;
-    private String licensePlate;
-    private Vehicle vehicle;
-    private String proofOfOwnership;
-    private List<Bill> bills;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
 
-    public CustomerVehicle(int id, User customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="OWNER_ID")
+    private User customer;
+
+    @Column(name="LICENSEPLATE")
+    private String licensePlate;
+
+    @OneToOne
+    @JoinColumn(name="VEHICLE_ID")
+    private Vehicle vehicle;
+
+    @Column(name="PROOF_OF_OWNERSHIP")
+    private String proofOfOwnership;
+
+    //private List<Bill> bills;
+
+    public CustomerVehicle(Long id, User customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
         this.id = id;
         this.customer = customer;
         this.licensePlate = licensePlate;
@@ -31,17 +47,19 @@ public class CustomerVehicle implements Serializable {
         this.proofOfOwnership = proofOfOwnership;
     }
 
+    public CustomerVehicle(){}
+
     @Override
     public String toString() {
         return String.format("CV: id %s, licensePlate %s", id, licensePlate);
 //        return super.toString();
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -77,11 +95,12 @@ public class CustomerVehicle implements Serializable {
         this.proofOfOwnership = proofOfOwnership;
     }
 
+    /*
     public List<Bill> getBills() {
         return bills;
     }
 
     public void setBills(List<Bill> bills) {
         this.bills = bills;
-    }
+    }*/
 }

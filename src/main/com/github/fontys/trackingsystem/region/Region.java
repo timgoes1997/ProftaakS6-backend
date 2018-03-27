@@ -24,12 +24,12 @@ public class Region implements Serializable{
     @JoinTable(name = "BORDER_POINTS",
             joinColumns = { @JoinColumn(name="REGION_ID", referencedColumnName="ID")},
             inverseJoinColumns = { @JoinColumn(name="LOCATION_ID", referencedColumnName="ID")})
-    private List<Location> borderPoints; // must be ordered consecutively
+    private List<BorderLocation> borderPoints; // must be ordered consecutively
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "region")
     private List<Rate> rates;
 
-    public Region(String name, List<Location> borderPoints, List<Rate> rates) {
+    public Region(String name, List<BorderLocation> borderPoints, List<Rate> rates) {
         this.name = name;
         this.borderPoints = borderPoints;
         this.rates = rates;
@@ -46,11 +46,11 @@ public class Region implements Serializable{
         this.name = name;
     }
 
-    public List<Location> getBorderPoints() {
+    public List<BorderLocation> getBorderPoints() {
         return borderPoints;
     }
 
-    public void setBorderPoints(List<Location> borderPoints) {
+    public void setBorderPoints(List<BorderLocation> borderPoints) {
         this.borderPoints = borderPoints;
     }
 
