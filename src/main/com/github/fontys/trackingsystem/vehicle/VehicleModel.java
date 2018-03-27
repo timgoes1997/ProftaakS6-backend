@@ -9,9 +9,9 @@ import java.io.Serializable;
 @Entity(name = "VEHICLE_MODEL")
 @NamedQueries({
         @NamedQuery(name="VehicleModel.findAll",
-                query="SELECT v FROM VEHICLE_MODEL v"),/*
+                query="SELECT v FROM VEHICLE_MODEL v"),
         @NamedQuery(name="VehicleModel.findByName",
-                query="SELECT v FROM VEHICLE_MODEL v WHERE v.MODELNAME = :MODELNAME"),*/
+                query="SELECT v FROM VEHICLE_MODEL v WHERE v.modelName=:modelName"),
 })
 public class VehicleModel implements Serializable{
     @Id

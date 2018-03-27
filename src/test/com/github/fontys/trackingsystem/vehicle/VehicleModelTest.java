@@ -6,7 +6,9 @@ import com.github.fontys.trackingsystem.dao.VehicleModelDAOImpl;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class VehicleModelTest {
 
     private EntityManager em;
@@ -34,19 +37,30 @@ public class VehicleModelTest {
     }
 
     @Test
-    public void AddVehicleModel(){
+    public void TestAAddVehicleModel(){
         em.getTransaction().begin();
-        vm = new VehicleModel("Model X", "P100D", FuelType.ELECTRIC, EnergyLabel.A);
-        em.persist(vm);
+        vmDao.create(new VehicleModel("Model X", "P100D", FuelType.ELECTRIC, EnergyLabel.A));
+        vmDao.create(new VehicleModel("Model X", "P90D", FuelType.ELECTRIC, EnergyLabel.A));
         em.getTransaction().commit();;
     }
 
     @Test
-    public void FindAllModels(){
+    public void TestBFindAllModels(){
         em.getTransaction().begin();
 
         List<VehicleModel> vModels = vmDao.findAllModels();
+        assertTrue(vModels.size() > 0);
+        vm = vModels.get(0);
 
+        em.getTransaction().commit();
+    }
+
+    @Test
+    public void TestCFindModelByName(){
+        em.getTransaction().begin();
+
+        List<VehicleModel> vModels = vmDao.findModelsByModelName("Model X");
+        assertTrue(vModels.size() > 0);
 
         em.getTransaction().commit();
     }

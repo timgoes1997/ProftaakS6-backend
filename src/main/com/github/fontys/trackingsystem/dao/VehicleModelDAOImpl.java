@@ -41,7 +41,10 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
 
     @Override
     public List<VehicleModel> findModelsByModelName(String modelName) {
-        return null;
+        TypedQuery<VehicleModel> query =
+                em.createNamedQuery("VehicleModel.findByName", VehicleModel.class);
+        List<VehicleModel> results = query.setParameter("modelName", modelName).getResultList();
+        return results;
     }
 
     @Override
