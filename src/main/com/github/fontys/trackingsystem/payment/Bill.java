@@ -1,6 +1,8 @@
 package com.github.fontys.trackingsystem.payment;
 
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
@@ -9,26 +11,43 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+@Entity(name="BILL")
 public class Bill implements Serializable {
-    private int billnr;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="CUSTOMER_VEHICLE_ID")
     private CustomerVehicle customerVehicle;
-    private Currency currency;
+
+    @Column(name="PRICE")
     private BigDecimal price;
+
+    @Column(name="ALREADY_PAID")
     private BigDecimal alreadyPaid;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE")
     private Calendar startDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE")
     private Calendar endDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "PAYMENT_STATUS")
     private PaymentStatus status;
+
+    @Column(name="MILEAGE")
     private double mileage;
 
-    /*
-        For reflective code
-     */
-    @Deprecated
     public Bill() {}
 
     public Bill(CustomerVehicle customerVehicle, Currency currency, BigDecimal price, BigDecimal alreadyPaid, Calendar startDate, Calendar endDate, PaymentStatus paymentStatus, double mileage) {
         this.customerVehicle = customerVehicle;
-        this.currency = currency;
         this.price = price;
         this.alreadyPaid = alreadyPaid;
         this.startDate = startDate;
@@ -44,14 +63,6 @@ public class Bill implements Serializable {
 
     public void setCustomerVehicle(CustomerVehicle customerVehicle) {
         this.customerVehicle = customerVehicle;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
     }
 
     public BigDecimal getPrice() {
@@ -112,11 +123,7 @@ public class Bill implements Serializable {
         return new SimpleDateFormat("MMM").format(startDate.getTime());
     }
 
-    public int getBillnr() {
-        return billnr;
-    }
-
-    public void setBillnr(int billnr) {
-        this.billnr = billnr;
+    public Long getId() {
+        return id;
     }
 }

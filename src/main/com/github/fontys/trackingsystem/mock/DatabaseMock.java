@@ -93,7 +93,6 @@ public class DatabaseMock {
                     PaymentStatus.OPEN,
                     1000
             );
-            b.setBillnr(i+1000);
             dummyBills.add(b);
         }
         return dummyBills;

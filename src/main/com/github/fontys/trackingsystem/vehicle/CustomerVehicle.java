@@ -30,7 +30,8 @@ public class CustomerVehicle implements Serializable {
     @Column(name="PROOF_OF_OWNERSHIP")
     private String proofOfOwnership;
 
-    //private List<Bill> bills;
+    @OneToMany(mappedBy="customerVehicle")
+    private List<Bill> bills;
 
     public CustomerVehicle(Long id, User customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
         this.id = id;
