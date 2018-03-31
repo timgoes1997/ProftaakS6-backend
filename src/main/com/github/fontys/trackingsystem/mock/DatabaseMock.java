@@ -37,6 +37,10 @@ public class DatabaseMock {
         bills = generateDummyBills(customerVehicles);
     }
 
+    public void updateBillStatus(Bill b, String newStatus) {
+        // TODO: 31-3-18 actually update bill status in the real database
+    }
+
     private List<Vehicle> generateDummyVehicles() {
         List<Vehicle> result = new ArrayList<>();
         Date date = new Date();

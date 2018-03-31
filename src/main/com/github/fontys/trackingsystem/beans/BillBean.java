@@ -2,14 +2,12 @@ package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.trackingsystem.mock.DatabaseMock;
 import com.github.fontys.trackingsystem.payment.Bill;
+import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -38,6 +36,7 @@ import java.util.List;
 @RequestScoped
 @Path("/bills")
 public class BillBean {
+
     @Inject
     private DatabaseMock db;
 
@@ -63,9 +62,40 @@ public class BillBean {
     @Path("/all")
     public Response getAllBills() {
         List<Bill> bills = db.getBills();
-        GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {};
+        GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {
+        };
         return Response.ok(list).build();
     }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{id}")
+    public Response getBillByID(@PathParam("id") int id, @QueryParam("status") String status) {
+        List<Bill> bills = db.getBills();
+        Bill result = null;
+        for (Bill b : bills) {
+            if (b.getId() == id) {
+                result = b;
+                break;
+            }
+        }
+
+        if (result.getStatus() == PaymentStatus.PAID) {
+            // mag niet naar open of cancelled gaan
+            if (status.equals("cancelled") || status.equals("open")) {
+                return Response.status(405).build();
+            }
+        } else if (result.getStatus() == PaymentStatus.CANCELED) {
+            // mag niet naar open of cancelled gaan
+            if (status.equals("open") || status.equals("cancelled")) {
+                return Response.status(405).build();
+            }
+        }
+        db.updateBillStatus(result, status);
+
+        return Response.ok(result).build();
+    }
+
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -74,7 +104,7 @@ public class BillBean {
         List<Bill> bills = db.getBills();
         Bill result = null;
         for (Bill b : bills) {
-            if (b.getBillnr() == id) {
+            if (b.getId() == id) {
                 result = b;
                 break;
             }
