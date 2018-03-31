@@ -96,6 +96,42 @@ public class BillBean {
         return Response.ok(result).build();
     }
 
+    private boolean isAPaymentStatus(String test) {
+        for (PaymentStatus c : PaymentStatus.values()) {
+            if (c.name().equals(test)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{status}")
+    public Response getBillByStatus(@QueryParam("status") String status) {
+        // Check if status is a valid status string
+        if (!isAPaymentStatus(status)) {
+            return Response.status(400).build();
+        }
+
+        List<Bill> bills = db.getBills();
+        List<Bill> result = new ArrayList<>();
+        for (Bill b : bills) {
+            if (b.getStatus().toString().equals(status)) {
+                result.add(b);
+                break;
+            }
+        }
+
+        // Check if there was any bill found
+        if (result.size() == 0) {
+            return Response.status(404).build();
+        }
+
+        // Good request, found results. Return results.
+        return Response.ok(result).build();
+    }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
