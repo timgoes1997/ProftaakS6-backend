@@ -3,7 +3,9 @@ package com.github.fontys.trackingsystem.beans;
 import com.github.fontys.trackingsystem.mock.DatabaseMock;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
+import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -105,6 +107,24 @@ public class BillBean {
         return false;
     }
 
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{ownerId}")
+    public Response getBillByOwnerId(@QueryParam("ownerId") int ownerId) {
+        // Check if owner exists
+        // TODO: 31-3-18 get bills by owner id
+        throw new NotImplementedException();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{vehicleId}")
+    public Response getBillByVehicleId(@QueryParam("vehicleId") int vehicleId) {
+        // Check if vehicle exists
+        // TODO: 31-3-18 get bills by vehicle id
+        throw new NotImplementedException();
+    }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
