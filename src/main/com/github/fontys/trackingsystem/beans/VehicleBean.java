@@ -45,19 +45,19 @@ public class VehicleBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response getVehicle(@PathParam("id") int id) {
-        for (CustomerVehicle cv : db.getCustomerVehicles()) {
-            if (cv.getId() == id) {
-                return Response.ok(cv).build();
-            }
+        try {
+            Vehicle vehicle = vehicleDAO.find(id);
+            return Response.status(Response.Status.FOUND).build();
+        }catch (Exception e){
+            return Response.serverError().build();
         }
-        return Response.serverError().build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/brands")
     public Response getBrands() {
-        List<String> brands = db.getBrands();
+        List<String> brands = vehicleDAO.getBrands();
         return Response.ok(brands).build();
     }
 
@@ -65,7 +65,7 @@ public class VehicleBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/brands/{brand}")
     public Response getVehicles(@PathParam("brand") String brand) {
-        List<Vehicle> vehicles = db.getVehiclesByBrand(brand);
+        List<Vehicle> vehicles = vehicleDAO.findByBrand(brand);
         if (vehicles.size() > 0) {
             return Response.ok(vehicles).build();
         } else {

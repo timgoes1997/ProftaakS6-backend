@@ -10,6 +10,7 @@ import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
@@ -74,5 +75,15 @@ public class VehicleDAOImpl implements VehicleDAO{
                 em.createNamedQuery("Vehicle.findByBrand", Vehicle.class);
         query.setParameter("brand", brand);
         return query.getResultList();
+    }
+
+    @Override
+    public List<String> getBrands() {
+        Query query = em.createQuery("SELECT DISTINCT v.brand FROM VEHICLE v");
+        return query.getResultList();
+    }
+
+    public void setEntityManager(EntityManager em){
+        this.em = em;
     }
 }

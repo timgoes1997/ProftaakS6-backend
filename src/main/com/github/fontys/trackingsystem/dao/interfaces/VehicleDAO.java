@@ -24,4 +24,6 @@ public interface VehicleDAO {
     List<Vehicle> findByModel(long id);
 
     List<Vehicle> findByBrand(String brand);
+
+    List<String> getBrands();
 }
