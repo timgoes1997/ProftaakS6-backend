@@ -103,10 +103,6 @@ public class UserBean {
         user.getAccount().setUser(user);
 
         try {
-            /*
-            accountDAO.create(user.getAccount());
-            Account createdAccount = accountDAO.findByEmail(user.getAccount().getEmail());
-            user.setAccount(createdAccount);*/
             userDAO.create(user);
             Account userAccount = accountDAO.findByEmail(user.getAccount().getEmail());
             User createdUser = userDAO.findByAccount(userAccount);
