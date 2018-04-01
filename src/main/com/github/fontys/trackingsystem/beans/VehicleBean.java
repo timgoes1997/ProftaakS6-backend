@@ -66,7 +66,7 @@ public class VehicleBean {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/register/vehicle")
+    @Path("/register/")
     public Response registerVehicle(@FormParam("brand") String brand,
                                     @FormParam("model") int modelID,
                                     @FormParam("licenseplate") String license,
@@ -86,11 +86,37 @@ public class VehicleBean {
                                     @FormParam("energyLabel") EnergyLabel energyLabel) {
         VehicleModel model = new VehicleModel(modelName, edition, fuelType, energyLabel);
 
+        //veh
         vehicleModelDAO.create(model);
 
         //TODO: check for already existing vehicles of the same type and return a error when that happens.
         return Response.ok(model).build();
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/model/find/{id}")
+    public Response getModel(@PathParam("id") Long id) {
+        try{
+            VehicleModel vm = vehicleModelDAO.find(id);
+            return Response.ok(vm).build();
+        }catch (Exception e){
+            return Response.noContent().build();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/model/find/name/{name}")
+    public Response getModel(@PathParam("name") String name) {
+        try{
+            List<VehicleModel> vm = vehicleModelDAO.findModelsByModelName(name);
+            return Response.ok(vm).build();
+        }catch (Exception e){
+            return Response.noContent().build();
+        }
+    }
+
 
     @POST
     @Path("/new")

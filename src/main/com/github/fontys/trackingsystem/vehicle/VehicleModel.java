@@ -10,8 +10,22 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(name="VehicleModel.findAll",
                 query="SELECT v FROM VEHICLE_MODEL v"),
+        @NamedQuery(name="VehicleModel.findByID",
+                query="SELECT v FROM VEHICLE_MODEL v WHERE v.id=:id"),
         @NamedQuery(name="VehicleModel.findByName",
                 query="SELECT v FROM VEHICLE_MODEL v WHERE v.modelName=:modelName"),
+        @NamedQuery(name="VehicleModel.findByEdition",
+                query="SELECT v FROM VEHICLE_MODEL v WHERE v.edition=:edition"),
+        @NamedQuery(name="VehicleModel.findByFuelType",
+                query="SELECT v FROM VEHICLE_MODEL v WHERE v.fuelType=:fuelType"),
+        @NamedQuery(name="VehicleModel.findByEnergyLabel",
+                query="SELECT v FROM VEHICLE_MODEL v WHERE v.energyLabel=:energyLabel"),
+        @NamedQuery(name="VehicleModel.findByNameAndEdition",
+                query="SELECT v FROM VEHICLE_MODEL v WHERE v.modelName=:modelName " +
+                        "AND v.edition=:edition"),
+        @NamedQuery(name="VehicleModel.find",
+                query="SELECT v FROM VEHICLE_MODEL v WHERE v.modelName=:modelName " +
+                        "AND v.edition=:edition AND v.fuelType=:fuelType AND v.energyLabel=:energyLabel"),
 })
 public class VehicleModel implements Serializable{
     @Id
