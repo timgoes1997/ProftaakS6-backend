@@ -32,6 +32,7 @@ public class DatabaseMock {
 
     private List<TrackedVehicle> trackedVehicles = new ArrayList<>();
     private List<CustomerVehicle> customerVehicles = new ArrayList<>();
+    private Map<String, Location> trackedLocations = new HashMap<String, Location>();
     private List<Vehicle> vehicles = new ArrayList<>();
     private List<Bill> bills = new ArrayList<>();
 
@@ -158,7 +159,7 @@ public class DatabaseMock {
         return trackedVehicles;
     }
 
-    public List<Location>
+    public Map<String, Location> getTrackedLocations() { return trackedLocations; }
 
     public List<Vehicle> getVehicles() {
         return vehicles;

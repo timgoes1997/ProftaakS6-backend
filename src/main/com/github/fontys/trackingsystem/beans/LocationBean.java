@@ -5,6 +5,7 @@ import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.tracking.Location;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import org.glassfish.jersey.internal.util.collection.Value;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequestScoped
 @Path("/location")
@@ -53,7 +55,30 @@ public class LocationBean {
         // todo
         List<Location> locations = new ArrayList<>();
 
+        // filter Hashmap for locations of current license with lambda expressions
+        // couldn't call start date and end date in lambda, thus the second iteration with an iterator
+        Map<String, Location> locationsMap = db.getTrackedLocations().entrySet().stream().filter(
+                map -> (map.getKey() == license))
+                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
 
+        // filter the map on date
+        if (locationsMap.size() > 0) {
+            // assign iterator to iterate through map
+            Iterator it = locationsMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry entry = (Map.Entry)it.next();
+                Location entryLocation = (Location)entry.getValue();
+                // compare dates
+                if (entryLocation.getTime().after(start) && entryLocation.getTime().before(end)) {
+                    locations.add(entryLocation);
+                }
+            }
+        }
+        else {
+            // no records
+            // Response? @AskRowan
+
+        }
 
         if (start.equals(end)) { // realtime
             locations.add(trackedVehicle.getLocation()); // Add last known location
