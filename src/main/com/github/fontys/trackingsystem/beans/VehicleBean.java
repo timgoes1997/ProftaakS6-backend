@@ -75,7 +75,7 @@ public class VehicleBean {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/register/")
+    @Path("/register/vehicle")
     public Response registerVehicle(@FormParam("brand") String brand,
                                     @FormParam("model") Long modelID,
                                     @FormParam("buildDate") String date) {
@@ -168,12 +168,11 @@ public class VehicleBean {
 
 
     @POST
-    @Path("/new")
+    @Path("/register")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response newVehicle(@FormDataParam("brand") String brand,
-                               @FormDataParam("model") int modelID,
+    public Response newVehicle(@FormDataParam("vehicle") long vehicleID,
+                               @FormDataParam("user") long userID,
                                @FormDataParam("licenseplate") String license,
-                               @FormDataParam("buildDate") String BuildDate,
                                @FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetails) throws Exception {
         String uploadedFileLocation = "D://School//S6//Proftaak//Git//Test//";

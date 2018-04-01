@@ -7,6 +7,12 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity(name="CUSTOMER")
+@NamedQueries({
+        @NamedQuery(name = "Customer.findByID",
+                query = "SELECT c FROM CUSTOMER c WHERE c.id=:id"),
+        @NamedQuery(name = "Customer.findByAccount",
+                query = "SELECT c FROM CUSTOMER c WHERE c.account.id=:id"),
+})
 public class User implements Serializable {
 
     @Id
