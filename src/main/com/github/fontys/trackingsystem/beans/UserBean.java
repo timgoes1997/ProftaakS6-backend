@@ -3,15 +3,20 @@ package com.github.fontys.trackingsystem.beans;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.trackingsystem.user.Role;
+import com.github.fontys.trackingsystem.user.User;
+import com.github.fontys.trackingsystem.vehicle.Vehicle;
+import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 
+import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RequestScoped
 @Path("/user")
@@ -30,7 +35,7 @@ public class UserBean {
         try {
             Account acc = accountDAO.find(id);
             return Response.status(Response.Status.FOUND).entity(acc).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             return Response.serverError().build();
         }
     }
@@ -42,7 +47,7 @@ public class UserBean {
         try {
             Account acc = accountDAO.findByUsername(name);
             return Response.status(Response.Status.FOUND).entity(acc).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             return Response.serverError().build();
         }
     }
@@ -54,8 +59,60 @@ public class UserBean {
         try {
             Account acc = accountDAO.findByEmail(email);
             return Response.status(Response.Status.FOUND).entity(email).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             return Response.serverError().build();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/user/{id}")
+    public Response getUser(@PathParam("id") int id) {
+        try {
+            User user = userDAO.find(id);
+            return Response.status(Response.Status.FOUND).entity(user).build();
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
+    }
+
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/customer/create")
+    public Response createCustomer(@FormParam("name") String name,
+                                    @FormParam("address") String address,
+                                    @FormParam("residency") String residency,
+                                    @FormParam("email") String email,
+                                    @FormParam("username") String username,
+                                    @FormParam("password") String password) {
+        Account acc;
+        try {
+            acc = accountDAO.findByEmail(email);
+            if (acc != null) {
+                return Response.status(Response.Status.CONFLICT).build();
+            }
+        } catch (Exception e) {
+            if (!(e instanceof EJBException)) {
+                return Response.serverError().entity(e).build();
+            }
+        }
+
+        User user = new User(name, address, residency, Role.CUSTOMER);
+        user.setAccount(new Account(email, username, password));
+        user.getAccount().setUser(user);
+
+        try {
+            /*
+            accountDAO.create(user.getAccount());
+            Account createdAccount = accountDAO.findByEmail(user.getAccount().getEmail());
+            user.setAccount(createdAccount);*/
+            userDAO.create(user);
+            Account userAccount = accountDAO.findByEmail(user.getAccount().getEmail());
+            User createdUser = userDAO.findByAccount(userAccount);
+            return Response.status(Response.Status.CREATED).entity(createdUser).build();
+        } catch (Exception e) { //Expects a NoResultException but that is hidden in EJBException
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
         }
     }
 }

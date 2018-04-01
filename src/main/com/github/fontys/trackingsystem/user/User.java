@@ -33,7 +33,7 @@ public class User implements Serializable {
     @Column(name = "ROLE")
     private Role role;
 
-    @OneToOne(fetch= FetchType.LAZY, mappedBy="user")
+    @OneToOne(fetch= FetchType.LAZY, mappedBy="user", cascade = CascadeType.PERSIST)
     private Account account;
 
     @Enumerated(EnumType.STRING)
