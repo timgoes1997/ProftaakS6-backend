@@ -5,6 +5,19 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity(name = "VEHICLE")
+@NamedQueries({
+        @NamedQuery(name="Vehicle.findAll",
+                query="SELECT v FROM VEHICLE v"),
+        @NamedQuery(name="Vehicle.findByID",
+                query="SELECT v FROM VEHICLE v WHERE v.id=:id"),
+        @NamedQuery(name="Vehicle.findByBrand",
+                query="SELECT v FROM VEHICLE v WHERE v.brand=:brand"),
+        @NamedQuery(name="Vehicle.findByModel",
+                query="SELECT v FROM VEHICLE v WHERE v.vehicleModel.id=:id"),
+        @NamedQuery(name="Vehicle.find",
+                query="SELECT v FROM VEHICLE v WHERE v.vehicleModel.id=:id " +
+                        "AND v.brand=:brand AND v.buildDate=:buildDate"),
+ })
 public class Vehicle implements Serializable{
 
     @Id

@@ -1,6 +1,7 @@
 package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.trackingsystem.EnergyLabel;
+import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
 import com.github.fontys.trackingsystem.mock.DatabaseMock;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
@@ -11,14 +12,19 @@ import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -31,6 +37,9 @@ public class VehicleBean {
 
     @Inject
     private VehicleModelDAO vehicleModelDAO;
+
+    @Inject
+    private VehicleDAO vehicleDAO;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,10 +66,10 @@ public class VehicleBean {
     @Path("/brands/{brand}")
     public Response getVehicles(@PathParam("brand") String brand) {
         List<Vehicle> vehicles = db.getVehiclesByBrand(brand);
-        if(vehicles.size() > 0){
+        if (vehicles.size() > 0) {
             return Response.ok(vehicles).build();
-        } else{
-          return Response.noContent().build();
+        } else {
+            return Response.noContent().build();
         }
     }
 
@@ -68,39 +77,79 @@ public class VehicleBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/register/")
     public Response registerVehicle(@FormParam("brand") String brand,
-                                    @FormParam("model") int modelID,
-                                    @FormParam("licenseplate") String license,
+                                    @FormParam("model") Long modelID,
                                     @FormParam("buildDate") String date) {
-        List<Vehicle> vehicles = db.getVehiclesByBrand(brand);
+        VehicleModel vm;
+        try{
+            vm = vehicleModelDAO.find(modelID);
+        }catch (EJBException e){
+            return Response.status(Response.Status.NOT_FOUND).entity(e).build();
+        }
 
-        //TODO: check for already existing vehicles of the same type and return a error when that happens.
-        return Response.ok(vehicles).build();
+        Date inDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+        try{
+            inDate = sdf.parse(date);
+            Vehicle v = vehicleDAO.find(brand, vm.getId(), inDate);
+            if(v != null){
+                return Response.status(Response.Status.CONFLICT).build();
+            }
+        } catch (ParseException|EJBException e) { //Expects a NoResultException but that is hidden in EJBException
+            if(e instanceof EJBException){
+                vehicleDAO.create(new Vehicle(brand, vm, inDate));
+                Vehicle v = vehicleDAO.find(brand, vm.getId(), inDate);
+                return Response.status(Response.Status.CREATED).entity(v).build();
+            }else{
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+            }
+        }
+
+        return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/register/model")
     public Response registerModel(@FormParam("modelName") String modelName,
-                                    @FormParam("edition") String edition,
-                                    @FormParam("fuelType") FuelType fuelType,
-                                    @FormParam("energyLabel") EnergyLabel energyLabel) {
-        VehicleModel model = new VehicleModel(modelName, edition, fuelType, energyLabel);
-
-        //veh
-        vehicleModelDAO.create(model);
-
-        //TODO: check for already existing vehicles of the same type and return a error when that happens.
-        return Response.ok(model).build();
+                                  @FormParam("edition") String edition,
+                                  @FormParam("fuelType") FuelType fuelType,
+                                  @FormParam("energyLabel") EnergyLabel energyLabel) {
+        try {
+            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
+            if (vm != null) {
+                return Response.status(Response.Status.CONFLICT).build();
+            } else {
+                vehicleModelDAO.create(new VehicleModel(modelName, edition, fuelType, energyLabel));
+                VehicleModel vm2 = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
+                return Response.status(Response.Status.CREATED).entity(vm2).build();
+            }
+        } catch (EJBException e) {
+            vehicleModelDAO.create(new VehicleModel(modelName, edition, fuelType, energyLabel));
+            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
+            return Response.status(Response.Status.CREATED).entity(vm).build();
+        }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/model/find/{id}")
     public Response getModel(@PathParam("id") Long id) {
-        try{
+        try {
             VehicleModel vm = vehicleModelDAO.find(id);
+            return Response.status(Response.Status.FOUND).entity(vm).build();
+        } catch (Exception e) {
+            return Response.noContent().build();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/model/find/")
+    public Response getModel(@QueryParam("modelName") String modelName, @QueryParam("edition") String edition, @QueryParam("fuelType") FuelType fuelType, @QueryParam("energyLabel") EnergyLabel energyLabel) {
+        try {
+            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
             return Response.ok(vm).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             return Response.noContent().build();
         }
     }
@@ -109,10 +158,10 @@ public class VehicleBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/model/find/name/{name}")
     public Response getModel(@PathParam("name") String name) {
-        try{
+        try {
             List<VehicleModel> vm = vehicleModelDAO.findModelsByModelName(name);
             return Response.ok(vm).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             return Response.noContent().build();
         }
     }
@@ -131,7 +180,7 @@ public class VehicleBean {
 
         String extension = FilenameUtils.getExtension(fileDetails.getFileName());
 
-        if(extension.equals("")) {
+        if (extension.equals("")) {
             return Response.notModified("No file given").build();
         }
 
@@ -153,7 +202,7 @@ public class VehicleBean {
         String uploadedFileLocation = "D://School//S6//Proftaak//Git//Test//";
         String extension = FilenameUtils.getExtension(fileDetails.getFileName());
 
-        if(extension.equals("")) {
+        if (extension.equals("")) {
             return Response.notModified("No file given").build();
         }
 
@@ -166,16 +215,16 @@ public class VehicleBean {
         return Response.status(200).entity(output).build();
     }
 
-    private File getNewFile(String uploadFileLocation, String fileType){
+    private File getNewFile(String uploadFileLocation, String fileType) {
         Random random = new SecureRandom();
         File f = new File(uploadFileLocation + getRandomFileName(random, fileType));
-        while(f.exists()){
+        while (f.exists()) {
             f = new File(uploadFileLocation + getRandomFileName(random, fileType));
         }
         return f;
     }
 
-    private String getRandomFileName(Random random, String fileType){
+    private String getRandomFileName(Random random, String fileType) {
         String newFileName = new BigInteger(130, random).toString(32) + "." + fileType;
         return newFileName;
     }
