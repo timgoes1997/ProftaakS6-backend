@@ -158,6 +158,8 @@ public class DatabaseMock {
         return trackedVehicles;
     }
 
+    public List<Location>
+
     public List<Vehicle> getVehicles() {
         return vehicles;
     }

@@ -29,10 +29,10 @@ public class LocationBean {
     public Response getVehicleOnLocation(@PathParam("license") String license, @FormParam("startdate") String startdate, @FormParam("enddate") String enddate) {
 
         // get the vehicle
-        TrackedVehicle id = getTrackedVehicle(license);
+        TrackedVehicle trackedVehicle = getTrackedVehicle(license);
 
         // if no vehicle, wrong license
-        if (id == null) {
+        if (trackedVehicle == null) {
             return Response.status(200, "Could not find license plate").build();
         }
 
@@ -52,10 +52,13 @@ public class LocationBean {
         // get the locations of the vehicle
         // todo
         List<Location> locations = new ArrayList<>();
+
+
+
         if (start.equals(end)) { // realtime
-            locations.add(id.getLocation()); // Add last known location
+            locations.add(trackedVehicle.getLocation()); // Add last known location
         } else {
-            locations.add(id.getLocation()); // not realtime
+            locations.add(trackedVehicle.getLocation()); // not realtime
         }
         GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {};
         return Response.ok(list).build();
