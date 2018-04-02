@@ -74,7 +74,7 @@ public class BillBean {
         List<Bill> bills = db.getBills();
         Bill result = null;
         for (Bill b : bills) {
-            if (b.getBillnr() == id) {
+            if (b.getId() == id) {
                 result = b;
                 break;
             }
