@@ -12,6 +12,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity(name="BILL")
+@NamedQueries({
+        @NamedQuery(name = "Bill.findByID",
+                query = "SELECT b FROM BILL b WHERE b.id=:id"),
+
+        @NamedQuery(name = "Bill.findByVehicleId",
+                query = "SELECT b FROM BILL b WHERE b.customerVehicle.id=:id"),
+        // TODO: 2-4-18 Idk of je zo bij een nested class kan met jpa queries
+
+        @NamedQuery(name = "Bill.findByStatus",
+                query = "SELECT b FROM BILL b WHERE b.status=:status"),
+})
 public class Bill implements Serializable {
 
     @Id
@@ -109,7 +120,6 @@ public class Bill implements Serializable {
     public void setStatus(PaymentStatus paymentStatus) {
         this.status = paymentStatus;
     }
-
     public double getMileage() {
         return mileage;
     }
