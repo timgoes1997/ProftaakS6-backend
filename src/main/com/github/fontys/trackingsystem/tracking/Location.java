@@ -2,6 +2,7 @@ package com.github.fontys.trackingsystem.tracking;
 
 import java.util.Calendar;
 
+
 public class Location {
     private double x;
     private double y;

@@ -38,7 +38,10 @@ public class LocationBean {
             return Response.status(200, "Could not find license plate").build();
         }
 
-        // parse the time
+        List<Location> locations = new ArrayList<>();
+
+        // Not realtime
+        // Parse the time
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-mm-dd");
         Date start = null;
         Date end = null;
@@ -51,53 +54,55 @@ public class LocationBean {
             return Response.status(500, "Unknown date format").build();
         }
 
-        // get the locations of the vehicle
-        // todo
-        List<Location> locations = new ArrayList<>();
+    // get the locations of the vehicle
+    // filter Hashmap for locations of current license with lambda expressions
+    // couldn't call start date and end date in lambda, thus the second iteration with an iterator
+    Map<String, Location> locationsMap = db.getTrackedLocations().entrySet().stream().filter(
+            map -> (map.getKey() == license))
+            .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
 
-        // filter Hashmap for locations of current license with lambda expressions
-        // couldn't call start date and end date in lambda, thus the second iteration with an iterator
-        Map<String, Location> locationsMap = db.getTrackedLocations().entrySet().stream().filter(
-                map -> (map.getKey() == license))
-                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
-
-        // filter the map on date
+    // filter the map on date, if the map is not empty
         if (locationsMap.size() > 0) {
-            // assign iterator to iterate through map
-            Iterator it = locationsMap.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry entry = (Map.Entry)it.next();
-                Location entryLocation = (Location)entry.getValue();
-                // compare dates
-                if (entryLocation.getTime().after(start) && entryLocation.getTime().before(end)) {
-                    locations.add(entryLocation);
-                }
+
+        // assign iterator to iterate through map
+        Iterator it = locationsMap.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            Location entryLocation = (Location) entry.getValue();
+
+            // compare dates
+            if (entryLocation.getTime().after(start) && entryLocation.getTime().before(end)) {
+
+                // if the date of the location falls between the specified dates, add the location
+                locations.add(entryLocation);
             }
         }
-        else {
-            // no records
-            // Response? @AskRowan
-
-        }
-
-        if (start.equals(end)) { // realtime
-            locations.add(trackedVehicle.getLocation()); // Add last known location
-        } else {
-            locations.add(trackedVehicle.getLocation()); // not realtime
-        }
-        GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {};
-        return Response.ok(list).build();
     }
+
+    GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {};
+        return Response.ok(list).build();
+}
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{license}/realtime")
     public Response getVehicleOnLocation(@PathParam("license") String license) {
 
-        Calendar now = new GregorianCalendar();
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-mm-dd");
-        String dateFormatted = fmt.format(now.getTime());
-        return getVehicleOnLocation(license, dateFormatted, dateFormatted);
+        // get the vehicle
+        TrackedVehicle trackedVehicle = getTrackedVehicle(license);
+
+        // if no vehicle, wrong license
+        if (trackedVehicle == null) {
+            return Response.status(200, "Could not find license plate").build();
+        }
+
+        List<Location> locations = new ArrayList<>();
+        locations.add(trackedVehicle.getLocation()); // Add last known location
+
+        GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {
+        };
+        return Response.ok(list).build();
     }
 
     private TrackedVehicle getTrackedVehicle(String license) {
