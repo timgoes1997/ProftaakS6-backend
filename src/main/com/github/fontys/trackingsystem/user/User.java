@@ -1,13 +1,47 @@
 package com.github.fontys.trackingsystem.user;
 
-import java.io.Serializable;
+import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
-public abstract class User implements Serializable {
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+
+@Entity(name="CUSTOMER")
+@NamedQueries({
+        @NamedQuery(name = "Customer.findByID",
+                query = "SELECT c FROM CUSTOMER c WHERE c.id=:id"),
+        @NamedQuery(name = "Customer.findByAccount",
+                query = "SELECT c FROM CUSTOMER c WHERE c.account.id=:id"),
+})
+public class User implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
+
+    @Column(name="NAME")
     private String name;
+
+    @Column(name="ADDRESS")
     private String address;
+
+    @Column(name="RESIDENCY")
     private String residency;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE")
     private Role role;
+
+    @OneToOne(fetch= FetchType.LAZY, mappedBy="user", cascade = CascadeType.PERSIST)
     private Account account;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DEPARTMENT")
+    private Department department;
+
+    @OneToMany(mappedBy="customer")
+    private List<CustomerVehicle> customerVehicles;
 
     public User(String name, String address, String residency, Role role) {
         this.name = name;
@@ -15,6 +49,8 @@ public abstract class User implements Serializable {
         this.residency = residency;
         this.role = role;
     }
+
+    public User(){}
 
     public String getName() {
         return name;
@@ -54,5 +90,25 @@ public abstract class User implements Serializable {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public List<CustomerVehicle> getCustomerVehicles() {
+        return customerVehicles;
+    }
+
+    public void setCustomerVehicles(List<CustomerVehicle> customerVehicles) {
+        this.customerVehicles = customerVehicles;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

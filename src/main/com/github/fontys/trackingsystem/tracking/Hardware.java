@@ -1,19 +1,33 @@
 package com.github.fontys.trackingsystem.tracking;
 
-public class Hardware {
-    private int id;
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity(name="HARDWARE")
+public class Hardware implements Serializable{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
+
+    @Column(name = "TYPE")
     private String type;
 
-    public Hardware(int id, String type) {
+    public Hardware() {
+
+    }
+
+    public Hardware(Long id, String type) {
         this.id = id;
         this.type = type;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sun Apr 01 18:21:24 CEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0162-8203-6850-000007693c78 
+on database directory memory:/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend/testDB with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+Loaded from file:/home/tim/.gradle/caches/modules-2/files-2.1/org.apache.derby/derby/10.14.1.0/3bcd8b1af3f8cd022d54d331e00064776be04f9c/derby-10.14.1.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_172-solus-b00
+user.dir=/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend
+os.name=Linux
+os.arch=amd64
+os.version=4.9.88-83.lts
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

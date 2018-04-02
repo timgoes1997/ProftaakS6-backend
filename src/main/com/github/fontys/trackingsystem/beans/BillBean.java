@@ -44,7 +44,7 @@ public class BillBean {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{year}/{month}")
-    public Response getVehicle(@PathParam("year") int year, @PathParam("month") int month) {
+    public Response getBillByTime(@PathParam("year") int year, @PathParam("month") int month) {
         List<Bill> bills = new ArrayList<>();
         for (Bill b : db.getBills()) {
             boolean result = compareYearAndMonth(b, year, month - 1);
@@ -61,10 +61,25 @@ public class BillBean {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/all")
-    public Response getVehicle() {
+    public Response getAllBills() {
         List<Bill> bills = db.getBills();
         GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {};
         return Response.ok(list).build();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{id}")
+    public Response getBillByID(@PathParam("id") int id) {
+        List<Bill> bills = db.getBills();
+        Bill result = null;
+        for (Bill b : bills) {
+            if (b.getId() == id) {
+                result = b;
+                break;
+            }
+        }
+        return Response.ok(result).build();
     }
 
     private boolean compareYearAndMonth(Bill b, int year, int month) {

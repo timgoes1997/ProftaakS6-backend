@@ -1,16 +1,45 @@
 package com.github.fontys.trackingsystem.user;
 
+import com.sun.mail.imap.ACL;
+
+import javax.persistence.*;
+
+@Entity(name = "ACCOUNT")
+@NamedQueries({
+        @NamedQuery(name = "Account.findByID",
+                query = "SELECT a FROM ACCOUNT a WHERE a.id=:id"),
+        @NamedQuery(name = "Account.findByUsername",
+                query = "SELECT a FROM ACCOUNT a WHERE a.username=:username"),
+        @NamedQuery(name = "Account.findByEmail",
+                query = "SELECT a FROM ACCOUNT a WHERE a.email=:email"),
+})
 public class Account {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
+
+    @Column(name="EMAIL")
     private String email;
+
+    @Column(name="USERNAME")
     private String username;
+
+    @Column(name="PASSWORD")
     private String password;
+
+    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name="USER_ID")
     private User user;
 
     public Account(String email, String username, String password) {
-        this.email = email;
         this.username = username;
+        this.email = email;
         this.password = password;
     }
+
+    public Account(){}
 
     public String getEmail() {
         return email;
@@ -42,5 +71,9 @@ public class Account {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

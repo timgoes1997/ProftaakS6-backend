@@ -2,8 +2,8 @@ package com.github.fontys.trackingsystem.region;
 
 import javax.persistence.*;
 
-@Entity(name = "LOCATION")
-public class Location {
+@Entity(name = "BORDER_LOCATION")
+public class BorderLocation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +16,11 @@ public class Location {
     @Column(name="Y")
     private double y;
 
-    public Location(){
+    public BorderLocation(){
 
     }
 
-    public Location(double x, double y){
+    public BorderLocation(double x, double y){
         this.x = x;
         this.y = y;
     }
