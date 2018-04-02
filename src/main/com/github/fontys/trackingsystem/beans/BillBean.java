@@ -1,14 +1,20 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.mock.DatabaseMock;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
+import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.Vehicle;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.security.auth.login.AccountNotFoundException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -42,6 +48,16 @@ public class BillBean {
     @Inject
     private DatabaseMock db;
 
+    @Inject
+    private BillDAO billDAO;
+
+    @Inject
+    private AccountDAO accountDAO;
+
+    @Inject
+    private VehicleDAO vehicleDAO;
+
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{year}/{month}")
@@ -72,58 +88,94 @@ public class BillBean {
     @PUT
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{id}")
-    public Response getBillByID(@PathParam("id") int id, @QueryParam("status") String status) {
-        List<Bill> bills = db.getBills();
-        Bill result = null;
-        for (Bill b : bills) {
-            if (b.getId() == id) {
-                result = b;
-                break;
-            }
+    public Response setBillStatus(@PathParam("id") int id, @QueryParam("status") String status) {
+        // Get single bill by id
+        Bill b = billDAO.find(id);
+        if (b == null) {
+            // Bill not found, return 404 according to swagger doc
+            return Response.status(404).build();
         }
 
-        if (result.getStatus() == PaymentStatus.PAID) {
+        if (b.getStatus() == PaymentStatus.PAID) {
             // mag niet naar open of cancelled gaan
             if (status.equals("cancelled") || status.equals("open")) {
                 return Response.status(405).build();
             }
-        } else if (result.getStatus() == PaymentStatus.CANCELED) {
+        } else if (b.getStatus() == PaymentStatus.CANCELED) {
             // mag niet naar open of cancelled gaan
             if (status.equals("open") || status.equals("cancelled")) {
                 return Response.status(405).build();
             }
         }
-        db.updateBillStatus(result, status);
 
-        return Response.ok(result).build();
+        // Set new status
+        b.setStatus(getPaymentStatusByString(status));
+
+        // Update in db
+        billDAO.edit(b);
+
+        return Response.ok(b).build();
     }
 
-    private boolean isAPaymentStatus(String test) {
+    private PaymentStatus getPaymentStatusByString(String paymentStatus) {
         for (PaymentStatus c : PaymentStatus.values()) {
-            if (c.name().equals(test)) {
-                return true;
+            if (c.name().equals(paymentStatus)) {
+                return c;
             }
         }
-        return false;
+        return null;
     }
-
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{ownerId}")
     public Response getBillByOwnerId(@QueryParam("ownerId") int ownerId) {
         // Check if owner exists
-        // TODO: 31-3-18 get bills by owner id
-        throw new NotImplementedException();
+        Account a = accountDAO.find(ownerId);
+        if (a == null) {
+            // According to swagger endpoint, return 400 because of invalid owner id
+            return Response.status(400).build();
+
+//            Return error during development
+//            throw new Exception(String.format("Could not find account by id '%s'", ownerId));
+        }
+
+        // Owner exists, get bills for owner
+        List<Bill> bills = billDAO.findByOwnerId(ownerId);
+        if (bills.size() > 0) {
+            // We have more than 0 bills, return status 200 with bills
+            return Response.ok(bills).build();
+        } else {
+            // No bills found for owner with <ownerId>, but request was valid
+            // Return 404 according to swagger endpoint documentation
+            return Response.status(404).build();
+        }
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{vehicleId}")
     public Response getBillByVehicleId(@QueryParam("vehicleId") int vehicleId) {
-        // Check if vehicle exists
-        // TODO: 31-3-18 get bills by vehicle id
-        throw new NotImplementedException();
+        // Check if owner exists
+        Vehicle v = vehicleDAO.find(vehicleId);
+        if (v == null) {
+            // According to swagger endpoint, return 400 because of invalid vehicle id
+            return Response.status(400).build();
+
+//            Return error during development
+//            throw new Exception(String.format("Could not find account by id '%s'", ownerId));
+        }
+
+        // Owner exists, get bills for owner
+        List<Bill> bills = billDAO.findByVehicleId(vehicleId);
+        if (bills.size() > 0) {
+            // We have more than 0 bills, return status 200 with bills
+            return Response.ok(bills).build();
+        } else {
+            // No bills found for vehicle with <vehicleId>, but request was valid
+            // Return 404 according to swagger endpoint documentation
+            return Response.status(404).build();
+        }
     }
 
     @GET
@@ -131,41 +183,34 @@ public class BillBean {
     @Path("/{status}")
     public Response getBillByStatus(@QueryParam("status") String status) {
         // Check if status is a valid status string
-        if (!isAPaymentStatus(status)) {
+        if (getPaymentStatusByString(status) != null) {
             return Response.status(400).build();
         }
 
-        List<Bill> bills = db.getBills();
-        List<Bill> result = new ArrayList<>();
-        for (Bill b : bills) {
-            if (b.getStatus().toString().equals(status)) {
-                result.add(b);
-                break;
-            }
-        }
-
-        // Check if there was any bill found
-        if (result.size() == 0) {
+        // Owner exists, get bills for owner
+        List<Bill> bills = billDAO.findByStatus(status);
+        if (bills.size() > 0) {
+            // We have more than 0 bills, return status 200 with bills
+            return Response.ok(bills).build();
+        } else {
+            // Return 404 according to swagger endpoint documentation
             return Response.status(404).build();
         }
-
-        // Good request, found results. Return results.
-        return Response.ok(result).build();
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{id}")
     public Response getBillByID(@PathParam("id") int id) {
-        List<Bill> bills = db.getBills();
-        Bill result = null;
-        for (Bill b : bills) {
-            if (b.getId() == id) {
-                result = b;
-                break;
-            }
+        // Get single bill by id
+        Bill b = billDAO.find(id);
+        if (b == null) {
+            // Bill not found, return 404 according to swagger doc
+            return Response.status(404).build();
         }
-        return Response.ok(result).build();
+
+        // Bill found, return success
+        return Response.ok(b).build();
     }
 
     private boolean compareYearAndMonth(Bill b, int year, int month) {
