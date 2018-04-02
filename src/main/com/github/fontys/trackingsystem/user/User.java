@@ -107,4 +107,8 @@ public class User implements Serializable {
     public void setCustomerVehicles(List<CustomerVehicle> customerVehicles) {
         this.customerVehicles = customerVehicles;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

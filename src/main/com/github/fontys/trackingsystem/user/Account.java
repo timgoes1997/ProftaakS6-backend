@@ -29,11 +29,12 @@ public class Account {
     @Column(name="PASSWORD")
     private String password;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name="USER_ID")
     private User user;
 
     public Account(String email, String username, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }

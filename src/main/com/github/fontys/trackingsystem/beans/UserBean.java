@@ -99,14 +99,14 @@ public class UserBean {
         }
 
         User user = new User(name, address, residency, Role.CUSTOMER);
-        user.setAccount(new Account(email, username, password));
-        user.getAccount().setUser(user);
+        Account account = new Account(email, username, password);
+        account.setUser(user);
 
         try {
-            userDAO.create(user);
-            Account userAccount = accountDAO.findByEmail(user.getAccount().getEmail());
+            accountDAO.create(account);
+            Account userAccount = accountDAO.findByEmail(account.getEmail());
             User createdUser = userDAO.findByAccount(userAccount);
-            return Response.status(Response.Status.CREATED).entity(createdUser).build();
+            return Response.ok(createdUser).build();
         } catch (Exception e) { //Expects a NoResultException but that is hidden in EJBException
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
         }

@@ -1,9 +1,11 @@
 package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.trackingsystem.EnergyLabel;
+import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
 import com.github.fontys.trackingsystem.mock.DatabaseMock;
+import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
@@ -40,6 +42,9 @@ public class VehicleBean {
 
     @Inject
     private VehicleDAO vehicleDAO;
+
+    @Inject
+    private UserDAO userDAO;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -175,7 +180,21 @@ public class VehicleBean {
                                @FormDataParam("licenseplate") String license,
                                @FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetails) throws Exception {
-        String uploadedFileLocation = "D://School//S6//Proftaak//Git//Test//";
+        Vehicle v;
+        try{
+            v = vehicleDAO.find(vehicleID);
+        }catch (Exception e){
+            return Response.status(Response.Status.NOT_FOUND).entity(e).build();
+        }
+
+        User u;
+        try{
+            u = userDAO.find(userID);
+        }catch(Exception e){
+            return Response.status(Response.Status.NOT_FOUND).entity(e).build();
+        }
+
+        String uploadedFileLocation = System.getProperty("user.dir") + "//files//";
 
         String extension = FilenameUtils.getExtension(fileDetails.getFileName());
 
@@ -187,9 +206,13 @@ public class VehicleBean {
         // save it
         writeToFile(uploadedInputStream, f);
 
-        String output = "File uploaded to : " + uploadedFileLocation + f.getName();
+        String location = uploadedFileLocation + f.getName();
 
-        return Response.status(200).entity(output).build();
+        if(v == null && u == null) return Response.notModified("Entity and vehicle are both null").build();
+
+        CustomerVehicle cv = new CustomerVehicle(u, license, v, location);
+
+        return Response.status(200).entity(cv).build();
     }
 
     @POST
