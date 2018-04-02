@@ -9,6 +9,16 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity(name="CUSTOMER_VEHICLE")
+@NamedQueries({
+        @NamedQuery(name = "CustomerVehicle.findByID",
+                query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.id=:id"),
+        @NamedQuery(name = "CustomerVehicle.findByUser",
+                query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.customer.id=:id"),
+        @NamedQuery(name = "CustomerVehicle.findByLicense",
+                query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.licensePlate=:licensePlate"),
+        @NamedQuery(name = "CustomerVehicle.findByVehicle",
+                query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.vehicle.id=:id"),
+})
 public class CustomerVehicle implements Serializable {
 
     @Id

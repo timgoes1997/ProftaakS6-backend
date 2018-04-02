@@ -6,6 +6,8 @@ import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Stateless
 public class CustomerVehicleDAOImpl implements CustomerVehicleDAO {
@@ -30,16 +32,33 @@ public class CustomerVehicleDAOImpl implements CustomerVehicleDAO {
 
     @Override
     public CustomerVehicle find(long id) {
-        return null;
+        TypedQuery<CustomerVehicle> query =
+                em.createNamedQuery("CustomerVehicle.findByID", CustomerVehicle.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
 
     @Override
-    public CustomerVehicle findByUser(long id) {
-        return null;
+    public CustomerVehicle findByLicense(String license) {
+        TypedQuery<CustomerVehicle> query =
+                em.createNamedQuery("CustomerVehicle.findByLicense", CustomerVehicle.class);
+        query.setParameter("licensePlate", license);
+        return query.getSingleResult();
     }
 
     @Override
-    public CustomerVehicle findByVehicle(long id) {
-        return null;
+    public List<CustomerVehicle> findByUser(long id) {
+        TypedQuery<CustomerVehicle> query =
+                em.createNamedQuery("CustomerVehicle.findByUser", CustomerVehicle.class);
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<CustomerVehicle> findByVehicle(long id) {
+        TypedQuery<CustomerVehicle> query =
+                em.createNamedQuery("CustomerVehicle.findByVehicle", CustomerVehicle.class);
+        query.setParameter("id", id);
+        return query.getResultList();
     }
 }

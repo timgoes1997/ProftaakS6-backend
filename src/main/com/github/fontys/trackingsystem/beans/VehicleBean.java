@@ -1,6 +1,7 @@
 package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.trackingsystem.EnergyLabel;
+import com.github.fontys.trackingsystem.dao.interfaces.CustomerVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
@@ -45,6 +46,9 @@ public class VehicleBean {
 
     @Inject
     private UserDAO userDAO;
+
+    @Inject
+    private CustomerVehicleDAO customerVehicleDAO;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -212,7 +216,13 @@ public class VehicleBean {
 
         CustomerVehicle cv = new CustomerVehicle(u, license, v, location);
 
-        return Response.status(200).entity(cv).build();
+        try{
+            customerVehicleDAO.create(cv);
+            CustomerVehicle customerVehicle = customerVehicleDAO.findByLicense(cv.getLicensePlate());
+            return Response.status(200).entity(customerVehicle).build();
+        }catch (Exception e){
+            return Response.serverError().entity(e).build();
+        }
     }
 
     @POST
