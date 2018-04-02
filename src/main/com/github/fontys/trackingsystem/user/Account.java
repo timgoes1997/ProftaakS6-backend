@@ -5,6 +5,14 @@ import com.sun.mail.imap.ACL;
 import javax.persistence.*;
 
 @Entity(name = "ACCOUNT")
+@NamedQueries({
+        @NamedQuery(name = "Account.findByID",
+                query = "SELECT a FROM ACCOUNT a WHERE a.id=:id"),
+        @NamedQuery(name = "Account.findByUsername",
+                query = "SELECT a FROM ACCOUNT a WHERE a.username=:username"),
+        @NamedQuery(name = "Account.findByEmail",
+                query = "SELECT a FROM ACCOUNT a WHERE a.email=:email"),
+})
 public class Account {
 
     @Id
@@ -21,11 +29,12 @@ public class Account {
     @Column(name="PASSWORD")
     private String password;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name="USER_ID")
     private User user;
 
     public Account(String email, String username, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }

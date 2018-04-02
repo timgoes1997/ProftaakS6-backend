@@ -1,11 +1,14 @@
 package com.github.fontys.trackingsystem.dao;
 
+import com.github.fontys.trackingsystem.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
+import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.Path;
 import java.util.List;
 
@@ -21,32 +24,81 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
     }
 
     @Override
-    public void remove(VehicleModel vehicleModel) {
+    public void edit(VehicleModel vehicleModel) { em.merge(vehicleModel); }
 
-    }
+    @Override
+    public void remove(VehicleModel vehicleModel) { em.remove(vehicleModel); }
 
     @Override
     public VehicleModel find(long id) {
-        return null;
+        TypedQuery<VehicleModel> query =
+                em.createNamedQuery("VehicleModel.findByID", VehicleModel.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
+
+    @Override
+    public VehicleModel find(String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel){
+        TypedQuery<VehicleModel> query =
+                em.createNamedQuery("VehicleModel.find", VehicleModel.class);
+        query.setParameter("modelName", modelName);
+        query.setParameter("edition", edition);
+        query.setParameter("fuelType", fuelType);
+        query.setParameter("energyLabel", energyLabel);
+        return query.getSingleResult();
+    }
+
+    @Override
+    public List<VehicleModel> findAllModels() {
+        TypedQuery<VehicleModel> query =
+                em.createNamedQuery("VehicleModel.findAll", VehicleModel.class);
+        List<VehicleModel> results = query.getResultList();
+        return results;
     }
 
     @Override
     public List<VehicleModel> findModelsByModelName(String modelName) {
-        return null;
+        TypedQuery<VehicleModel> query =
+                em.createNamedQuery("VehicleModel.findByName", VehicleModel.class);
+        List<VehicleModel> results = query.setParameter("modelName", modelName).getResultList();
+        return results;
     }
 
     @Override
-    public List<VehicleModel> findModelsByEdition(String modelName) {
-        return null;
+    public List<VehicleModel> findModelsByEdition(String edition) {
+        TypedQuery<VehicleModel> query =
+                em.createNamedQuery("VehicleModel.findByEdition", VehicleModel.class);
+        List<VehicleModel> results = query.setParameter("edition", edition).getResultList();
+        return results;
     }
 
     @Override
-    public List<VehicleModel> findModelsByFuelType(String modelName) {
-        return null;
+    public List<VehicleModel> findModelsByNameAndEdition(String modelName, String edition) {
+        TypedQuery<VehicleModel> query =
+                em.createNamedQuery("VehicleModel.findByNameAndEdition", VehicleModel.class);
+        query.setParameter("modelName", modelName);
+        query.setParameter("edition", edition);
+        List<VehicleModel> results = query.getResultList();
+        return results;
     }
 
     @Override
-    public List<VehicleModel> findModelsByEnergyLabel(String modelName) {
-        return null;
+    public List<VehicleModel> findModelsByFuelType(FuelType fuelType) {
+        TypedQuery<VehicleModel> query =
+                em.createNamedQuery("VehicleModel.findByFuelType", VehicleModel.class);
+        List<VehicleModel> results = query.setParameter("fuelType", fuelType).getResultList();
+        return results;
+    }
+
+    @Override
+    public List<VehicleModel> findModelsByEnergyLabel(EnergyLabel energyLabel) {
+        TypedQuery<VehicleModel> query =
+                em.createNamedQuery("VehicleModel.findByEnergyLabel", VehicleModel.class);
+        List<VehicleModel> results = query.setParameter("energyLabel", energyLabel).getResultList();
+        return results;
+    }
+
+    public void setEntityManager(EntityManager em){
+        this.em = em;
     }
 }

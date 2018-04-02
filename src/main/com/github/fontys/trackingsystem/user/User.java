@@ -7,6 +7,12 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity(name="CUSTOMER")
+@NamedQueries({
+        @NamedQuery(name = "Customer.findByID",
+                query = "SELECT c FROM CUSTOMER c WHERE c.id=:id"),
+        @NamedQuery(name = "Customer.findByAccount",
+                query = "SELECT c FROM CUSTOMER c WHERE c.account.id=:id"),
+})
 public class User implements Serializable {
 
     @Id
@@ -27,7 +33,7 @@ public class User implements Serializable {
     @Column(name = "ROLE")
     private Role role;
 
-    @OneToOne(fetch= FetchType.LAZY, mappedBy="user")
+    @OneToOne(fetch= FetchType.LAZY, mappedBy="user", cascade = CascadeType.PERSIST)
     private Account account;
 
     @Enumerated(EnumType.STRING)
@@ -100,5 +106,9 @@ public class User implements Serializable {
 
     public void setCustomerVehicles(List<CustomerVehicle> customerVehicles) {
         this.customerVehicles = customerVehicles;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
