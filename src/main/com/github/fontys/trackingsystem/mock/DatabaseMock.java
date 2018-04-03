@@ -46,6 +46,9 @@ public class DatabaseMock {
         for (Bill bill : bills) {
             em.persist(bill);
         }
+        for (CustomerVehicle vehicle : customerVehicles) {
+            em.persist(vehicle);
+        }
     }
 
     public void updateBillStatus(Bill b, String newStatus) {

@@ -90,7 +90,7 @@ public class VehicleBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/active/all")
     public Response getVehicles() {
-        List<CustomerVehicle> vehicles = new ArrayList<>();
+        List<CustomerVehicle> vehicles = customerVehicleDAO.getAll();
         GenericEntity<List<CustomerVehicle>> list = new GenericEntity<List<CustomerVehicle>>(vehicles) {};
         if (vehicles.size() > 0) {
             return Response.ok(list).build();
