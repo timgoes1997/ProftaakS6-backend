@@ -2,6 +2,10 @@ package com.github.fontys.trackingsystem.mock;
 
 
 import com.github.fontys.trackingsystem.EnergyLabel;
+import com.github.fontys.trackingsystem.dao.interfaces.CustomerVehicleDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.LocationDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.TrackedVehicleDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.Currency;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
@@ -14,11 +18,15 @@ import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
 import com.github.fontys.trackingsystem.vehicle.VehicleModel;
+import org.glassfish.jersey.internal.inject.Custom;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
+
+import static java.lang.System.in;
 
 @ApplicationScoped
 public class DatabaseMock {
@@ -31,11 +39,43 @@ public class DatabaseMock {
     private List<Vehicle> vehicles = new ArrayList<>();
     private List<Bill> bills = new ArrayList<>();
 
+    @Inject
+    VehicleDAO vehicleDAO;
+
+    @Inject
+    TrackedVehicleDAO trackedVehicleDAO;
+
+    @Inject
+    CustomerVehicleDAO customerVehicleDAO;
+
+    @Inject
+    LocationDAO locationDAO;
+
     @PostConstruct
     public void init() {
         vehicles = generateDummyVehicles();
         customerVehicles = generateDummyCustomerVehicles(vehicles);
         bills = generateDummyBills(customerVehicles);
+
+        // Insert into the real database
+
+        for (Vehicle v : vehicles) {
+            vehicleDAO.create(v);
+        }
+        for (CustomerVehicle cv : customerVehicles) {
+            customerVehicleDAO.create(cv);
+        }
+        for (TrackedVehicle tv : trackedVehicles) {
+            trackedVehicleDAO.create(tv);
+        }
+
+        Iterator it = trackedLocations.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            Location entryLocation = (Location) entry.getValue();
+            locationDAO.create(entryLocation);
+        }
     }
 
     private List<Vehicle> generateDummyVehicles() {

@@ -1,5 +1,9 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.trackingsystem.dao.interfaces.CustomerVehicleDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.LocationDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.TrackedVehicleDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.mock.DatabaseMock;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.tracking.Location;
@@ -24,6 +28,15 @@ public class LocationBean {
 
     @Inject
     private DatabaseMock db;
+
+    @Inject
+    private LocationDAO locationDAO;
+
+    @Inject
+    CustomerVehicleDAO customerVehicleDAO;
+
+    @Inject
+    TrackedVehicleDAO trackedVehicleDAO;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -54,35 +67,34 @@ public class LocationBean {
             return Response.status(500, "Unknown date format").build();
         }
 
-    // get the locations of the vehicle
-    // filter Hashmap for locations of current license with lambda expressions
-    // couldn't call start date and end date in lambda, thus the second iteration with an iterator
-    Map<String, Location> locationsMap = db.getTrackedLocations().entrySet().stream().filter(
-            map -> (map.getKey() == license))
-            .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+        // Get the vehicle ID, then get all locations with the vehicle with that ID
+        CustomerVehicle cv = customerVehicleDAO.findByLicense(license);
+        locations = locationDAO.findByVehicleID(cv.getId());
 
-    // filter the map on date, if the map is not empty
-        if (locationsMap.size() > 0) {
+        // filter the map on date, if the map is not empty
+        if (locations.size() > 0) {
 
-        // assign iterator to iterate through map
-        Iterator it = locationsMap.entrySet().iterator();
+            // assign iterator to iterate through map
+            Iterator it = locations.iterator();
 
-        while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry) it.next();
-            Location entryLocation = (Location) entry.getValue();
+            //todo Change to normal foreach loop (was HashMap, now List)
+            while (it.hasNext()) {
+                Map.Entry entry = (Map.Entry) it.next();
+                Location entryLocation = (Location) entry.getValue();
 
-            // compare dates
-            if (entryLocation.getTime().after(start) && entryLocation.getTime().before(end)) {
+                // compare date
+                if (entryLocation.getTime().after(start) && entryLocation.getTime().before(end)) {
 
-                // if the date of the location falls between the specified dates, add the location
-                locations.add(entryLocation);
+                    // if the date of the location falls between the specified dates, add the location
+                    locations.add(entryLocation);
+                }
             }
         }
-    }
 
-    GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {};
+        GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {
+        };
         return Response.ok(list).build();
-}
+    }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -106,7 +118,7 @@ public class LocationBean {
     }
 
     private TrackedVehicle getTrackedVehicle(String license) {
-        List<TrackedVehicle> vehicleList = db.getTrackedVehicles();
+        /*List<TrackedVehicle> vehicleList = db.getTrackedVehicles();
         for (TrackedVehicle veh : vehicleList) {
             CustomerVehicle a = veh.getCustomerVehicle();
             if (a != null) {
@@ -114,7 +126,7 @@ public class LocationBean {
                     return veh;
                 }
             }
-        }
+        }*/
         return null;
     }
 }

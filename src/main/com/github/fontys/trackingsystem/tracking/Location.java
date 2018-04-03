@@ -4,6 +4,12 @@ import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity(name = "TRACKING_LOCATION")
+@NamedQueries({
+// Add vehicleID as foreign key to Location...
+       @NamedQuery(name = "Location.findByVehicleID",
+               query = "SELECT TRACKING_LOCATION FROM TRACKED_VEHICLE a " +
+                       "WHERE a.customerVehicle.id=:vehicleID")
+})
 public class Location {
 
     @Id
