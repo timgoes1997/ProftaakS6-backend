@@ -14,15 +14,15 @@ public class TrackedVehicle implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="CUSTOMER_VEHICLE")
     private CustomerVehicle customerVehicle;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="LOCATION")
     private Location location;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="HARDWARE")
     private Hardware hardware;
 

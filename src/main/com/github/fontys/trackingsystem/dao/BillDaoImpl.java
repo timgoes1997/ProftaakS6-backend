@@ -4,13 +4,13 @@ import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.payment.Bill;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Stateless
+@RequestScoped
 public class BillDaoImpl implements BillDAO {
 
     @PersistenceContext(name = "Proftaak")

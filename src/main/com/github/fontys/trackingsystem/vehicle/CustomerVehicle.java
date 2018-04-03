@@ -26,21 +26,21 @@ public class CustomerVehicle implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name="OWNER_ID")
     private User customer;
 
     @Column(name="LICENSEPLATE")
     private String licensePlate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="VEHICLE_ID")
     private Vehicle vehicle;
 
     @Column(name="PROOF_OF_OWNERSHIP")
     private String proofOfOwnership;
 
-    @OneToMany(mappedBy="customerVehicle")
+    @OneToMany(mappedBy="customerVehicle", cascade = CascadeType.PERSIST)
     private List<Bill> bills;
 
     public CustomerVehicle(Long id, User customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {

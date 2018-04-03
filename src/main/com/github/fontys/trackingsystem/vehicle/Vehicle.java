@@ -28,7 +28,7 @@ public class Vehicle implements Serializable{
     @Column(name="BRAND")
     private String brand;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "VEHICLE_MODEL")
     private VehicleModel vehicleModel;
 

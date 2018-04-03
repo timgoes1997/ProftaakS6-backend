@@ -29,7 +29,7 @@ public class Bill implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name="CUSTOMER_VEHICLE_ID")
     private CustomerVehicle customerVehicle;
 

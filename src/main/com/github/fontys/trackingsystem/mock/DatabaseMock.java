@@ -16,12 +16,19 @@ import com.github.fontys.trackingsystem.vehicle.Vehicle;
 import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.*;
 
-@ApplicationScoped
+@Singleton
+@Startup
 public class DatabaseMock {
+
+    @PersistenceContext(name="Proftaak")
+    private EntityManager em;
 
     private static int AMOUNT_TO_GENERATE = 5;
 
@@ -35,6 +42,10 @@ public class DatabaseMock {
         vehicles = generateDummyVehicles();
         customerVehicles = generateDummyCustomerVehicles(vehicles);
         bills = generateDummyBills(customerVehicles);
+
+        for (Bill bill : bills) {
+            em.persist(bill);
+        }
     }
 
     public void updateBillStatus(Bill b, String newStatus) {

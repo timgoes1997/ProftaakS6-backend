@@ -40,7 +40,7 @@ public class User implements Serializable {
     @Column(name = "DEPARTMENT")
     private Department department;
 
-    @OneToMany(mappedBy="customer")
+    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST)
     private List<CustomerVehicle> customerVehicles;
 
     public User(String name, String address, String residency, Role role) {
