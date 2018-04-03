@@ -7,14 +7,10 @@ import com.github.fontys.trackingsystem.mock.DatabaseMock;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.security.auth.login.AccountNotFoundException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -128,8 +124,8 @@ public class BillBean {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("/{ownerId}")
-    public Response getBillByOwnerId(@QueryParam("ownerId") int ownerId) {
+    @Path("/user/{ownerId}")
+    public Response getBillByOwnerId(@PathParam("ownerId") int ownerId) {
         // Check if owner exists
         Account a = accountDAO.find(ownerId);
         if (a == null) {
@@ -154,8 +150,8 @@ public class BillBean {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("/{vehicleId}")
-    public Response getBillByVehicleId(@QueryParam("vehicleId") int vehicleId) {
+    @Path("/vehicle/{vehicleId}")
+    public Response getBillByVehicleId(@PathParam("vehicleId") int vehicleId) {
         // Check if owner exists
         Vehicle v = vehicleDAO.find(vehicleId);
         if (v == null) {
@@ -180,8 +176,8 @@ public class BillBean {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("/{status}")
-    public Response getBillByStatus(@QueryParam("status") String status) {
+    @Path("/status/{status}")
+    public Response getBillByStatus(@PathParam("status") String status) {
         // Check if status is a valid status string
         if (getPaymentStatusByString(status) != null) {
             return Response.status(400).build();
