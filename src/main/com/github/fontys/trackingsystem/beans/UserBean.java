@@ -57,6 +57,7 @@ public class UserBean {
     @Path("/account/email/{email}")
     public Response getAccountByEmail(@PathParam("email") String email) {
         try {
+            // TODO: 4/3/18 return account
             Account acc = accountDAO.findByEmail(email);
             return Response.status(Response.Status.FOUND).entity(email).build();
         } catch (Exception e) {

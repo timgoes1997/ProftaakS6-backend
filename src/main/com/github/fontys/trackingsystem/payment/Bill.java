@@ -24,7 +24,6 @@ import java.util.Date;
                 query = "SELECT b FROM BILL b WHERE b.status=:status"),
 })
 public class Bill implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -131,6 +130,11 @@ public class Bill implements Serializable {
     @XmlAttribute
     public String getMonth() {
         return new SimpleDateFormat("MMM").format(startDate.getTime());
+    }
+
+    @XmlAttribute
+    public Long getBillnr() {
+        return id;
     }
 
     public Long getId() {
