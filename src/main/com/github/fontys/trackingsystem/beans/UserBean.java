@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RequestScoped
-@Path("/user")
+@Path("/users")
 public class UserBean {
 
     @Inject
@@ -67,7 +67,7 @@ public class UserBean {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/user/{id}")
+    @Path("/{id}")
     public Response getUser(@PathParam("id") int id) {
         try {
             User user = userDAO.find(id);
@@ -80,7 +80,7 @@ public class UserBean {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/customer/create")
+    @Path("/create")
     public Response createCustomer(@FormParam("name") String name,
                                     @FormParam("address") String address,
                                     @FormParam("residency") String residency,
