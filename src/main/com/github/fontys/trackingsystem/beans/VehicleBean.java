@@ -20,6 +20,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
@@ -27,12 +28,13 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 @RequestScoped
-@Path("/vehicle")
+@Path("/vehicles")
 public class VehicleBean {
 
     @Inject
@@ -67,6 +69,7 @@ public class VehicleBean {
     @Path("/brands")
     public Response getBrands() {
         List<String> brands = vehicleDAO.getBrands();
+        GenericEntity<List<String>> list = new GenericEntity<List<String>>(brands) {};
         return Response.ok(brands).build();
     }
 
@@ -75,8 +78,22 @@ public class VehicleBean {
     @Path("/brands/{brand}")
     public Response getVehicles(@PathParam("brand") String brand) {
         List<Vehicle> vehicles = vehicleDAO.findByBrand(brand);
+        GenericEntity<List<Vehicle>> list = new GenericEntity<List<Vehicle>>(vehicles) {};
         if (vehicles.size() > 0) {
-            return Response.ok(vehicles).build();
+            return Response.ok(list).build();
+        } else {
+            return Response.noContent().build();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/active/all")
+    public Response getVehicles() {
+        List<CustomerVehicle> vehicles = new ArrayList<>();
+        GenericEntity<List<CustomerVehicle>> list = new GenericEntity<List<CustomerVehicle>>(vehicles) {};
+        if (vehicles.size() > 0) {
+            return Response.ok(list).build();
         } else {
             return Response.noContent().build();
         }

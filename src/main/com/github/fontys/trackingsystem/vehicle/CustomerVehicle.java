@@ -10,6 +10,8 @@ import java.util.List;
 
 @Entity(name="CUSTOMER_VEHICLE")
 @NamedQueries({
+        @NamedQuery(name = "CustomerVehicle.findAll",
+                query = "SELECT c FROM CUSTOMER_VEHICLE c"),
         @NamedQuery(name = "CustomerVehicle.findByID",
                 query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.id=:id"),
         @NamedQuery(name = "CustomerVehicle.findByUser",

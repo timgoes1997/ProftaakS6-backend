@@ -61,4 +61,11 @@ public class CustomerVehicleDAOImpl implements CustomerVehicleDAO {
         query.setParameter("id", id);
         return query.getResultList();
     }
+
+    @Override
+    public List<CustomerVehicle> getAll() {
+        TypedQuery<CustomerVehicle> query =
+                em.createNamedQuery("CustomerVehicle.findAll", CustomerVehicle.class);
+        return query.getResultList();
+    }
 }
