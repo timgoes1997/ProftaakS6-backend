@@ -3,6 +3,7 @@ package com.github.fontys.trackingsystem.user;
 import com.sun.mail.imap.ACL;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity(name = "ACCOUNT")
 @NamedQueries({
@@ -57,6 +58,7 @@ public class Account {
         this.username = username;
     }
 
+    @XmlTransient
     public String getPassword() {
         return password;
     }
