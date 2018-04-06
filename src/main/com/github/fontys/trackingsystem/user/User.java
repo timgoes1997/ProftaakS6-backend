@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.user;
 
+import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.List;
         @NamedQuery(name = "Customer.findByAccount",
                 query = "SELECT c FROM CUSTOMER c WHERE c.account.id=:id"),
 })
-public class User implements Serializable {
+public class User implements Serializable, ESUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -110,5 +111,10 @@ public class User implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public Role getPrivilege() {
+        return getRole();
     }
 }
