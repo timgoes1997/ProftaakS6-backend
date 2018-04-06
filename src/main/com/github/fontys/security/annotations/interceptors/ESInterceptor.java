@@ -1,7 +1,12 @@
-package com.github.fontys.security;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.github.fontys.security.annotations.interceptors;
 
-import com.github.fontys.trackingsystem.user.Role;
-import com.github.fontys.trackingsystem.user.User;
+import com.github.fontys.security.annotations.inject.CurrentESUser;
+import com.github.fontys.security.base.ESUser;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -21,6 +26,10 @@ public class ESInterceptor
 {
     @Inject
     private HttpServletRequest context;
+    
+    @Inject
+    @CurrentESUser
+    private ESUser u;
 
     public ESInterceptor()
     {
@@ -31,27 +40,25 @@ public class ESInterceptor
     {
         // get the context parameters
         EasySecurity example = ctx.getMethod().getAnnotation(EasySecurity.class);
-        Role[] roles = example.grantedRoles();
+        String[] roles = example.grantedRoles();
         boolean requiresUser = example.requiresUser();
 
         if (requiresUser || roles.length > 0)
         {
-            User u = (User) context.getSession().getAttribute("user");
             boolean NOAUTH = true; // by default: no access
             if (u != null)
             {
-                for (Role r : roles)
+                for (String r : roles)
                 {
-                    if (u.getRole() == r)
+                    if (u.getPrivilege().toString().equals(r))
                     {
                         NOAUTH = false; // access granted
                         break;
                     }
                 }
-            }
-            else
-            {
-                NOAUTH = requiresUser;
+                if (requiresUser && roles.length == 0) {
+                    NOAUTH = false;
+                }
             }
             if (NOAUTH)
             {

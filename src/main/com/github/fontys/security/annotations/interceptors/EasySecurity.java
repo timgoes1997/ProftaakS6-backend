@@ -1,6 +1,9 @@
-package com.github.fontys.security;
-
-import com.github.fontys.trackingsystem.user.Role;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.github.fontys.security.annotations.interceptors;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -19,19 +22,19 @@ import javax.interceptor.InterceptorBinding;
 @Target( {ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EasySecurity {
-
+	
     /**
      * Roles that have full access
      * @return the roles that have access
      */
     @Nonbinding
-    public Role[] grantedRoles() default {};
-
+    public String[] grantedRoles() default {};
+    
     /**
      * Whether a user is required. Is overridden if granted roles has any value
      * @return whether a user is required
      */
     @Nonbinding
     public boolean requiresUser() default false;
-
+	
 }
