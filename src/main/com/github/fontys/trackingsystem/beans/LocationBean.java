@@ -74,7 +74,7 @@ public class LocationBean {
         /*
         List<TrackedVehicle> vehicleList = db.getTrackedVehicles();
         for (TrackedVehicle veh : vehicleList) {
-            CustomerVehicle a = veh.getCustomerVehicle();
+            RegisteredVehicle a = veh.getRegisteredVehicle();
             if (a != null) {
                 if (a.getLicensePlate().toLowerCase().equals(license.toLowerCase())) {
                     return veh;

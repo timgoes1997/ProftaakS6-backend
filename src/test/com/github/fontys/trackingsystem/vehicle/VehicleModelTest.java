@@ -2,7 +2,6 @@ package com.github.fontys.trackingsystem.vehicle;
 
 import com.github.fontys.helper.PersistenceHelper;
 import com.github.fontys.trackingsystem.EnergyLabel;
-import com.github.fontys.trackingsystem.dao.VehicleModelDAOImpl;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
@@ -10,7 +9,6 @@ import org.junit.runners.MethodSorters;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 
 import java.util.List;
 

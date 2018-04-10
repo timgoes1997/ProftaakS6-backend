@@ -2,7 +2,6 @@ package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.payment.Bill;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.enterprise.context.RequestScoped;

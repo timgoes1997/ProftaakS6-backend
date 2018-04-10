@@ -7,7 +7,7 @@ import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
 import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
 import com.github.fontys.trackingsystem.vehicle.VehicleModel;
@@ -88,8 +88,8 @@ public class VehicleBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/active/all")
     public Response getVehicles() {
-        List<CustomerVehicle> vehicles = customerVehicleDAO.getAll();
-        GenericEntity<List<CustomerVehicle>> list = new GenericEntity<List<CustomerVehicle>>(vehicles) {};
+        List<RegisteredVehicle> vehicles = customerVehicleDAO.getAll();
+        GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(vehicles) {};
         if (vehicles.size() > 0) {
             return Response.ok(list).build();
         } else {
@@ -229,12 +229,12 @@ public class VehicleBean {
 
         if(v == null && u == null) return Response.notModified("Entity and vehicle are both null").build();
 
-        CustomerVehicle cv = new CustomerVehicle(u, license, v, location);
+        RegisteredVehicle cv = new RegisteredVehicle(u, license, v, location);
 
         try{
             customerVehicleDAO.create(cv);
-            CustomerVehicle customerVehicle = customerVehicleDAO.findByLicense(cv.getLicensePlate());
-            return Response.status(200).entity(customerVehicle).build();
+            RegisteredVehicle registeredVehicle = customerVehicleDAO.findByLicense(cv.getLicensePlate());
+            return Response.status(200).entity(registeredVehicle).build();
         }catch (Exception e){
             return Response.serverError().entity(e).build();
         }

@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.tracking;
 
 
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,7 +16,7 @@ public class TrackedVehicle implements Serializable {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="CUSTOMER_VEHICLE")
-    private CustomerVehicle customerVehicle;
+    private RegisteredVehicle registeredVehicle;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="LOCATION")
@@ -28,18 +28,18 @@ public class TrackedVehicle implements Serializable {
 
     public TrackedVehicle(){}
 
-    public TrackedVehicle(CustomerVehicle customerVehicle, Location location, Hardware hardware) {
-        this.customerVehicle = customerVehicle;
+    public TrackedVehicle(RegisteredVehicle registeredVehicle, Location location, Hardware hardware) {
+        this.registeredVehicle = registeredVehicle;
         this.location = location;
         this.hardware = hardware;
     }
 
-    public CustomerVehicle getCustomerVehicle() {
-        return customerVehicle;
+    public RegisteredVehicle getRegisteredVehicle() {
+        return registeredVehicle;
     }
 
-    public void setCustomerVehicle(CustomerVehicle customerVehicle) {
-        this.customerVehicle = customerVehicle;
+    public void setRegisteredVehicle(RegisteredVehicle registeredVehicle) {
+        this.registeredVehicle = registeredVehicle;
     }
 
     public Location getLocation() {
