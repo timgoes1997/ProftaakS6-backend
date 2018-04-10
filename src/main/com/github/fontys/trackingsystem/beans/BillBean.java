@@ -3,7 +3,7 @@ package com.github.fontys.trackingsystem.beans;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
-import com.github.fontys.trackingsystem.mock.DatabaseMock;
+import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.user.Account;
@@ -42,7 +42,7 @@ import java.util.List;
 public class BillBean {
 
     @Inject
-    private DatabaseMock db;
+    private DummyDataGenerator db;
 
     @Inject
     private BillDAO billDAO;

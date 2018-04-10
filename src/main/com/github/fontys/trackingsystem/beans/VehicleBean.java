@@ -5,7 +5,7 @@ import com.github.fontys.trackingsystem.dao.interfaces.CustomerVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
-import com.github.fontys.trackingsystem.mock.DatabaseMock;
+import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
@@ -18,7 +18,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -28,7 +27,6 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -38,7 +36,7 @@ import java.util.Random;
 public class VehicleBean {
 
     @Inject
-    private DatabaseMock db;
+    private DummyDataGenerator db;
 
     @Inject
     private VehicleModelDAO vehicleModelDAO;

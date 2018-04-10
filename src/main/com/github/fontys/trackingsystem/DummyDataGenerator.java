@@ -1,4 +1,4 @@
-package com.github.fontys.trackingsystem.mock;
+package com.github.fontys.trackingsystem;
 
 
 import com.github.fontys.trackingsystem.EnergyLabel;
@@ -28,7 +28,7 @@ import java.util.*;
 
 @Singleton
 @Startup
-public class DatabaseMock {
+public class DummyDataGenerator {
 
     @PersistenceContext(name="Proftaak")
     private EntityManager em;
