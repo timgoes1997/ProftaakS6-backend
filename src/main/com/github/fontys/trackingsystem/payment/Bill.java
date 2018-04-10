@@ -13,17 +13,30 @@ import java.util.Date;
 
 @Entity(name="BILL")
 @NamedQueries({
-        @NamedQuery(name = "Bill.findByID",
+        @NamedQuery(name = Bill.FIND_BYID,
                 query = "SELECT b FROM BILL b WHERE b.id=:id"),
 
-        @NamedQuery(name = "Bill.findByVehicleId",
+        @NamedQuery(name = Bill.FIND_BYVEHICLEID,
                 query = "SELECT b FROM BILL b WHERE b.customerVehicle.id=:id"),
         // TODO: 2-4-18 Idk of je zo bij een nested class kan met jpa queries
 
-        @NamedQuery(name = "Bill.findByStatus",
+        @NamedQuery(name = Bill.FIND_BYSTATUS,
                 query = "SELECT b FROM BILL b WHERE b.status=:status"),
 })
 public class Bill implements Serializable {
+
+    // ======================================
+    // =             Queries              =
+    // ======================================
+
+    public static final String FIND_BYID = "Bill.findByID";
+    public static final String FIND_BYVEHICLEID = "Bill.findByVehicleId";
+    public static final String FIND_BYSTATUS = "Bill.findByStatus";
+
+    // ======================================
+    // =             Fields              =
+    // ======================================
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

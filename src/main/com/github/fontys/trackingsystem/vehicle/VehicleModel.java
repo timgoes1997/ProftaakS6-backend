@@ -8,26 +8,45 @@ import java.io.Serializable;
 
 @Entity(name = "VEHICLE_MODEL")
 @NamedQueries({
-        @NamedQuery(name="VehicleModel.findAll",
+        @NamedQuery(name=VehicleModel.FIND_ALL,
                 query="SELECT v FROM VEHICLE_MODEL v"),
-        @NamedQuery(name="VehicleModel.findByID",
+        @NamedQuery(name=VehicleModel.FIND_BYID,
                 query="SELECT v FROM VEHICLE_MODEL v WHERE v.id=:id"),
-        @NamedQuery(name="VehicleModel.findByName",
+        @NamedQuery(name=VehicleModel.FIND_BYNAME,
                 query="SELECT v FROM VEHICLE_MODEL v WHERE v.modelName=:modelName"),
-        @NamedQuery(name="VehicleModel.findByEdition",
+        @NamedQuery(name=VehicleModel.FIND_BYEDITION,
                 query="SELECT v FROM VEHICLE_MODEL v WHERE v.edition=:edition"),
-        @NamedQuery(name="VehicleModel.findByFuelType",
+        @NamedQuery(name=VehicleModel.FIND_BYFUELTYPE,
                 query="SELECT v FROM VEHICLE_MODEL v WHERE v.fuelType=:fuelType"),
-        @NamedQuery(name="VehicleModel.findByEnergyLabel",
+        @NamedQuery(name=VehicleModel.FIND_BYENERGYLABEL,
                 query="SELECT v FROM VEHICLE_MODEL v WHERE v.energyLabel=:energyLabel"),
-        @NamedQuery(name="VehicleModel.findByNameAndEdition",
+        @NamedQuery(name=VehicleModel.FIND_BYNAMEANDEDITION,
                 query="SELECT v FROM VEHICLE_MODEL v WHERE v.modelName=:modelName " +
                         "AND v.edition=:edition"),
-        @NamedQuery(name="VehicleModel.find",
+        @NamedQuery(name=VehicleModel.FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL,
                 query="SELECT v FROM VEHICLE_MODEL v WHERE v.modelName=:modelName " +
                         "AND v.edition=:edition AND v.fuelType=:fuelType AND v.energyLabel=:energyLabel"),
 })
 public class VehicleModel implements Serializable{
+
+    // ======================================
+    // =             Queries              =
+    // ======================================
+
+    public static final String FIND_ALL = "VehicleModel.findAll";
+    public static final String FIND_BYID = "VehicleModel.findByID";
+    public static final String FIND_BYNAME = "VehicleModel.findByName";
+    public static final String FIND_BYEDITION = "VehicleModel.findByEdition";
+    public static final String FIND_BYFUELTYPE = "VehicleModel.findByFuelType" ;
+    public static final String FIND_BYENERGYLABEL = "VehicleModel.findByEnergyLabel";
+    public static final String FIND_BYNAMEANDEDITION = "VehicleModel.findByNameAndEdition";
+    public static final String FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL = "VehicleModel.find";
+
+    // ======================================
+    // =             Fields              =
+    // ======================================
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

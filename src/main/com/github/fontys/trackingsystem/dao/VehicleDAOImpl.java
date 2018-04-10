@@ -39,7 +39,7 @@ public class VehicleDAOImpl implements VehicleDAO{
     @Override
     public Vehicle find(long id) {
         TypedQuery<Vehicle> query =
-                em.createNamedQuery("Vehicle.findByID", Vehicle.class);
+                em.createNamedQuery(Vehicle.FIND_BYID, Vehicle.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
@@ -47,7 +47,7 @@ public class VehicleDAOImpl implements VehicleDAO{
     @Override
     public Vehicle find(String brand, Long vehicleModel, Date buildDate) {
         TypedQuery<Vehicle> query =
-                em.createNamedQuery("Vehicle.find", Vehicle.class);
+                em.createNamedQuery(Vehicle.FIND_BYMODELBRANDBUILDDATE, Vehicle.class);
         query.setParameter("id", vehicleModel);
         query.setParameter("brand", brand);
         query.setParameter("buildDate", buildDate);
@@ -57,14 +57,14 @@ public class VehicleDAOImpl implements VehicleDAO{
     @Override
     public List<Vehicle> findAll() {
         TypedQuery<Vehicle> query =
-                em.createNamedQuery("Vehicle.findAll", Vehicle.class);
+                em.createNamedQuery(Vehicle.FIND_ALL, Vehicle.class);
         return query.getResultList();
     }
 
     @Override
     public List<Vehicle> findByModel(long id) {
         TypedQuery<Vehicle> query =
-                em.createNamedQuery("Vehicle.findByModel", Vehicle.class);
+                em.createNamedQuery(Vehicle.FIND_BYMODEL, Vehicle.class);
         query.setParameter("id", id);
         return query.getResultList();
     }
@@ -72,7 +72,7 @@ public class VehicleDAOImpl implements VehicleDAO{
     @Override
     public List<Vehicle> findByBrand(String brand) {
         TypedQuery<Vehicle> query =
-                em.createNamedQuery("Vehicle.findByBrand", Vehicle.class);
+                em.createNamedQuery(Vehicle.FIND_BYBRAND, Vehicle.class);
         query.setParameter("brand", brand);
         return query.getResultList();
     }

@@ -9,12 +9,23 @@ import java.util.List;
 
 @Entity(name="CUSTOMER")
 @NamedQueries({
-        @NamedQuery(name = "Customer.findByID",
+        @NamedQuery(name = User.FIND_BYID,
                 query = "SELECT c FROM CUSTOMER c WHERE c.id=:id"),
-        @NamedQuery(name = "Customer.findByAccount",
+        @NamedQuery(name = User.FIND_BYACCOUNT,
                 query = "SELECT c FROM CUSTOMER c WHERE c.account.id=:id"),
 })
 public class User implements Serializable, ESUser {
+
+    // ======================================
+    // =             Queries              =
+    // ======================================
+
+    public static final String FIND_BYID = "Account.findByID";
+    public static final String FIND_BYACCOUNT = "Account.findByAccount";
+
+    // ======================================
+    // =             Fields              =
+    // ======================================
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,18 +10,32 @@ import java.util.List;
 
 @Entity(name="CUSTOMER_VEHICLE")
 @NamedQueries({
-        @NamedQuery(name = "CustomerVehicle.findAll",
+        @NamedQuery(name = CustomerVehicle.FIND_ALL,
                 query = "SELECT c FROM CUSTOMER_VEHICLE c"),
-        @NamedQuery(name = "CustomerVehicle.findByID",
+        @NamedQuery(name = CustomerVehicle.FIND_BYID,
                 query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.id=:id"),
-        @NamedQuery(name = "CustomerVehicle.findByUser",
+        @NamedQuery(name = CustomerVehicle.FIND_BYUSER,
                 query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.customer.id=:id"),
-        @NamedQuery(name = "CustomerVehicle.findByLicense",
+        @NamedQuery(name = CustomerVehicle.FIND_BYLICENSEPLATE,
                 query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.licensePlate=:licensePlate"),
-        @NamedQuery(name = "CustomerVehicle.findByVehicle",
+        @NamedQuery(name = CustomerVehicle.FIND_BYVEHICLE,
                 query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.vehicle.id=:id"),
 })
 public class CustomerVehicle implements Serializable {
+
+    // ======================================
+    // =             Queries              =
+    // ======================================
+
+    public static final String FIND_ALL = "CustomerVehicle.findAll";
+    public static final String FIND_BYID = "CustomerVehicle.findByID";
+    public static final String FIND_BYUSER = "CustomerVehicle.findByUser";
+    public static final String FIND_BYLICENSEPLATE = "CustomerVehicle.findByLicense";
+    public static final String FIND_BYVEHICLE = "CustomerVehicle.findByVehicle";
+
+    // ======================================
+    // =             Fields              =
+    // ======================================
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

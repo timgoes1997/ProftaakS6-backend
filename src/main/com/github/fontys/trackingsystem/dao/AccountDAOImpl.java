@@ -32,7 +32,7 @@ public class AccountDAOImpl implements AccountDAO{
     @Override
     public Account find(long id) {
         TypedQuery<Account> query =
-                em.createNamedQuery("Account.findByID", Account.class);
+                em.createNamedQuery(Account.FIND_BYID, Account.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
@@ -40,7 +40,7 @@ public class AccountDAOImpl implements AccountDAO{
     @Override
     public Account findByUsername(String username) {
         TypedQuery<Account> query =
-                em.createNamedQuery("Account.findByUsername", Account.class);
+                em.createNamedQuery(Account.FIND_BYUSERNAME, Account.class);
         query.setParameter("username", username);
         return query.getSingleResult();
     }
@@ -48,7 +48,7 @@ public class AccountDAOImpl implements AccountDAO{
     @Override
     public Account findByEmail(String email) {
         TypedQuery<Account> query =
-                em.createNamedQuery("Account.findByEmail", Account.class);
+                em.createNamedQuery(Account.FIND_BYEMAIL, Account.class);
         query.setParameter("email", email);
         return query.getSingleResult();
     }

@@ -32,7 +32,7 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
     @Override
     public VehicleModel find(long id) {
         TypedQuery<VehicleModel> query =
-                em.createNamedQuery("VehicleModel.findByID", VehicleModel.class);
+                em.createNamedQuery(VehicleModel.FIND_BYID, VehicleModel.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
@@ -40,7 +40,7 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
     @Override
     public VehicleModel find(String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel){
         TypedQuery<VehicleModel> query =
-                em.createNamedQuery("VehicleModel.find", VehicleModel.class);
+                em.createNamedQuery(VehicleModel.FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL, VehicleModel.class);
         query.setParameter("modelName", modelName);
         query.setParameter("edition", edition);
         query.setParameter("fuelType", fuelType);
@@ -51,7 +51,7 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
     @Override
     public List<VehicleModel> findAllModels() {
         TypedQuery<VehicleModel> query =
-                em.createNamedQuery("VehicleModel.findAll", VehicleModel.class);
+                em.createNamedQuery(VehicleModel.FIND_ALL, VehicleModel.class);
         List<VehicleModel> results = query.getResultList();
         return results;
     }
@@ -59,7 +59,7 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
     @Override
     public List<VehicleModel> findModelsByModelName(String modelName) {
         TypedQuery<VehicleModel> query =
-                em.createNamedQuery("VehicleModel.findByName", VehicleModel.class);
+                em.createNamedQuery(VehicleModel.FIND_BYNAME, VehicleModel.class);
         List<VehicleModel> results = query.setParameter("modelName", modelName).getResultList();
         return results;
     }
@@ -67,7 +67,7 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
     @Override
     public List<VehicleModel> findModelsByEdition(String edition) {
         TypedQuery<VehicleModel> query =
-                em.createNamedQuery("VehicleModel.findByEdition", VehicleModel.class);
+                em.createNamedQuery(VehicleModel.FIND_BYEDITION, VehicleModel.class);
         List<VehicleModel> results = query.setParameter("edition", edition).getResultList();
         return results;
     }
@@ -75,7 +75,7 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
     @Override
     public List<VehicleModel> findModelsByNameAndEdition(String modelName, String edition) {
         TypedQuery<VehicleModel> query =
-                em.createNamedQuery("VehicleModel.findByNameAndEdition", VehicleModel.class);
+                em.createNamedQuery(VehicleModel.FIND_BYNAMEANDEDITION, VehicleModel.class);
         query.setParameter("modelName", modelName);
         query.setParameter("edition", edition);
         List<VehicleModel> results = query.getResultList();
@@ -85,7 +85,7 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
     @Override
     public List<VehicleModel> findModelsByFuelType(FuelType fuelType) {
         TypedQuery<VehicleModel> query =
-                em.createNamedQuery("VehicleModel.findByFuelType", VehicleModel.class);
+                em.createNamedQuery(VehicleModel.FIND_BYFUELTYPE, VehicleModel.class);
         List<VehicleModel> results = query.setParameter("fuelType", fuelType).getResultList();
         return results;
     }
@@ -93,7 +93,7 @@ public class VehicleModelDAOImpl implements VehicleModelDAO {
     @Override
     public List<VehicleModel> findModelsByEnergyLabel(EnergyLabel energyLabel) {
         TypedQuery<VehicleModel> query =
-                em.createNamedQuery("VehicleModel.findByEnergyLabel", VehicleModel.class);
+                em.createNamedQuery(VehicleModel.FIND_BYENERGYLABEL, VehicleModel.class);
         List<VehicleModel> results = query.setParameter("energyLabel", energyLabel).getResultList();
         return results;
     }
