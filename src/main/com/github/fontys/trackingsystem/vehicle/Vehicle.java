@@ -84,9 +84,49 @@ public class Vehicle implements Serializable{
     @Column(name = "ENERGYLABEL")
     private EnergyLabel energyLabel;
 
-    public Vehicle(String brand, Date buildDate) {
+    public Vehicle(String brand, Date buildDate, String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel) {
         this.brand = brand;
         this.buildDate = buildDate;
+        this.modelName = modelName;
+        this.edition = edition;
+        this.fuelType = fuelType;
+        this.energyLabel = energyLabel;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
+    public FuelType getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public EnergyLabel getEnergyLabel() {
+        return energyLabel;
+    }
+
+    public void setEnergyLabel(EnergyLabel energyLabel) {
+        this.energyLabel = energyLabel;
     }
 
     public Vehicle() {
