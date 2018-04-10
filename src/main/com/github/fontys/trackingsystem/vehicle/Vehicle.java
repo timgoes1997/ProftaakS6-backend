@@ -37,8 +37,6 @@ import java.util.Date;
 
  })
 public class Vehicle implements Serializable{
-    //todo; ook daos checken & refactoren
-
     // ======================================
     // =             Queries              =
     // ======================================
