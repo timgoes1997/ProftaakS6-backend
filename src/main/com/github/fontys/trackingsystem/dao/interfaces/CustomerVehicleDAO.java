@@ -18,4 +18,6 @@ public interface CustomerVehicleDAO {
     List<CustomerVehicle> findByUser(long id);
 
     List<CustomerVehicle> findByVehicle(long id);
+
+    List<CustomerVehicle> getAll();
 }

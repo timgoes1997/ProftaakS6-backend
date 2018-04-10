@@ -3,17 +3,30 @@ package com.github.fontys.trackingsystem.user;
 import com.sun.mail.imap.ACL;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity(name = "ACCOUNT")
 @NamedQueries({
-        @NamedQuery(name = "Account.findByID",
+        @NamedQuery(name = Account.FIND_BYID,
                 query = "SELECT a FROM ACCOUNT a WHERE a.id=:id"),
-        @NamedQuery(name = "Account.findByUsername",
+        @NamedQuery(name = Account.FIND_BYUSERNAME,
                 query = "SELECT a FROM ACCOUNT a WHERE a.username=:username"),
-        @NamedQuery(name = "Account.findByEmail",
+        @NamedQuery(name = Account.FIND_BYEMAIL,
                 query = "SELECT a FROM ACCOUNT a WHERE a.email=:email"),
 })
 public class Account {
+
+    // ======================================
+    // =             Queries              =
+    // ======================================
+
+    public static final String FIND_BYID = "User.findById";
+    public static final String FIND_BYUSERNAME = "User.findByUsername";
+    public static final String FIND_BYEMAIL = "User.findByEmail";
+
+    // ======================================
+    // =             Fields              =
+    // ======================================
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +70,7 @@ public class Account {
         this.username = username;
     }
 
+    @XmlTransient
     public String getPassword() {
         return password;
     }

@@ -1,11 +1,10 @@
 package com.github.fontys;
 
 
-import com.github.fontys.trackingsystem.beans.VehicleBean;
+import com.github.fontys.base.CORSFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
 
 
 /*
@@ -17,6 +16,7 @@ public class App extends ResourceConfig
     public App() {
         packages("com.github.fontys");
         register(MultiPartFeature.class);
+        register(CORSFilter.class);
     }
 
     /*

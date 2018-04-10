@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.user;
 
+import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
 import javax.persistence.*;
@@ -8,12 +9,23 @@ import java.util.List;
 
 @Entity(name="CUSTOMER")
 @NamedQueries({
-        @NamedQuery(name = "Customer.findByID",
+        @NamedQuery(name = User.FIND_BYID,
                 query = "SELECT c FROM CUSTOMER c WHERE c.id=:id"),
-        @NamedQuery(name = "Customer.findByAccount",
+        @NamedQuery(name = User.FIND_BYACCOUNT,
                 query = "SELECT c FROM CUSTOMER c WHERE c.account.id=:id"),
 })
-public class User implements Serializable {
+public class User implements Serializable, ESUser {
+
+    // ======================================
+    // =             Queries              =
+    // ======================================
+
+    public static final String FIND_BYID = "Account.findByID";
+    public static final String FIND_BYACCOUNT = "Account.findByAccount";
+
+    // ======================================
+    // =             Fields              =
+    // ======================================
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +52,7 @@ public class User implements Serializable {
     @Column(name = "DEPARTMENT")
     private Department department;
 
-    @OneToMany(mappedBy="customer")
+    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST)
     private List<CustomerVehicle> customerVehicles;
 
     public User(String name, String address, String residency, Role role) {
@@ -110,5 +122,10 @@ public class User implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public Role getPrivilege() {
+        return getRole();
     }
 }

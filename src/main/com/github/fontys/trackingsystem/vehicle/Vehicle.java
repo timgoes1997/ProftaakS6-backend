@@ -6,19 +6,33 @@ import java.util.Date;
 
 @Entity(name = "VEHICLE")
 @NamedQueries({
-        @NamedQuery(name="Vehicle.findAll",
+        @NamedQuery(name= Vehicle.FIND_ALL,
                 query="SELECT v FROM VEHICLE v"),
-        @NamedQuery(name="Vehicle.findByID",
+        @NamedQuery(name=Vehicle.FIND_BYID,
                 query="SELECT v FROM VEHICLE v WHERE v.id=:id"),
-        @NamedQuery(name="Vehicle.findByBrand",
+        @NamedQuery(name=Vehicle.FIND_BYBRAND,
                 query="SELECT v FROM VEHICLE v WHERE v.brand=:brand"),
-        @NamedQuery(name="Vehicle.findByModel",
+        @NamedQuery(name=Vehicle.FIND_BYMODEL,
                 query="SELECT v FROM VEHICLE v WHERE v.vehicleModel.id=:id"),
-        @NamedQuery(name="Vehicle.find",
+        @NamedQuery(name=Vehicle.FIND_BYMODELBRANDBUILDDATE,
                 query="SELECT v FROM VEHICLE v WHERE v.vehicleModel.id=:id " +
                         "AND v.brand=:brand AND v.buildDate=:buildDate"),
  })
 public class Vehicle implements Serializable{
+
+    // ======================================
+    // =             Queries              =
+    // ======================================
+
+    public static final String FIND_ALL = "Vehicle.findAll";
+    public static final String FIND_BYID = "Vehicle.findByID";
+    public static final String FIND_BYBRAND = "Vehicle.findByBrand";
+    public static final String FIND_BYMODEL = "Vehicle.findByModel";
+    public static final String FIND_BYMODELBRANDBUILDDATE = "Vehicle.findModelBrandDate";
+
+    // ======================================
+    // =             Fields              =
+    // ======================================
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +42,7 @@ public class Vehicle implements Serializable{
     @Column(name="BRAND")
     private String brand;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "VEHICLE_MODEL")
     private VehicleModel vehicleModel;
 

@@ -33,7 +33,7 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public User find(long id) {
         TypedQuery<User> query =
-                em.createNamedQuery("Customer.findByID", User.class);
+                em.createNamedQuery(User.FIND_BYID, User.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
@@ -41,7 +41,7 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public User findByAccount(Account acc) {
         TypedQuery<User> query =
-                em.createNamedQuery("Customer.findByAccount", User.class);
+                em.createNamedQuery(User.FIND_BYACCOUNT, User.class);
         query.setParameter("id", acc.getId());
         return query.getSingleResult();
     }

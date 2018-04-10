@@ -26,7 +26,7 @@ public class TrackedVehicle implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="CUSTOMER_VEHICLE")
     private CustomerVehicle customerVehicle;
 
@@ -40,7 +40,11 @@ public class TrackedVehicle implements Serializable {
             inverseJoinColumns = { @JoinColumn(name="LOCATION_ID", referencedColumnName="ID")})
     private List<Location> locations; // must be ordered consecutively
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name="LOCATION")
+    private Location location;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="HARDWARE")
     private Hardware hardware;
 

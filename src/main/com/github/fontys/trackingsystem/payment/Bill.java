@@ -12,14 +12,41 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity(name="BILL")
+@NamedQueries({
+        @NamedQuery(name = Bill.FIND_ALL,
+                query = "SELECT b FROM BILL b"),
+
+        @NamedQuery(name = Bill.FIND_BYID,
+                query = "SELECT b FROM BILL b WHERE b.id=:id"),
+
+        @NamedQuery(name = Bill.FIND_BYVEHICLEID,
+                query = "SELECT b FROM BILL b WHERE b.customerVehicle.id=:id"),
+        // TODO: 2-4-18 Idk of je zo bij een nested class kan met jpa queries
+
+        @NamedQuery(name = Bill.FIND_BYSTATUS,
+                query = "SELECT b FROM BILL b WHERE b.status=:status"),
+})
 public class Bill implements Serializable {
+
+    // ======================================
+    // =             Queries              =
+    // ======================================
+
+    public static final String FIND_ALL = "Bill.findAll";
+    public static final String FIND_BYID = "Bill.findByID";
+    public static final String FIND_BYVEHICLEID = "Bill.findByVehicleId";
+    public static final String FIND_BYSTATUS = "Bill.findByStatus";
+
+    // ======================================
+    // =             Fields              =
+    // ======================================
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name="CUSTOMER_VEHICLE_ID")
     private CustomerVehicle customerVehicle;
 
@@ -109,7 +136,6 @@ public class Bill implements Serializable {
     public void setStatus(PaymentStatus paymentStatus) {
         this.status = paymentStatus;
     }
-
     public double getMileage() {
         return mileage;
     }
@@ -121,6 +147,11 @@ public class Bill implements Serializable {
     @XmlAttribute
     public String getMonth() {
         return new SimpleDateFormat("MMM").format(startDate.getTime());
+    }
+
+    @XmlAttribute
+    public Long getBillnr() {
+        return id;
     }
 
     public Long getId() {

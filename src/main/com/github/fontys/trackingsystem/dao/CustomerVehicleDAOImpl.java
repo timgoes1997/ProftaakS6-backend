@@ -33,7 +33,7 @@ public class CustomerVehicleDAOImpl implements CustomerVehicleDAO {
     @Override
     public CustomerVehicle find(long id) {
         TypedQuery<CustomerVehicle> query =
-                em.createNamedQuery("CustomerVehicle.findByID", CustomerVehicle.class);
+                em.createNamedQuery(CustomerVehicle.FIND_BYID, CustomerVehicle.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
@@ -41,7 +41,7 @@ public class CustomerVehicleDAOImpl implements CustomerVehicleDAO {
     @Override
     public CustomerVehicle findByLicense(String license) {
         TypedQuery<CustomerVehicle> query =
-                em.createNamedQuery("CustomerVehicle.findByLicense", CustomerVehicle.class);
+                em.createNamedQuery(CustomerVehicle.FIND_BYLICENSEPLATE, CustomerVehicle.class);
         query.setParameter("licensePlate", license);
         return query.getSingleResult();
     }
@@ -49,7 +49,7 @@ public class CustomerVehicleDAOImpl implements CustomerVehicleDAO {
     @Override
     public List<CustomerVehicle> findByUser(long id) {
         TypedQuery<CustomerVehicle> query =
-                em.createNamedQuery("CustomerVehicle.findByUser", CustomerVehicle.class);
+                em.createNamedQuery(CustomerVehicle.FIND_BYUSER, CustomerVehicle.class);
         query.setParameter("id", id);
         return query.getResultList();
     }
@@ -57,8 +57,15 @@ public class CustomerVehicleDAOImpl implements CustomerVehicleDAO {
     @Override
     public List<CustomerVehicle> findByVehicle(long id) {
         TypedQuery<CustomerVehicle> query =
-                em.createNamedQuery("CustomerVehicle.findByVehicle", CustomerVehicle.class);
+                em.createNamedQuery(CustomerVehicle.FIND_BYVEHICLE, CustomerVehicle.class);
         query.setParameter("id", id);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<CustomerVehicle> getAll() {
+        TypedQuery<CustomerVehicle> query =
+                em.createNamedQuery(CustomerVehicle.FIND_ALL, CustomerVehicle.class);
         return query.getResultList();
     }
 }
