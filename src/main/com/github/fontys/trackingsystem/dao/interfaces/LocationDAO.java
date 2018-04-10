@@ -13,7 +13,4 @@ public interface LocationDAO {
     void remove(Location location);
 
     Location findByID(long id);
-
-    List<Location> findByVehicleID(long vehicleID);
-
 }

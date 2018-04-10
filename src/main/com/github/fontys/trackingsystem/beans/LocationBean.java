@@ -69,7 +69,7 @@ public class LocationBean {
 
         // Get the vehicle ID, then get all locations with the vehicle with that ID
         CustomerVehicle cv = customerVehicleDAO.findByLicense(license);
-        locations = locationDAO.findByVehicleID(cv.getId());
+        locations = trackedVehicleDAO.findLocationsByCustomerVehicleID(cv.getId());
 
         // filter the map on date, if the map is not empty
         if (locations.size() > 0) {
