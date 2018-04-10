@@ -13,6 +13,9 @@ import java.util.Date;
 
 @Entity(name="BILL")
 @NamedQueries({
+        @NamedQuery(name = Bill.FIND_ALL,
+                query = "SELECT b FROM BILL b"),
+
         @NamedQuery(name = Bill.FIND_BYID,
                 query = "SELECT b FROM BILL b WHERE b.id=:id"),
 
@@ -29,6 +32,7 @@ public class Bill implements Serializable {
     // =             Queries              =
     // ======================================
 
+    public static final String FIND_ALL = "Bill.findAll";
     public static final String FIND_BYID = "Bill.findByID";
     public static final String FIND_BYVEHICLEID = "Bill.findByVehicleId";
     public static final String FIND_BYSTATUS = "Bill.findByStatus";

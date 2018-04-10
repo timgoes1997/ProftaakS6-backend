@@ -73,6 +73,7 @@ public class LocationBean {
     }
 
     private TrackedVehicle getTrackedVehicle(String license) {
+        /*
         List<TrackedVehicle> vehicleList = db.getTrackedVehicles();
         for (TrackedVehicle veh : vehicleList) {
             CustomerVehicle a = veh.getCustomerVehicle();
@@ -81,7 +82,7 @@ public class LocationBean {
                     return veh;
                 }
             }
-        }
+        }*/
         return null;
     }
 }

@@ -19,4 +19,6 @@ public interface BillDAO {
     List<Bill> findByStatus(String status);
 
     List<Bill> findByVehicleId(int vehicleId);
+
+    List<Bill> getAll();
 }

@@ -62,6 +62,13 @@ public class BillDaoImpl implements BillDAO {
         return query.getResultList();
     }
 
+    @Override
+    public List<Bill> getAll() {
+        TypedQuery<Bill> query =
+                em.createNamedQuery(Bill.FIND_ALL, Bill.class);
+        return query.getResultList();
+    }
+
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }

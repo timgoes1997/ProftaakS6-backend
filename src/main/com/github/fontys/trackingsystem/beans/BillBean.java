@@ -59,7 +59,7 @@ public class BillBean {
     @Path("/{year}/{month}")
     public Response getBillByTime(@PathParam("year") int year, @PathParam("month") int month) {
         List<Bill> bills = new ArrayList<>();
-        for (Bill b : db.getBills()) {
+        for (Bill b : billDAO.getAll()) {
             boolean result = compareYearAndMonth(b, year, month - 1);
             if (result) {
                 bills.add(b);
@@ -75,7 +75,7 @@ public class BillBean {
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/all")
     public Response getAllBills() {
-        List<Bill> bills = db.getBills();
+        List<Bill> bills = billDAO.getAll();
         GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {
         };
         return Response.ok(list).build();
