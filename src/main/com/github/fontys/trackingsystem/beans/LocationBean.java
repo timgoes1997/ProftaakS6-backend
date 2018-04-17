@@ -69,24 +69,16 @@ public class LocationBean {
 
         // Get the vehicle ID, then get all locations with the vehicle with that ID
         CustomerVehicle cv = customerVehicleDAO.findByLicense(license);
+
+        // Get all locations of the vehicle with retrieved vehicle ID
         locations = trackedVehicleDAO.findLocationsByCustomerVehicleID(cv.getId());
 
         // filter the map on date, if the map is not empty
         if (locations.size() > 0) {
-
-            // assign iterator to iterate through map
-            Iterator it = locations.iterator();
-
-            //todo Change to normal foreach loop (was HashMap, now List)
-            while (it.hasNext()) {
-                Map.Entry entry = (Map.Entry) it.next();
-                Location entryLocation = (Location) entry.getValue();
-
-                // compare date
-                if (entryLocation.getTime().after(start) && entryLocation.getTime().before(end)) {
-
-                    // if the date of the location falls between the specified dates, add the location
-                    locations.add(entryLocation);
+            for (Location l : locations) {
+                // if the date of the location falls outside the specified dates, remove the location
+                if (!l.getTime().after(start) && !l.getTime().before(end)) {
+                    locations.remove(l);
                 }
             }
         }
