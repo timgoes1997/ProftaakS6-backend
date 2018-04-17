@@ -17,7 +17,7 @@ import java.util.Date;
         @NamedQuery(name=Vehicle.FIND_BYMODEL,
                 query="SELECT v FROM VEHICLE v WHERE v.vehicleModel.id=:id"),
         @NamedQuery(name=Vehicle.FIND_BYMODELBRANDBUILDDATE,
-                query="SELECT v FROM VEHICLE v WHERE v.vehicleModel.id=:id " +
+                query="SELECT v FROM VEHICLE v WHERE " +
                         "AND v.brand=:brand AND v.buildDate=:buildDate"),
 
         @NamedQuery(name=Vehicle.FIND_BYNAME,
@@ -47,12 +47,12 @@ public class Vehicle implements Serializable{
     public static final String FIND_BYMODEL = "Vehicle.findByModel";
     public static final String FIND_BYMODELBRANDBUILDDATE = "Vehicle.findModelBrandDate";
 
-    public static final String FIND_BYNAME = "VehicleModel.findByName";
-    public static final String FIND_BYEDITION = "VehicleModel.findByEdition";
-    public static final String FIND_BYFUELTYPE = "VehicleModel.findByFuelType" ;
-    public static final String FIND_BYENERGYLABEL = "VehicleModel.findByEnergyLabel";
-    public static final String FIND_BYNAMEANDEDITION = "VehicleModel.findByNameAndEdition";
-    public static final String FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL = "VehicleModel.find";
+    public static final String FIND_BYNAME = "Vehicle.findByName";
+    public static final String FIND_BYEDITION = "Vehicle.findByEdition";
+    public static final String FIND_BYFUELTYPE = "Vehicle.findByFuelType" ;
+    public static final String FIND_BYENERGYLABEL = "Vehicle.findByEnergyLabel";
+    public static final String FIND_BYNAMEANDEDITION = "Vehicle.findByNameAndEdition";
+    public static final String FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL = "Vehicle.find";
 
     // ======================================
     // =             Fields              =
