@@ -1,7 +1,6 @@
-package com.github.fontys.trackingsystem.mock;
+package com.github.fontys.trackingsystem;
 
 
-import com.github.fontys.trackingsystem.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.*;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.Currency;
@@ -12,7 +11,7 @@ import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
 import com.github.fontys.trackingsystem.vehicle.VehicleModel;
@@ -28,7 +27,7 @@ import java.util.*;
 
 @Singleton
 @Startup
-public class DatabaseMock {
+public class DummyDataGenerator {
 
     @PersistenceContext(name="Proftaak")
     private EntityManager em;
@@ -91,7 +90,7 @@ public class DatabaseMock {
 
             User inDatabase = userDAO.findByAccount(accountDAO.findByEmail(account.getEmail()));
 
-            CustomerVehicle cv = new CustomerVehicle(
+            RegisteredVehicle cv = new RegisteredVehicle(
                     (long)i,
                     inDatabase,
                     String.format("XXX-00%s", i),
@@ -104,17 +103,17 @@ public class DatabaseMock {
     }
 
     private void generateDummyBills() {
-        List<CustomerVehicle> customerVehicles = customerVehicleDAO.getAll();
+        List<RegisteredVehicle> registeredVehicles = customerVehicleDAO.getAll();
 
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
             Calendar startdate = new GregorianCalendar();
             startdate.set(2018, i, 1);
             Calendar endDate = new GregorianCalendar();
             endDate.set(2018, i, 28);
-            TrackedVehicle tv = new TrackedVehicle(customerVehicles.get(i), new Location(50 + i / 4, 9 + i / 4, startdate), new Hardware((long)10, "Hwtype"));
+            TrackedVehicle tv = new TrackedVehicle(registeredVehicles.get(i), new Location(50 + i / 4, 9 + i / 4, startdate), new Hardware((long)10, "Hwtype"));
             em.persist(tv);
             Bill b = new Bill(
-                    customerVehicles.get(i),
+                    registeredVehicles.get(i),
                     Currency.EUR,
                     new BigDecimal(i * 200),
                     new BigDecimal(i * 400),

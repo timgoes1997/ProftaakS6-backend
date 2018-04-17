@@ -1,23 +1,23 @@
 package com.github.fontys.trackingsystem.dao.interfaces;
 
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import java.util.List;
 
 public interface CustomerVehicleDAO {
-    void create(CustomerVehicle customerVehicle);
+    void create(RegisteredVehicle registeredVehicle);
 
-    void edit(CustomerVehicle customerVehicle);
+    void edit(RegisteredVehicle registeredVehicle);
 
-    void remove(CustomerVehicle customerVehicle);
+    void remove(RegisteredVehicle registeredVehicle);
 
-    CustomerVehicle find(long id);
+    RegisteredVehicle find(long id);
 
-    CustomerVehicle findByLicense(String license);
+    RegisteredVehicle findByLicense(String license);
 
-    List<CustomerVehicle> findByUser(long id);
+    List<RegisteredVehicle> findByUser(long id);
 
-    List<CustomerVehicle> findByVehicle(long id);
+    List<RegisteredVehicle> findByVehicle(long id);
 
-    List<CustomerVehicle> getAll();
+    List<RegisteredVehicle> getAll();
 }

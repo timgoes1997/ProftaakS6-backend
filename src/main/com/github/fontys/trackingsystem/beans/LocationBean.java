@@ -1,10 +1,8 @@
 package com.github.fontys.trackingsystem.beans;
 
-import com.github.fontys.trackingsystem.mock.DatabaseMock;
-import com.github.fontys.trackingsystem.payment.Bill;
+import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.tracking.Location;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -21,7 +19,7 @@ import java.util.*;
 public class LocationBean {
 
     @Inject
-    private DatabaseMock db;
+    private DummyDataGenerator db;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -76,7 +74,7 @@ public class LocationBean {
         /*
         List<TrackedVehicle> vehicleList = db.getTrackedVehicles();
         for (TrackedVehicle veh : vehicleList) {
-            CustomerVehicle a = veh.getCustomerVehicle();
+            RegisteredVehicle a = veh.getRegisteredVehicle();
             if (a != null) {
                 if (a.getLicensePlate().toLowerCase().equals(license.toLowerCase())) {
                     return veh;

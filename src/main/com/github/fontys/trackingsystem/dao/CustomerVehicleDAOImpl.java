@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.dao.interfaces.CustomerVehicleDAO;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,56 +16,56 @@ public class CustomerVehicleDAOImpl implements CustomerVehicleDAO {
     private EntityManager em;
 
     @Override
-    public void create(CustomerVehicle customerVehicle) {
-        em.persist(customerVehicle);
+    public void create(RegisteredVehicle registeredVehicle) {
+        em.persist(registeredVehicle);
     }
 
     @Override
-    public void edit(CustomerVehicle customerVehicle) {
-        em.merge(customerVehicle);
+    public void edit(RegisteredVehicle registeredVehicle) {
+        em.merge(registeredVehicle);
     }
 
     @Override
-    public void remove(CustomerVehicle customerVehicle) {
-        em.remove(customerVehicle);
+    public void remove(RegisteredVehicle registeredVehicle) {
+        em.remove(registeredVehicle);
     }
 
     @Override
-    public CustomerVehicle find(long id) {
-        TypedQuery<CustomerVehicle> query =
-                em.createNamedQuery(CustomerVehicle.FIND_BYID, CustomerVehicle.class);
+    public RegisteredVehicle find(long id) {
+        TypedQuery<RegisteredVehicle> query =
+                em.createNamedQuery(RegisteredVehicle.FIND_BYID, RegisteredVehicle.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
 
     @Override
-    public CustomerVehicle findByLicense(String license) {
-        TypedQuery<CustomerVehicle> query =
-                em.createNamedQuery(CustomerVehicle.FIND_BYLICENSEPLATE, CustomerVehicle.class);
+    public RegisteredVehicle findByLicense(String license) {
+        TypedQuery<RegisteredVehicle> query =
+                em.createNamedQuery(RegisteredVehicle.FIND_BYLICENSEPLATE, RegisteredVehicle.class);
         query.setParameter("licensePlate", license);
         return query.getSingleResult();
     }
 
     @Override
-    public List<CustomerVehicle> findByUser(long id) {
-        TypedQuery<CustomerVehicle> query =
-                em.createNamedQuery(CustomerVehicle.FIND_BYUSER, CustomerVehicle.class);
+    public List<RegisteredVehicle> findByUser(long id) {
+        TypedQuery<RegisteredVehicle> query =
+                em.createNamedQuery(RegisteredVehicle.FIND_BYUSER, RegisteredVehicle.class);
         query.setParameter("id", id);
         return query.getResultList();
     }
 
     @Override
-    public List<CustomerVehicle> findByVehicle(long id) {
-        TypedQuery<CustomerVehicle> query =
-                em.createNamedQuery(CustomerVehicle.FIND_BYVEHICLE, CustomerVehicle.class);
+    public List<RegisteredVehicle> findByVehicle(long id) {
+        TypedQuery<RegisteredVehicle> query =
+                em.createNamedQuery(RegisteredVehicle.FIND_BYVEHICLE, RegisteredVehicle.class);
         query.setParameter("id", id);
         return query.getResultList();
     }
 
     @Override
-    public List<CustomerVehicle> getAll() {
-        TypedQuery<CustomerVehicle> query =
-                em.createNamedQuery(CustomerVehicle.FIND_ALL, CustomerVehicle.class);
+    public List<RegisteredVehicle> getAll() {
+        TypedQuery<RegisteredVehicle> query =
+                em.createNamedQuery(RegisteredVehicle.FIND_ALL, RegisteredVehicle.class);
         return query.getResultList();
     }
 }

@@ -2,10 +2,8 @@ package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
-import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
-import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -81,6 +79,59 @@ public class VehicleDAOImpl implements VehicleDAO{
     public List<String> getBrands() {
         Query query = em.createQuery("SELECT DISTINCT v.brand FROM VEHICLE v");
         return query.getResultList();
+    }
+
+    @Override
+    public Vehicle find(String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel){
+        TypedQuery<Vehicle> query =
+                em.createNamedQuery(Vehicle.FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL, Vehicle.class);
+        query.setParameter("modelName", modelName);
+        query.setParameter("edition", edition);
+        query.setParameter("fuelType", fuelType);
+        query.setParameter("energyLabel", energyLabel);
+        return query.getSingleResult();
+    }
+
+    @Override
+    public List<Vehicle> findModelsByModelName(String modelName) {
+        TypedQuery<Vehicle> query =
+                em.createNamedQuery(Vehicle.FIND_BYNAME, Vehicle.class);
+        List<Vehicle> results = query.setParameter("modelName", modelName).getResultList();
+        return results;
+    }
+
+    @Override
+    public List<Vehicle> findModelsByEdition(String edition) {
+        TypedQuery<Vehicle> query =
+                em.createNamedQuery(Vehicle.FIND_BYEDITION, Vehicle.class);
+        List<Vehicle> results = query.setParameter("edition", edition).getResultList();
+        return results;
+    }
+
+    @Override
+    public List<Vehicle> findModelsByNameAndEdition(String modelName, String edition) {
+        TypedQuery<Vehicle> query =
+                em.createNamedQuery(Vehicle.FIND_BYNAMEANDEDITION, Vehicle.class);
+        query.setParameter("modelName", modelName);
+        query.setParameter("edition", edition);
+        List<Vehicle> results = query.getResultList();
+        return results;
+    }
+
+    @Override
+    public List<Vehicle> findModelsByFuelType(FuelType fuelType) {
+        TypedQuery<Vehicle> query =
+                em.createNamedQuery(Vehicle.FIND_BYFUELTYPE, Vehicle.class);
+        List<Vehicle> results = query.setParameter("fuelType", fuelType).getResultList();
+        return results;
+    }
+
+    @Override
+    public List<Vehicle> findModelsByEnergyLabel(EnergyLabel energyLabel) {
+        TypedQuery<Vehicle> query =
+                em.createNamedQuery(Vehicle.FIND_BYENERGYLABEL, Vehicle.class);
+        List<Vehicle> results = query.setParameter("energyLabel", energyLabel).getResultList();
+        return results;
     }
 
     public void setEntityManager(EntityManager em){
