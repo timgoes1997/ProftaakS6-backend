@@ -2,6 +2,10 @@
 
 / = project root directory
 
+# Prerequisities
+
+> Start the derby database
+./asadmin start-database
 
 # Run server
 
