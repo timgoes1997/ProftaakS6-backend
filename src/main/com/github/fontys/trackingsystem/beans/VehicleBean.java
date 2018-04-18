@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.trackingsystem.EnergyLabel;
-import com.github.fontys.trackingsystem.dao.interfaces.CustomerVehicleDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.DummyDataGenerator;
@@ -43,7 +43,7 @@ public class VehicleBean {
     private UserDAO userDAO;
 
     @Inject
-    private CustomerVehicleDAO customerVehicleDAO;
+    private RegisteredVehicleDAO registeredVehicleDAO;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -85,7 +85,7 @@ public class VehicleBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/active/all")
     public Response getVehicles() {
-        List<RegisteredVehicle> vehicles = customerVehicleDAO.getAll();
+        List<RegisteredVehicle> vehicles = registeredVehicleDAO.getAll();
         GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(vehicles) {
         };
         if (vehicles.size() > 0) {
@@ -229,8 +229,8 @@ public class VehicleBean {
         RegisteredVehicle cv = new RegisteredVehicle(u, license, v, location);
 
         try {
-            customerVehicleDAO.create(cv);
-            RegisteredVehicle registeredVehicle = customerVehicleDAO.findByLicense(cv.getLicensePlate());
+            registeredVehicleDAO.create(cv);
+            RegisteredVehicle registeredVehicle = registeredVehicleDAO.findByLicense(cv.getLicensePlate());
             return Response.status(200).entity(registeredVehicle).build();
         } catch (Exception e) {
             return Response.serverError().entity(e).build();

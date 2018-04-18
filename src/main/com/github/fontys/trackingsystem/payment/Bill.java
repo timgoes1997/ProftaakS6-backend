@@ -19,7 +19,7 @@ import java.util.Calendar;
                 query = "SELECT b FROM BILL b WHERE b.id=:id"),
 
         @NamedQuery(name = Bill.FIND_BYVEHICLEID,
-                query = "SELECT b FROM BILL b WHERE b.customerVehicle.id=:id"),
+                query = "SELECT b FROM BILL b WHERE b.registeredVehicle.id=:id"),
         // TODO: 2-4-18 Idk of je zo bij een nested class kan met jpa queries
 
         @NamedQuery(name = Bill.FIND_BYSTATUS,

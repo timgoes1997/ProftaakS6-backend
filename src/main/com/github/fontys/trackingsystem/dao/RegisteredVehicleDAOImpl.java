@@ -1,6 +1,6 @@
 package com.github.fontys.trackingsystem.dao;
 
-import com.github.fontys.trackingsystem.dao.interfaces.CustomerVehicleDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.ejb.Stateless;
@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class CustomerVehicleDAOImpl implements CustomerVehicleDAO {
+public class RegisteredVehicleDAOImpl implements RegisteredVehicleDAO {
 
     @PersistenceContext(name="Proftaak")
     private EntityManager em;
