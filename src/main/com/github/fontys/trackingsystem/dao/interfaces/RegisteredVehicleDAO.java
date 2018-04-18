@@ -4,7 +4,7 @@ import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import java.util.List;
 
-public interface CustomerVehicleDAO {
+public interface RegisteredVehicleDAO {
     void create(RegisteredVehicle registeredVehicle);
 
     void edit(RegisteredVehicle registeredVehicle);

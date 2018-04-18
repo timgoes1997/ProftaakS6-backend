@@ -15,12 +15,6 @@ import java.util.Date;
         @NamedQuery(name=Vehicle.FIND_BYBRAND,
                 query="SELECT v FROM VEHICLE v WHERE v.brand=:brand"),
         @NamedQuery(name=Vehicle.FIND_BYMODEL,
-                query="SELECT v FROM VEHICLE v WHERE v.vehicleModel.id=:id"),
-        @NamedQuery(name=Vehicle.FIND_BYMODELBRANDBUILDDATE,
-                query="SELECT v FROM VEHICLE v WHERE " +
-                        "AND v.brand=:brand AND v.buildDate=:buildDate"),
-
-        @NamedQuery(name=Vehicle.FIND_BYNAME,
                 query="SELECT v FROM VEHICLE v WHERE v.modelName=:modelName"),
         @NamedQuery(name=Vehicle.FIND_BYEDITION,
                 query="SELECT v FROM VEHICLE v WHERE v.edition=:edition"),
@@ -28,6 +22,9 @@ import java.util.Date;
                 query="SELECT v FROM VEHICLE v WHERE v.fuelType=:fuelType"),
         @NamedQuery(name=Vehicle.FIND_BYENERGYLABEL,
                 query="SELECT v FROM VEHICLE v WHERE v.energyLabel=:energyLabel"),
+        @NamedQuery(name=Vehicle.FIND_BYMODELBRANDBUILDDATE,
+                query="SELECT v FROM VEHICLE v WHERE v.brand=:brand " +
+                        "AND v.buildDate=:buildDate"),
         @NamedQuery(name=Vehicle.FIND_BYNAMEANDEDITION,
                 query="SELECT v FROM VEHICLE v WHERE v.modelName=:modelName " +
                         "AND v.edition=:edition"),

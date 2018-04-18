@@ -8,18 +8,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity(name="CUSTOMER_VEHICLE")
+@Entity(name="REGISTERED_VEHICLE")
 @NamedQueries({
         @NamedQuery(name = RegisteredVehicle.FIND_ALL,
-                query = "SELECT c FROM CUSTOMER_VEHICLE c"),
+                query = "SELECT c FROM REGISTERED_VEHICLE c"),
         @NamedQuery(name = RegisteredVehicle.FIND_BYID,
-                query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.id=:id"),
+                query = "SELECT c FROM REGISTERED_VEHICLE c WHERE c.id=:id"),
         @NamedQuery(name = RegisteredVehicle.FIND_BYUSER,
-                query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.customer.id=:id"),
+                query = "SELECT c FROM REGISTERED_VEHICLE c WHERE c.customer.id=:id"),
         @NamedQuery(name = RegisteredVehicle.FIND_BYLICENSEPLATE,
-                query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.licensePlate=:licensePlate"),
+                query = "SELECT c FROM REGISTERED_VEHICLE c WHERE c.licensePlate=:licensePlate"),
         @NamedQuery(name = RegisteredVehicle.FIND_BYVEHICLE,
-                query = "SELECT c FROM CUSTOMER_VEHICLE c WHERE c.vehicle.id=:id"),
+                query = "SELECT c FROM REGISTERED_VEHICLE c WHERE c.vehicle.id=:id"),
 })
 public class RegisteredVehicle implements Serializable {
 
@@ -56,7 +56,7 @@ public class RegisteredVehicle implements Serializable {
     @Column(name="PROOF_OF_OWNERSHIP")
     private String proofOfOwnership;
 
-    @OneToMany(mappedBy="customerVehicle", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy="registeredVehicle", cascade = CascadeType.PERSIST)
     private List<Bill> bills;
 
     public RegisteredVehicle(Long id, User customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
