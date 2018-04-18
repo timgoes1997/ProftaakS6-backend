@@ -91,21 +91,20 @@ public class DummyDataGenerator {
                     String.format("Residency %s", i),
                     Role.BILL_ADMINISTRATOR);
 
-            Account account = new Account(String.format("email", i), String.format("user", i), String.format("password", i));
+            Account account = new Account(String.format("email %s", i), String.format("user %s", i), String.format("password %s", i));
             account.setUser(u);
             accountDAO.create(account);
 
             User inDatabase = userDAO.findByAccount(accountDAO.findByEmail(account.getEmail()));
 
-            RegisteredVehicle cv = new RegisteredVehicle(
+            RegisteredVehicle rv = new RegisteredVehicle(
                     (long) i,
                     inDatabase,
                     String.format("XXX-00%s", i),
                     vehicles.get(i),
                     String.format("Proof %s", i));
 
-            registeredVehicleDAO.create(cv);
-
+            registeredVehicleDAO.create(rv);
         }
     }
 

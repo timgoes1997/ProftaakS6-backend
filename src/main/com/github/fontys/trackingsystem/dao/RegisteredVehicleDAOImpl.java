@@ -17,6 +17,7 @@ public class RegisteredVehicleDAOImpl implements RegisteredVehicleDAO {
 
     @Override
     public void create(RegisteredVehicle registeredVehicle) {
+        registeredVehicle.setLicensePlate(registeredVehicle.getLicensePlate().toUpperCase());
         em.persist(registeredVehicle);
     }
 
