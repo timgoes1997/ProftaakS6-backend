@@ -5,8 +5,6 @@ import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.Vehicle;
-import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
@@ -14,9 +12,6 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @RequestScoped
 @Path("/users")

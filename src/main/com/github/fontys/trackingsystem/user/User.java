@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.user;
 
 import com.github.fontys.security.base.ESUser;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -53,7 +53,7 @@ public class User implements Serializable, ESUser {
     private Department department;
 
     @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST)
-    private List<CustomerVehicle> customerVehicles;
+    private List<RegisteredVehicle> registeredVehicles;
 
     public User(String name, String address, String residency, Role role) {
         this.name = name;
@@ -112,12 +112,12 @@ public class User implements Serializable, ESUser {
         this.department = department;
     }
 
-    public List<CustomerVehicle> getCustomerVehicles() {
-        return customerVehicles;
+    public List<RegisteredVehicle> getRegisteredVehicles() {
+        return registeredVehicles;
     }
 
-    public void setCustomerVehicles(List<CustomerVehicle> customerVehicles) {
-        this.customerVehicles = customerVehicles;
+    public void setRegisteredVehicles(List<RegisteredVehicle> registeredVehicles) {
+        this.registeredVehicles = registeredVehicles;
     }
 
     public Long getId() {

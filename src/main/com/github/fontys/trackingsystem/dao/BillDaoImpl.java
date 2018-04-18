@@ -2,8 +2,6 @@ package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.payment.Bill;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
@@ -43,7 +41,8 @@ public class BillDaoImpl implements BillDAO {
     @Override
     public List<Bill> findByOwnerId(int ownerId) {
         // TODO: 2-4-18 Wat bedoelen we hier met de owner? account of username id?
-        throw new NotImplementedException();
+        return null;
+//        throw new NotImplementedException();
     }
 
     @Override

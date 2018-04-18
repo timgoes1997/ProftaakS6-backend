@@ -1,16 +1,14 @@
 package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.trackingsystem.EnergyLabel;
-import com.github.fontys.trackingsystem.dao.interfaces.CustomerVehicleDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
-import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
-import com.github.fontys.trackingsystem.mock.DatabaseMock;
+import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
-import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -18,7 +16,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -28,7 +25,6 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -38,10 +34,7 @@ import java.util.Random;
 public class VehicleBean {
 
     @Inject
-    private DatabaseMock db;
-
-    @Inject
-    private VehicleModelDAO vehicleModelDAO;
+    private DummyDataGenerator db;
 
     @Inject
     private VehicleDAO vehicleDAO;
@@ -50,7 +43,7 @@ public class VehicleBean {
     private UserDAO userDAO;
 
     @Inject
-    private CustomerVehicleDAO customerVehicleDAO;
+    private RegisteredVehicleDAO registeredVehicleDAO;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -59,7 +52,7 @@ public class VehicleBean {
         try {
             Vehicle vehicle = vehicleDAO.find(id);
             return Response.status(Response.Status.FOUND).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             return Response.serverError().build();
         }
     }
@@ -69,7 +62,8 @@ public class VehicleBean {
     @Path("/brands")
     public Response getBrands() {
         List<String> brands = vehicleDAO.getBrands();
-        GenericEntity<List<String>> list = new GenericEntity<List<String>>(brands) {};
+        GenericEntity<List<String>> list = new GenericEntity<List<String>>(brands) {
+        };
         return Response.ok(brands).build();
     }
 
@@ -78,7 +72,8 @@ public class VehicleBean {
     @Path("/brands/{brand}")
     public Response getVehicles(@PathParam("brand") String brand) {
         List<Vehicle> vehicles = vehicleDAO.findByBrand(brand);
-        GenericEntity<List<Vehicle>> list = new GenericEntity<List<Vehicle>>(vehicles) {};
+        GenericEntity<List<Vehicle>> list = new GenericEntity<List<Vehicle>>(vehicles) {
+        };
         if (vehicles.size() > 0) {
             return Response.ok(list).build();
         } else {
@@ -90,8 +85,9 @@ public class VehicleBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/active/all")
     public Response getVehicles() {
-        List<CustomerVehicle> vehicles = customerVehicleDAO.getAll();
-        GenericEntity<List<CustomerVehicle>> list = new GenericEntity<List<CustomerVehicle>>(vehicles) {};
+        List<RegisteredVehicle> vehicles = registeredVehicleDAO.getAll();
+        GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(vehicles) {
+        };
         if (vehicles.size() > 0) {
             return Response.ok(list).build();
         } else {
@@ -104,93 +100,92 @@ public class VehicleBean {
     @Path("/register/vehicle")
     public Response registerVehicle(@FormParam("brand") String brand,
                                     @FormParam("model") Long modelID,
-                                    @FormParam("buildDate") String date) {
-        VehicleModel vm;
-        try{
-            vm = vehicleModelDAO.find(modelID);
-        }catch (EJBException e){
-            return Response.status(Response.Status.NOT_FOUND).entity(e).build();
-        }
+                                    @FormParam("buildDate") String date,
+                                    @FormParam("modelName") String modelName,
+                                    @FormParam("edition") String edition,
+                                    @FormParam("fuelType") String fuelTypeString,
+                                    @FormParam("energyLabel") String energyLabelString
+                                    ) {
+        FuelType fuelType = FuelType.valueOf(fuelTypeString);
+        EnergyLabel energyLabel = EnergyLabel.valueOf(energyLabelString);
 
         Date inDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
-        try{
+        try {
             inDate = sdf.parse(date);
-            Vehicle v = vehicleDAO.find(brand, vm.getId(), inDate);
-            if(v != null){
+            Vehicle v = vehicleDAO.find(modelName, edition, fuelType, energyLabel);
+            if (v != null) {
                 return Response.status(Response.Status.CONFLICT).build();
             }
-        } catch (ParseException|EJBException e) { //Expects a NoResultException but that is hidden in EJBException
-            if(e instanceof EJBException){
-                vehicleDAO.create(new Vehicle(brand, vm, inDate));
-                Vehicle v = vehicleDAO.find(brand, vm.getId(), inDate);
-                return Response.status(Response.Status.CREATED).entity(v).build();
-            }else{
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
-            }
+        } catch (EJBException e) { //Expects a NoResultException but that is hidden in EJBException
+            vehicleDAO.create(new Vehicle(brand, inDate, modelName, edition, fuelType, energyLabel));
+            Vehicle v = vehicleDAO.find(modelName, edition, fuelType, energyLabel);
+            return Response.status(Response.Status.CREATED).entity(v).build();
+        } catch (ParseException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
         }
 
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/register/model")
-    public Response registerModel(@FormParam("modelName") String modelName,
-                                  @FormParam("edition") String edition,
-                                  @FormParam("fuelType") FuelType fuelType,
-                                  @FormParam("energyLabel") EnergyLabel energyLabel) {
-        try {
-            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
-            if (vm != null) {
-                return Response.status(Response.Status.CONFLICT).build();
-            } else {
-                vehicleModelDAO.create(new VehicleModel(modelName, edition, fuelType, energyLabel));
-                VehicleModel vm2 = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
-                return Response.status(Response.Status.CREATED).entity(vm2).build();
-            }
-        } catch (EJBException e) {
-            vehicleModelDAO.create(new VehicleModel(modelName, edition, fuelType, energyLabel));
-            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
-            return Response.status(Response.Status.CREATED).entity(vm).build();
-        }
-    }
+//    @POST
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/register/model")
+//    public Response registerModel(@FormParam("modelName") String modelName,
+//                                  @FormParam("edition") String edition,
+//                                  @FormParam("fuelType") FuelType fuelType,
+//                                  @FormParam("energyLabel") EnergyLabel energyLabel) {
+//        try {
+//            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
+//            if (vm != null) {
+//                return Response.status(Response.Status.CONFLICT).build();
+//            } else {
+//                vehicleModelDAO.create(new VehicleModel(modelName, edition, fuelType, energyLabel));
+//                VehicleModel vm2 = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
+//                return Response.status(Response.Status.CREATED).entity(vm2).build();
+//            }
+//        } catch (EJBException e) {
+//            vehicleModelDAO.create(new VehicleModel(modelName, edition, fuelType, energyLabel));
+//            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
+//            return Response.status(Response.Status.CREATED).entity(vm).build();
+//        }
+//    }
+//
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/model/find/{id}")
+//    public Response getModel(@PathParam("id") Long id) {
+//        try {
+//            VehicleModel vm = vehicleModelDAO.find(id);
+//            return Response.status(Response.Status.FOUND).entity(vm).build();
+//        } catch (Exception e) {
+//            return Response.noContent().build();
+//        }
+//    }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/model/find/{id}")
-    public Response getModel(@PathParam("id") Long id) {
-        try {
-            VehicleModel vm = vehicleModelDAO.find(id);
-            return Response.status(Response.Status.FOUND).entity(vm).build();
-        } catch (Exception e) {
-            return Response.noContent().build();
-        }
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/model/find/")
-    public Response getModel(@QueryParam("modelName") String modelName, @QueryParam("edition") String edition, @QueryParam("fuelType") FuelType fuelType, @QueryParam("energyLabel") EnergyLabel energyLabel) {
-        try {
-            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
-            return Response.ok(vm).build();
-        } catch (Exception e) {
-            return Response.noContent().build();
-        }
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/model/find/name/{name}")
-    public Response getModel(@PathParam("name") String name) {
-        try {
-            List<VehicleModel> vm = vehicleModelDAO.findModelsByModelName(name);
-            return Response.ok(vm).build();
-        } catch (Exception e) {
-            return Response.noContent().build();
-        }
-    }
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/model/find/")
+//    public Response getModel(@QueryParam("modelName") String modelName, @QueryParam("edition") String edition, @QueryParam("fuelType") FuelType fuelType, @QueryParam("energyLabel") EnergyLabel energyLabel) {
+//        try {
+//            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
+//            return Response.ok(vm).build();
+//        } catch (Exception e) {
+//            return Response.noContent().build();
+//        }
+//    }
+//
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/model/find/name/{name}")
+//    public Response getModel(@PathParam("name") String name) {
+//        try {
+//            List<VehicleModel> vm = vehicleModelDAO.findModelsByModelName(name);
+//            return Response.ok(vm).build();
+//        } catch (Exception e) {
+//            return Response.noContent().build();
+//        }
+//    }
 
 
     @POST
@@ -202,16 +197,16 @@ public class VehicleBean {
                                @FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetails) throws Exception {
         Vehicle v;
-        try{
+        try {
             v = vehicleDAO.find(vehicleID);
-        }catch (Exception e){
+        } catch (Exception e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e).build();
         }
 
         User u;
-        try{
+        try {
             u = userDAO.find(userID);
-        }catch(Exception e){
+        } catch (Exception e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e).build();
         }
 
@@ -229,15 +224,15 @@ public class VehicleBean {
 
         String location = uploadedFileLocation + f.getName();
 
-        if(v == null && u == null) return Response.notModified("Entity and vehicle are both null").build();
+        if (v == null && u == null) return Response.notModified("Entity and vehicle are both null").build();
 
-        CustomerVehicle cv = new CustomerVehicle(u, license, v, location);
+        RegisteredVehicle cv = new RegisteredVehicle(u, license, v, location);
 
-        try{
-            customerVehicleDAO.create(cv);
-            CustomerVehicle customerVehicle = customerVehicleDAO.findByLicense(cv.getLicensePlate());
-            return Response.status(200).entity(customerVehicle).build();
-        }catch (Exception e){
+        try {
+            registeredVehicleDAO.create(cv);
+            RegisteredVehicle registeredVehicle = registeredVehicleDAO.findByLicense(cv.getLicensePlate());
+            return Response.status(200).entity(registeredVehicle).build();
+        } catch (Exception e) {
             return Response.serverError().entity(e).build();
         }
     }

@@ -1,8 +1,5 @@
 package com.github.fontys.trackingsystem.tracking;
-
-
-import com.github.fontys.trackingsystem.region.BorderLocation;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,14 +9,20 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = TrackedVehicle.FIND_LOCATIONSBYTRACKEDVEHICLEID,
                 query = "SELECT tv.locations FROM TRACKED_VEHICLE tv WHERE tv.id=:id"),
-        @NamedQuery(name = TrackedVehicle.FIND_LOCATIONSBYCUSTOMERVEHICLEID,
-                query = "SELECT tv.locations FROM TRACKED_VEHICLE tv WHERE tv.customerVehicle.id=:id"),
+        @NamedQuery(name = TrackedVehicle.FIND_LOCATIONSBYREGISTEREDVEHICLEID,
+                query = "SELECT tv.locations FROM TRACKED_VEHICLE tv WHERE tv.registeredVehicle.id=:id"),
+        @NamedQuery(name = TrackedVehicle.FIND_TRACKEDVEHICLEBYCUSTOMERVEHICLEID,
+                query = "SELECT tv FROM TRACKED_VEHICLE tv WHERE tv.registeredVehicle.id=:id"),
+        @NamedQuery(name = TrackedVehicle.FIND_LASTLOCATIONBYTRACKEDVEHICLEID,
+        query = "SELECT tv.lastLocation FROM TRACKED_VEHICLE tv WHERE tv.id=:id"),
 })
+
 public class TrackedVehicle implements Serializable {
 
-    public static final String FIND_LOCATIONSBYTRACKEDVEHICLEID = "TrackedVehicle.findLocationSByTrackedVehicleID";
-    public static final String FIND_LOCATIONSBYCUSTOMERVEHICLEID = "TrackedVehicle.findLocationSByCustomerVehicleID";
-
+    public static final String FIND_LOCATIONSBYTRACKEDVEHICLEID = "TrackedVehicle.findLocationsByTrackedVehicleID";
+    public static final String FIND_LOCATIONSBYREGISTEREDVEHICLEID = "TrackedVehicle.findLocationsByRegisteredVehicleID";
+    public static final String FIND_TRACKEDVEHICLEBYCUSTOMERVEHICLEID = "TrackedVehicle.findTrackedVehicleByCustomerVehicleID";
+    public static final String FIND_LASTLOCATIONBYTRACKEDVEHICLEID = "TrackedVehicle.findLastLocationByTrackedVehicleID";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +31,7 @@ public class TrackedVehicle implements Serializable {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="CUSTOMER_VEHICLE")
-    private CustomerVehicle customerVehicle;
+    private RegisteredVehicle registeredVehicle;
 
     @OneToOne
     @JoinColumn(name="LAST_LOCATION")
@@ -41,27 +44,22 @@ public class TrackedVehicle implements Serializable {
     private List<Location> locations; // must be ordered consecutively
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name="LOCATION")
-    private Location location;
-
-    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="HARDWARE")
     private Hardware hardware;
 
     public TrackedVehicle(){}
-
-    public TrackedVehicle(CustomerVehicle customerVehicle, Location location, Hardware hardware) {
-        this.customerVehicle = customerVehicle;
-        this.lastLocation = location;
+    public TrackedVehicle(RegisteredVehicle registeredVehicle, Location lastLocation, Hardware hardware) {
+        this.registeredVehicle = registeredVehicle;
         this.hardware = hardware;
+        this.lastLocation = lastLocation;
     }
 
-    public CustomerVehicle getCustomerVehicle() {
-        return customerVehicle;
+    public RegisteredVehicle getRegisteredVehicle() {
+        return registeredVehicle;
     }
 
-    public void setCustomerVehicle(CustomerVehicle customerVehicle) {
-        this.customerVehicle = customerVehicle;
+    public void setRegisteredVehicle(RegisteredVehicle registeredVehicle) {
+        this.registeredVehicle = registeredVehicle;
     }
 
     public Location getLocation() {
@@ -78,5 +76,13 @@ public class TrackedVehicle implements Serializable {
 
     public void setHardware(Hardware hardware) {
         this.hardware = hardware;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 }

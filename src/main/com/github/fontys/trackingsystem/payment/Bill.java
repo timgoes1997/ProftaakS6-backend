@@ -1,6 +1,6 @@
 package com.github.fontys.trackingsystem.payment;
 
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 @Entity(name="BILL")
 @NamedQueries({
@@ -48,7 +47,7 @@ public class Bill implements Serializable {
 
     @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name="CUSTOMER_VEHICLE_ID")
-    private CustomerVehicle customerVehicle;
+    private RegisteredVehicle registeredVehicle;
 
     @Column(name="PRICE")
     private BigDecimal price;
@@ -73,8 +72,8 @@ public class Bill implements Serializable {
 
     public Bill() {}
 
-    public Bill(CustomerVehicle customerVehicle, Currency currency, BigDecimal price, BigDecimal alreadyPaid, Calendar startDate, Calendar endDate, PaymentStatus paymentStatus, double mileage) {
-        this.customerVehicle = customerVehicle;
+    public Bill(RegisteredVehicle registeredVehicle, Currency currency, BigDecimal price, BigDecimal alreadyPaid, Calendar startDate, Calendar endDate, PaymentStatus paymentStatus, double mileage) {
+        this.registeredVehicle = registeredVehicle;
         this.price = price;
         this.alreadyPaid = alreadyPaid;
         this.startDate = startDate;
@@ -84,12 +83,12 @@ public class Bill implements Serializable {
     }
 
     @XmlTransient
-    public CustomerVehicle getCustomerVehicle() {
-        return customerVehicle;
+    public RegisteredVehicle getRegisteredVehicle() {
+        return registeredVehicle;
     }
 
-    public void setCustomerVehicle(CustomerVehicle customerVehicle) {
-        this.customerVehicle = customerVehicle;
+    public void setRegisteredVehicle(RegisteredVehicle registeredVehicle) {
+        this.registeredVehicle = registeredVehicle;
     }
 
     public BigDecimal getPrice() {
@@ -126,7 +125,7 @@ public class Bill implements Serializable {
 
     @XmlAttribute
     public String getLicense() {
-        return customerVehicle.getLicensePlate();
+        return registeredVehicle.getLicensePlate();
     }
 
     public PaymentStatus getStatus() {

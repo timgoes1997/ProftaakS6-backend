@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TrackedVehicleDAOImpl implements TrackedVehicleDAO {
 
-    @PersistenceContext(name="Proftaak")
+    @PersistenceContext(name = "Proftaak")
     EntityManager em;
 
     @Override
@@ -35,6 +35,13 @@ public class TrackedVehicleDAOImpl implements TrackedVehicleDAO {
     }
 
     @Override
+    public TrackedVehicle findByRegisteredVehicleID(long id) {
+        TypedQuery<TrackedVehicle> query = em.createNamedQuery(TrackedVehicle.FIND_TRACKEDVEHICLEBYCUSTOMERVEHICLEID, TrackedVehicle.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
+
+    @Override
     public List<Location> findLocationsByTrackedVehicleID(long trackedVehicleID) {
         TypedQuery<Location> query =
                 em.createNamedQuery(TrackedVehicle.FIND_LOCATIONSBYTRACKEDVEHICLEID, Location.class);
@@ -43,9 +50,18 @@ public class TrackedVehicleDAOImpl implements TrackedVehicleDAO {
     }
 
     @Override
-    public List<Location> findLocationsByCustomerVehicleID(long customerVehicleID) {
+    public List<Location> findLocationsByRegisteredVehicleID(long customerVehicleID) {
         TypedQuery<Location> query =
-                em.createNamedQuery(TrackedVehicle.FIND_LOCATIONSBYCUSTOMERVEHICLEID, Location.class);
+                em.createNamedQuery(TrackedVehicle.FIND_LOCATIONSBYREGISTEREDVEHICLEID, Location.class);
         query.setParameter("id", customerVehicleID);
-        return query.getResultList();    }
+        return query.getResultList();
+    }
+
+    @Override
+    public Location findLastLocationByTrackedVehicleID(long trackedVehicleID) {
+        TypedQuery<Location> query =
+                em.createNamedQuery(TrackedVehicle.FIND_LASTLOCATIONBYTRACKEDVEHICLEID, Location.class);
+        query.setParameter("id", trackedVehicleID);
+        return query.getSingleResult();
+    }
 }

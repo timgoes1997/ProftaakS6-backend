@@ -1,7 +1,5 @@
-package com.github.fontys.trackingsystem.mock;
+package com.github.fontys.trackingsystem;
 
-
-import com.github.fontys.trackingsystem.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.*;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.Currency;
@@ -12,11 +10,9 @@ import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.CustomerVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
-import com.github.fontys.trackingsystem.vehicle.VehicleModel;
-import org.glassfish.jersey.internal.inject.Custom;
 
 import javax.annotation.PostConstruct;
 
@@ -30,9 +26,9 @@ import java.util.*;
 
 @Singleton
 @Startup
-public class DatabaseMock {
+public class DummyDataGenerator {
 
-    @PersistenceContext(name="Proftaak")
+    @PersistenceContext(name = "Proftaak")
     private EntityManager em;
 
     @Inject
@@ -45,7 +41,7 @@ public class DatabaseMock {
     private AccountDAO accountDAO;
 
     @Inject
-    private CustomerVehicleDAO customerVehicleDAO;
+    private RegisteredVehicleDAO registeredVehicleDAO;
 
     @Inject
     private BillDAO billDAO;
@@ -65,17 +61,25 @@ public class DatabaseMock {
 
     private void generateDummyVehicles() {
         Date date = new Date();
-        vehicleDAO.create(new Vehicle("Dikke BMW", new VehicleModel(1L, "i8", "", FuelType.ELECTRIC, EnergyLabel.A), date));
-        vehicleDAO.create(new Vehicle("Dikke BMW", new VehicleModel(2L, "m4", "", FuelType.GASOLINE, EnergyLabel.B), date));
-        vehicleDAO.create(new Vehicle("Audi", new VehicleModel(3L, "A4", "Sport", FuelType.DIESEL, EnergyLabel.D), date));
-        vehicleDAO.create(new Vehicle("Porsche", new VehicleModel(4L, "911", "Turbo S", FuelType.DIESEL, EnergyLabel.E), date));
-        vehicleDAO.create(new Vehicle("Koeningsegg", new VehicleModel(5L, "Agrerra", "R", FuelType.LPG, EnergyLabel.C), date));
-        vehicleDAO.create(new Vehicle("Lamborghini", new VehicleModel(6L, "Aventador", "", FuelType.DIESEL, EnergyLabel.F), date));
-        vehicleDAO.create(new Vehicle("Volkswagen", new VehicleModel(7L, "Polo", "GT", FuelType.DIESEL, EnergyLabel.D), date));
-        vehicleDAO.create(new Vehicle("Opel", new VehicleModel(8L, "Ampera", "", FuelType.ELECTRIC, EnergyLabel.A), date));
-        vehicleDAO.create(new Vehicle("Tesla", new VehicleModel(9L, "Model S", "P100D", FuelType.ELECTRIC, EnergyLabel.A), date));
-        vehicleDAO.create(new Vehicle("Tesla", new VehicleModel(10L, "Model 3", "65", FuelType.ELECTRIC, EnergyLabel.A), date));
-        vehicleDAO.create(new Vehicle("Tesla", new VehicleModel(11L, "Model X", "P100D", FuelType.ELECTRIC, EnergyLabel.A), date));
+        for (int i = 0; i < 10; i++) {
+            vehicleDAO.create(new Vehicle(
+                    String.format("Brand '%s", i),
+                    date,
+                    String.format("Model '%s", i),
+                    String.format("Edition '%s'", i),
+                    FuelType.ELECTRIC,
+                    EnergyLabel.A));
+        }
+//        vehicleDAO.create(new Vehicle("Dikke BMW", new VehicleModel(2L, "m4", "", FuelType.GASOLINE, EnergyLabel.B), date));
+//        vehicleDAO.create(new Vehicle("Audi", new VehicleModel(3L, "A4", "Sport", FuelType.DIESEL, EnergyLabel.D), date));
+//        vehicleDAO.create(new Vehicle("Porsche", new VehicleModel(4L, "911", "Turbo S", FuelType.DIESEL, EnergyLabel.E), date));
+//        vehicleDAO.create(new Vehicle("Koeningsegg", new VehicleModel(5L, "Agrerra", "R", FuelType.LPG, EnergyLabel.C), date));
+//        vehicleDAO.create(new Vehicle("Lamborghini", new VehicleModel(6L, "Aventador", "", FuelType.DIESEL, EnergyLabel.F), date));
+//        vehicleDAO.create(new Vehicle("Volkswagen", new VehicleModel(7L, "Polo", "GT", FuelType.DIESEL, EnergyLabel.D), date));
+//        vehicleDAO.create(new Vehicle("Opel", new VehicleModel(8L, "Ampera", "", FuelType.ELECTRIC, EnergyLabel.A), date));
+//        vehicleDAO.create(new Vehicle("Tesla", new VehicleModel(9L, "Model S", "P100D", FuelType.ELECTRIC, EnergyLabel.A), date));
+//        vehicleDAO.create(new Vehicle("Tesla", new VehicleModel(10L, "Model 3", "65", FuelType.ELECTRIC, EnergyLabel.A), date));
+//        vehicleDAO.create(new Vehicle("Tesla", new VehicleModel(11L, "Model X", "P100D", FuelType.ELECTRIC, EnergyLabel.A), date));
     }
 
     private void generateDummyCustomerVehicles() {
@@ -93,30 +97,30 @@ public class DatabaseMock {
 
             User inDatabase = userDAO.findByAccount(accountDAO.findByEmail(account.getEmail()));
 
-            CustomerVehicle cv = new CustomerVehicle(
-                    (long)i,
+            RegisteredVehicle cv = new RegisteredVehicle(
+                    (long) i,
                     inDatabase,
                     String.format("XXX-00%s", i),
                     vehicles.get(i),
                     String.format("Proof %s", i));
 
-            customerVehicleDAO.create(cv);
+            registeredVehicleDAO.create(cv);
 
         }
     }
 
     private void generateDummyBills() {
-        List<CustomerVehicle> customerVehicles = customerVehicleDAO.getAll();
+        List<RegisteredVehicle> registeredVehicles = registeredVehicleDAO.getAll();
 
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
             Calendar startdate = new GregorianCalendar();
             startdate.set(2018, i, 1);
             Calendar endDate = new GregorianCalendar();
             endDate.set(2018, i, 28);
-            TrackedVehicle tv = new TrackedVehicle(customerVehicles.get(i), new Location(50 + i / 4, 9 + i / 4, startdate), new Hardware((long)10, "Hwtype"));
+            TrackedVehicle tv = new TrackedVehicle(registeredVehicles.get(i), new Location(50 + i / 4, 9 + i / 4, startdate), new Hardware((long) 10, "Hwtype"));
             em.persist(tv);
             Bill b = new Bill(
-                    customerVehicles.get(i),
+                    registeredVehicles.get(i),
                     Currency.EUR,
                     new BigDecimal(i * 200),
                     new BigDecimal(i * 400),
