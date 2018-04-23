@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-@Entity(name="BILL")
+@Entity(name = "BILL")
 @NamedQueries({
         @NamedQuery(name = Bill.FIND_ALL,
                 query = "SELECT b FROM BILL b"),
@@ -45,14 +45,14 @@ public class Bill implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name="CUSTOMER_VEHICLE_ID")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "CUSTOMER_VEHICLE_ID")
     private RegisteredVehicle registeredVehicle;
 
-    @Column(name="PRICE")
+    @Column(name = "PRICE")
     private BigDecimal price;
 
-    @Column(name="ALREADY_PAID")
+    @Column(name = "ALREADY_PAID")
     private BigDecimal alreadyPaid;
 
     @Temporal(TemporalType.DATE)
@@ -67,10 +67,11 @@ public class Bill implements Serializable {
     @Column(name = "PAYMENT_STATUS")
     private PaymentStatus status;
 
-    @Column(name="MILEAGE")
+    @Column(name = "MILEAGE")
     private double mileage;
 
-    public Bill() {}
+    public Bill() {
+    }
 
     public Bill(RegisteredVehicle registeredVehicle, Currency currency, BigDecimal price, BigDecimal alreadyPaid, Calendar startDate, Calendar endDate, PaymentStatus paymentStatus, double mileage) {
         this.registeredVehicle = registeredVehicle;
@@ -91,6 +92,25 @@ public class Bill implements Serializable {
         this.registeredVehicle = registeredVehicle;
     }
 
+    @XmlAttribute
+    public long getNumberStartDate() {
+        return startDate.getTimeInMillis() / 1000;
+    }
+
+    @XmlAttribute
+    public long getNumberEndDate() {
+        return startDate.getTimeInMillis() / 1000;
+    }
+
+    public Calendar getCalendarStartDate() {
+        return startDate;
+    }
+
+
+    public Calendar getCalendarEndDate() {
+        return endDate;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -107,16 +127,9 @@ public class Bill implements Serializable {
         this.alreadyPaid = alreadyPaid;
     }
 
-    public Calendar getStartDate() {
-        return startDate;
-    }
 
     public void setStartDate(Calendar startDate) {
         this.startDate = startDate;
-    }
-
-    public Calendar getEndDate() {
-        return endDate;
     }
 
     public void setEndDate(Calendar endDate) {
@@ -135,6 +148,7 @@ public class Bill implements Serializable {
     public void setStatus(PaymentStatus paymentStatus) {
         this.status = paymentStatus;
     }
+
     public double getMileage() {
         return mileage;
     }

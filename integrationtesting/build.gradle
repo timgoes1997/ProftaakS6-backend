@@ -17,6 +17,10 @@ dependencies {
     testCompile 'com.google.code.gson:gson:2.8.2'
 }
 
+test {
+    testLogging.showStandardStreams = true
+}
+
 jar {
     manifest {
         attributes 'Main-Class': 'io.github.edwinvanrooij.App'
