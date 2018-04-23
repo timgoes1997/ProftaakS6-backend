@@ -75,7 +75,7 @@ public class LocationBean {
                 Location l = locIter.next();
                 Date cl = l.getTime().getTime();
                 // if the date of the location falls outside the specified dates, remove the location
-                if (!l.getTime().getTime().after(start) && !l.getTime().getTime().before(end)) {
+                if (l.getTime().getTime().before(start) || l.getTime().getTime().after(end)) {
                     locIter.remove();
                 }
             }
