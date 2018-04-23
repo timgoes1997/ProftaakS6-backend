@@ -46,6 +46,26 @@ public class UserDAOImpl implements UserDAO{
         return query.getSingleResult();
     }
 
+    @Override
+    public User findByVerificationLink(String link) {
+        TypedQuery<User> query = em.createNamedQuery(User.FIND_VERIFICATION_LINK, User.class);
+        return query.setParameter("link", link).getSingleResult();
+    }
+
+    @Override
+    public boolean verificationLinkExists(String link) {
+        TypedQuery<User> query = em.createNamedQuery(User.FIND_VERIFICATION_LINK, User.class);
+        return query.setParameter("link", link).getResultList().size() > 0;
+    }
+
+    @Override
+    public boolean hasBeenVerified(String link) {
+        TypedQuery<User> query = em.createNamedQuery(User.FIND_VERIFICATION_LINK_AND_VERIFICATION, User.class);
+        return query.setParameter("link", link)
+                .setParameter("verified", true)
+                .getResultList().size() > 0;
+    }
+
     public void setEntityManager(EntityManager em){
         this.em = em;
     }

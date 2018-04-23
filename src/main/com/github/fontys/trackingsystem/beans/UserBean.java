@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.services.EmailService;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.user.Account;
@@ -22,6 +23,9 @@ public class UserBean {
 
     @Inject
     private UserDAO userDAO;
+
+    @Inject
+    private EmailService emailService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -71,6 +75,32 @@ public class UserBean {
         }
     }
 
+    @GET
+    @Path("/verify/{token}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response confirmRegistration(@PathParam("token") String token){
+        try{
+            if(!userDAO.verificationLinkExists(token)){
+                return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            }
+
+            if(userDAO.hasBeenVerified(token)){
+                return Response.status(Response.Status.CONFLICT).entity("You have already verified your account").build();
+            }
+
+            User user = userDAO.findByVerificationLink(token);
+            if(user == null){
+                return Response.serverError().build();
+            }
+            user.setVerified(true);
+            userDAO.edit(user);
+
+            return Response.ok("Account has been verified").build();
+
+        }catch(Exception e){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+    }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -101,6 +131,9 @@ public class UserBean {
             accountDAO.create(account);
             Account userAccount = accountDAO.findByEmail(account.getEmail());
             User createdUser = userDAO.findByAccount(userAccount);
+            createdUser.setVerifyLink(emailService.generateVerificationLink(createdUser));
+            userDAO.edit(createdUser);
+            emailService.sendVerificationMail(userAccount);
             return Response.ok(createdUser).build();
         } catch (Exception e) { //Expects a NoResultException but that is hidden in EJBException
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();

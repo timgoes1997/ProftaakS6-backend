@@ -5,15 +5,20 @@ import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity(name="CUSTOMER")
+@Entity(name = "CUSTOMER")
 @NamedQueries({
         @NamedQuery(name = User.FIND_BYID,
                 query = "SELECT c FROM CUSTOMER c WHERE c.id=:id"),
         @NamedQuery(name = User.FIND_BYACCOUNT,
                 query = "SELECT c FROM CUSTOMER c WHERE c.account.id=:id"),
+        @NamedQuery(name = User.FIND_VERIFICATION_LINK,
+                query = "SELECT c FROM CUSTOMER c WHERE c.verifyLink = :link"),
+        @NamedQuery(name = User.FIND_VERIFICATION_LINK_AND_VERIFICATION,
+                query = "SELECT c FROM CUSTOMER c WHERE c.verifyLink = :link AND c.verified = :verified"),
 })
 public class User implements Serializable, ESUser {
 
@@ -23,6 +28,8 @@ public class User implements Serializable, ESUser {
 
     public static final String FIND_BYID = "Account.findByID";
     public static final String FIND_BYACCOUNT = "Account.findByAccount";
+    public static final String FIND_VERIFICATION_LINK = "User.findVerificationLink";
+    public static final String FIND_VERIFICATION_LINK_AND_VERIFICATION = "User.findVerificationLinkAndVerified";
 
     // ======================================
     // =             Fields              =
@@ -33,27 +40,34 @@ public class User implements Serializable, ESUser {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name="NAME")
+    @Column(name = "VERIFIED", nullable = false)
+    private Boolean verified;
+
+    @Size(min = 0, max = 32)
+    @Column(name = "VERIFICATION_LINK")
+    private String verifyLink;
+
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name="ADDRESS")
+    @Column(name = "ADDRESS")
     private String address;
 
-    @Column(name="RESIDENCY")
+    @Column(name = "RESIDENCY")
     private String residency;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private Role role;
 
-    @OneToOne(fetch= FetchType.LAZY, mappedBy="user", cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST)
     private Account account;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "DEPARTMENT")
     private Department department;
 
-    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
     private List<RegisteredVehicle> registeredVehicles;
 
     public User(String name, String address, String residency, Role role) {
@@ -61,9 +75,12 @@ public class User implements Serializable, ESUser {
         this.address = address;
         this.residency = residency;
         this.role = role;
+        this.verified = false;
     }
 
-    public User(){}
+    public User() {
+        this.verified = false;
+    }
 
     public String getName() {
         return name;
@@ -129,4 +146,12 @@ public class User implements Serializable, ESUser {
     public Role getPrivilege() {
         return getRole();
     }
+
+    public Boolean getVerified() { return verified; }
+
+    public String getVerifyLink() { return verifyLink; }
+
+    public void setVerifyLink(String verifyLink) { this.verifyLink = verifyLink; }
+
+    public void setVerified(Boolean verified) { this.verified = verified; }
 }

@@ -34,6 +34,9 @@ public class AuthBean {
         try {
             Account a = accountDAO.findByEmail(email);
             if (a != null) {
+                if(!a.getUser().getVerified()){
+                    return Response.status(Response.Status.UNAUTHORIZED).entity("Not registered").build();
+                }
                 // do stuff with password
                 if (a.getPassword().equals(pass)) {
                     ESAuth.logon(req, a.getUser());

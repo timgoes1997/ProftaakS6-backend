@@ -13,4 +13,10 @@ public interface UserDAO {
     User find(long id);
 
     User findByAccount(Account acc);
+
+    User findByVerificationLink(String link);
+
+    boolean verificationLinkExists(String link);
+
+    boolean hasBeenVerified(String link);
 }
