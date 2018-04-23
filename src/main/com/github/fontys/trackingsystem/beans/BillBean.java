@@ -1,5 +1,8 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.security.annotations.inject.CurrentESUser;
+import com.github.fontys.security.annotations.interceptors.EasySecurity;
+import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
@@ -7,6 +10,7 @@ import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
 
 import javax.enterprise.context.RequestScoped;
@@ -40,6 +44,10 @@ import java.util.List;
 @RequestScoped
 @Path("/bills")
 public class BillBean {
+
+    @Inject
+    @CurrentESUser
+    private ESUser currentUser;
 
     @Inject
     private DummyDataGenerator db;
@@ -207,6 +215,23 @@ public class BillBean {
 
         // Bill found, return success
         return Response.ok(b).build();
+    }
+
+    @GET
+    @EasySecurity(requiresUser = true)
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/currentUser")
+    public Response getCurrentUserBills()
+    {
+        User casted = (User)currentUser;
+
+        List<Bill> bills = new ArrayList<>();
+
+        bills = billDAO.findByOwnerId(Math.toIntExact(casted.getId()));
+
+        GenericEntity<List<Bill>> listje = new GenericEntity<List<Bill>>(bills) {};
+
+        return Response.ok(listje).build();
     }
 
     private boolean compareYearAndMonth(Bill b, int year, int month) {
