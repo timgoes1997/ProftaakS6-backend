@@ -3,6 +3,7 @@ import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name="TRACKED_VEHICLE")
@@ -30,14 +31,14 @@ public class TrackedVehicle implements Serializable {
     private Long id;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name="CUSTOMER_VEHICLE", unique = true)
+    @JoinColumn(name="REGISTERED_VEHICLE", unique = true)
     private RegisteredVehicle registeredVehicle;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="LAST_LOCATION")
     private Location lastLocation;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "TRACKEDVEHICLE_LOCATIONS",
             joinColumns = { @JoinColumn(name="TRACKEDVEHICLE_ID", referencedColumnName="ID")},
             inverseJoinColumns = { @JoinColumn(name="LOCATION_ID", referencedColumnName="ID")})
@@ -52,6 +53,7 @@ public class TrackedVehicle implements Serializable {
         this.registeredVehicle = registeredVehicle;
         this.hardware = hardware;
         this.lastLocation = lastLocation;
+        this.locations = new ArrayList<>();
     }
 
     public RegisteredVehicle getRegisteredVehicle() {
@@ -62,12 +64,15 @@ public class TrackedVehicle implements Serializable {
         this.registeredVehicle = registeredVehicle;
     }
 
-    public Location getLocation() {
+    public Location getLastLocation() {
         return lastLocation;
     }
 
-    public void setLocation(Location location) {
-        this.lastLocation = location;
+    public void setLastLocation(Location lastLocation) {
+        if (this.lastLocation != null) {
+            this.locations.add(this.lastLocation);
+        }
+        this.lastLocation = lastLocation;
     }
 
     public Hardware getHardware() {

@@ -9,6 +9,7 @@ import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -44,7 +45,7 @@ public class LocationBean {
 
         // Not realtime
         // Parse the time
-        SimpleDateFormat parse = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
         Date start = null;
         Date end = null;
 
@@ -65,17 +66,27 @@ public class LocationBean {
         // Get all locations of the vehicle with retrieved vehicle ID
         locations = trackedVehicleDAO.findLocationsByRegisteredVehicleID(rv.getId());
 
+        locations.removeAll(Collections.singleton(null));
+
         // filter the map on date, if the map is not empty
         if (!locations.isEmpty()) {
-            for (Location l : locations) {
-                if (l != null) {
-                    // if the date of the location falls outside the specified dates, remove the location
-                    if (!l.getTime().after(start) && !l.getTime().before(end)) {
-                        locations.remove(l);
-                    }
+            Iterator<Location> locIter = locations.iterator();
+            while (locIter.hasNext()) {
+                Location l = locIter.next();
+                Date cl = l.getTime().getTime();
+                // if the date of the location falls outside the specified dates, remove the location
+                if (!l.getTime().getTime().after(start) && !l.getTime().getTime().before(end)) {
+                    locIter.remove();
                 }
             }
         }
+
+        //Sort the list by dates
+        Collections.sort(locations, new Comparator<Location>() {
+            public int compare(Location o1, Location o2) {
+                return o1.getTime().compareTo(o2.getTime());
+            }
+        });
 
         GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {
         };
@@ -96,7 +107,7 @@ public class LocationBean {
         TrackedVehicle tv = trackedVehicleDAO.findByRegisteredVehicleID(rv.getId());
 
         List<Location> locations = new ArrayList<>();
-        locations.add(tv.getLocation()); // Add last known location
+        locations.add(tv.getLastLocation()); // Add last known location
 
         GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {
         };
