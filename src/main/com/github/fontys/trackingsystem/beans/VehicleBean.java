@@ -234,6 +234,64 @@ public class VehicleBean {
 
         RegisteredVehicle cv = new RegisteredVehicle(u, license, v, location);
 
+        return createRegisteredVehicle(cv);
+    }
+
+    @POST
+    @Path("/register/create")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response newVehicle(@FormDataParam("brand") String brand,
+                               @FormDataParam("buildDate") String date,
+                               @FormDataParam("modelName") String modelName,
+                               @FormDataParam("edition") String edition,
+                               @FormDataParam("fuelType") String fuelTypeString,
+                               @FormDataParam("energyLabel") String energyLabelString,
+                               @FormDataParam("user") long userID,
+                               @FormDataParam("licenseplate") String license,
+                               @FormDataParam("file") InputStream uploadedInputStream,
+                               @FormDataParam("file") FormDataContentDisposition fileDetails) throws Exception {
+        FuelType fuelType = FuelType.valueOf(fuelTypeString);
+        EnergyLabel energyLabel = EnergyLabel.valueOf(energyLabelString);
+
+        Date inDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+        Vehicle v = null;
+        try {
+            inDate = sdf.parse(date);
+            v = vehicleDAO.find(brand, inDate, modelName, edition, fuelType, energyLabel);
+        }catch (EJBException e) { //Expects a NoResultException but that is hidden in EJBException
+            v = new Vehicle(brand, inDate, modelName, edition, fuelType, energyLabel);
+        }
+
+        User u;
+        try {
+            u = userDAO.find(userID);
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e).build();
+        }
+
+        String uploadedFileLocation = System.getProperty("user.dir") + "//files//";
+
+        String extension = FilenameUtils.getExtension(fileDetails.getFileName());
+
+        if (extension.equals("")) {
+            return Response.notModified("No file given").build();
+        }
+
+        File f = getNewFile(uploadedFileLocation, extension);//getNewFile(uploadedFileLocation, extension);
+        // save it
+        writeToFile(uploadedInputStream, f);
+
+        String location = uploadedFileLocation + f.getName();
+
+        if (v == null && u == null) return Response.notModified("Entity and vehicle are both null").build();
+
+        RegisteredVehicle cv = new RegisteredVehicle(u, license, v, location);
+
+        return createRegisteredVehicle(cv);
+    }
+
+    private Response createRegisteredVehicle(RegisteredVehicle cv) {
         try {
             registeredVehicleDAO.create(cv);
             RegisteredVehicle registeredVehicle = registeredVehicleDAO.findByLicense(cv.getLicensePlate());

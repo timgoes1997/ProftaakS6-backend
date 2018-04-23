@@ -28,6 +28,8 @@ public interface VehicleDAO {
 
     Vehicle find(String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel);
 
+    Vehicle find(String brand, Date date, String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel);
+
     List<String> findModelsByBrand(String brand);
 
     List<String> findEditionsByModelAndBrand(String brand, String model);

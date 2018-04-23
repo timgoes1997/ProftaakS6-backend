@@ -93,6 +93,19 @@ public class VehicleDAOImpl implements VehicleDAO{
     }
 
     @Override
+    public Vehicle find(String brand, Date date, String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel) {
+        TypedQuery<Vehicle> query =
+                em.createNamedQuery(Vehicle.FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL, Vehicle.class);
+        query.setParameter("brand", brand);
+        query.setParameter("buildDate", date);
+        query.setParameter("modelName", modelName);
+        query.setParameter("edition", edition);
+        query.setParameter("fuelType", fuelType);
+        query.setParameter("energyLabel", energyLabel);
+        return query.getSingleResult();
+    }
+
+    @Override
     public List<String> findModelsByBrand(String brand) {
         Query query = em.createQuery("SELECT DISTINCT v.modelName FROM VEHICLE v WHERE v.brand = :brand");
         query.setParameter("brand", brand);

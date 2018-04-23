@@ -31,6 +31,10 @@ import java.util.Date;
         @NamedQuery(name=Vehicle.FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL,
                 query="SELECT v FROM VEHICLE v WHERE v.modelName=:modelName " +
                         "AND v.edition=:edition AND v.fuelType=:fuelType AND v.energyLabel=:energyLabel"),
+        @NamedQuery(name=Vehicle.FIND_BYNAMEEDITIONFUELTYPEENERGYLABELBRANDDATE,
+                query="SELECT v FROM VEHICLE v WHERE v.modelName=:modelName " +
+                        "AND v.edition=:edition AND v.fuelType=:fuelType AND v.energyLabel=:energyLabel AND v.brand=:brand " +
+                        "AND v.buildDate=:buildDate"),
 
  })
 public class Vehicle implements Serializable{
@@ -50,6 +54,8 @@ public class Vehicle implements Serializable{
     public static final String FIND_BYENERGYLABEL = "Vehicle.findByEnergyLabel";
     public static final String FIND_BYNAMEANDEDITION = "Vehicle.findByNameAndEdition";
     public static final String FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL = "Vehicle.find";
+    public static final String FIND_BYNAMEEDITIONFUELTYPEENERGYLABELBRANDDATE = "Vehicle.findAllField";
+
 
     // ======================================
     // =             Fields                 =
