@@ -66,11 +66,13 @@ public class LocationBean {
         locations = trackedVehicleDAO.findLocationsByRegisteredVehicleID(rv.getId());
 
         // filter the map on date, if the map is not empty
-        if (locations.size() > 0) {
+        if (!locations.isEmpty()) {
             for (Location l : locations) {
-                // if the date of the location falls outside the specified dates, remove the location
-                if (!l.getTime().after(start) && !l.getTime().before(end)) {
-                    locations.remove(l);
+                if (l != null) {
+                    // if the date of the location falls outside the specified dates, remove the location
+                    if (!l.getTime().after(start) && !l.getTime().before(end)) {
+                        locations.remove(l);
+                    }
                 }
             }
         }

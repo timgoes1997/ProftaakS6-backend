@@ -46,7 +46,7 @@ public class DummyDataGenerator {
     @Inject
     private BillDAO billDAO;
 
-    private static int AMOUNT_TO_GENERATE = 5;
+    private static int AMOUNT_TO_GENERATE = 10;
 
     @PostConstruct
     public void init() {
@@ -61,7 +61,7 @@ public class DummyDataGenerator {
 
     private void generateDummyVehicles() {
         Date date = new Date();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
             vehicleDAO.create(new Vehicle(
                     String.format("Brand '%s", i),
                     date,

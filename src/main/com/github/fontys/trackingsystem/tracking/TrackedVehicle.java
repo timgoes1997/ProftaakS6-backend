@@ -30,10 +30,10 @@ public class TrackedVehicle implements Serializable {
     private Long id;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name="CUSTOMER_VEHICLE")
+    @JoinColumn(name="CUSTOMER_VEHICLE", unique = true)
     private RegisteredVehicle registeredVehicle;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="LAST_LOCATION")
     private Location lastLocation;
 
