@@ -108,6 +108,34 @@ public class VehicleDAOImpl implements VehicleDAO{
     }
 
     @Override
+    public List<String> findFuelTypesByModelBrandAndEdition(String brand, String model, String edition) {
+        Query query = em.createQuery("SELECT DISTINCT v.fuelType FROM VEHICLE v WHERE v.brand = :brand AND v.modelName = :modelName AND v.edition = :edition");
+        query.setParameter("brand", brand);
+        query.setParameter("modelName", model);
+        query.setParameter("edition", edition);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<String> findEnergyLabelsByModelBrandAndEdition(String brand, String model, String edition) {
+        Query query = em.createQuery("SELECT DISTINCT v.energyLabel FROM VEHICLE v WHERE v.brand = :brand AND v.modelName = :modelName AND v.edition = :edition");
+        query.setParameter("brand", brand);
+        query.setParameter("modelName", model);
+        query.setParameter("edition", edition);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<String> findEnergyLabelsByModelBrandEditionAndFuelType(String brand, String model, String edition, FuelType fuelType) {
+        Query query = em.createQuery("SELECT DISTINCT v.energyLabel FROM VEHICLE v WHERE v.brand = :brand AND v.modelName = :modelName AND v.edition = :edition AND v.fuelType = :fuelType");
+        query.setParameter("brand", brand);
+        query.setParameter("modelName", model);
+        query.setParameter("edition", edition);
+        query.setParameter("fuelType", fuelType);
+        return query.getResultList();
+    }
+
+    @Override
     public List<Vehicle> findModelsByModelName(String modelName) {
         TypedQuery<Vehicle> query =
                 em.createNamedQuery(Vehicle.FIND_BYNAME, Vehicle.class);

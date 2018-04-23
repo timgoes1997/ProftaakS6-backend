@@ -111,6 +111,45 @@ public class VehicleBean {
                 ? Response.ok(list).build() : Response.noContent().build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{brand}/{model}/editions")
+    public Response getEditionsByModelAndBrand(@PathParam("brand") String brand, @PathParam("model") String model) {
+        List<String> models = vehicleDAO.findEditionsByModelAndBrand(brand, model);
+        GenericEntity<List<String>> list = new GenericEntity<List<String>>(models) { };
+        return (models.size() > 0)
+                ? Response.ok(list).build() : Response.noContent().build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{brand}/{model}/{edition}/fueltypes")
+    public Response getFuelTypesByModelBrandAndEdition(@PathParam("brand") String brand, @PathParam("model") String model, @PathParam("edition") String edition) {
+        List<String> fuelTypes = vehicleDAO.findFuelTypesByModelBrandAndEdition(brand, model, edition);
+        GenericEntity<List<String>> list = new GenericEntity<List<String>>(fuelTypes) { };
+        return (fuelTypes.size() > 0)
+                ? Response.ok(list).build() : Response.noContent().build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{brand}/{model}/{edition}/energylabels")
+    public Response getEnergyLabelsByModelBrandAndEdition(@PathParam("brand") String brand, @PathParam("model") String model, @PathParam("edition") String edition) {
+        List<String> fuelTypes = vehicleDAO.findEnergyLabelsByModelBrandAndEdition(brand, model, edition);
+        GenericEntity<List<String>> list = new GenericEntity<List<String>>(fuelTypes) { };
+        return (fuelTypes.size() > 0)
+                ? Response.ok(list).build() : Response.noContent().build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{brand}/{model}/{edition}/{fuelType}/energylabels")
+    public Response getEnergyLabelsByModelBrandEditionAndFuelType(@PathParam("brand") String brand, @PathParam("model") String model, @PathParam("edition") String edition, @PathParam("fuelType") FuelType fuelType) {
+        List<String> fuelTypes = vehicleDAO.findEnergyLabelsByModelBrandEditionAndFuelType(brand, model, edition, fuelType);
+        GenericEntity<List<String>> list = new GenericEntity<List<String>>(fuelTypes) { };
+        return (fuelTypes.size() > 0)
+                ? Response.ok(list).build() : Response.noContent().build();
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -125,7 +164,7 @@ public class VehicleBean {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @EasySecurity(requiresUser = true)
-    @Path("/register/vehicle")
+    @Path("/create/vehicle")
     public Response registerVehicle(@FormParam("brand") String brand,
                                     @FormParam("buildDate") String date,
                                     @FormParam("modelName") String modelName,

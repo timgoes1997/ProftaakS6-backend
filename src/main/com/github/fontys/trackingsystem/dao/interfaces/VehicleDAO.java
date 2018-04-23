@@ -32,6 +32,12 @@ public interface VehicleDAO {
 
     List<String> findEditionsByModelAndBrand(String brand, String model);
 
+    List<String> findFuelTypesByModelBrandAndEdition(String brand, String model, String edition);
+
+    List<String> findEnergyLabelsByModelBrandAndEdition(String brand, String model, String edition);
+
+    List<String> findEnergyLabelsByModelBrandEditionAndFuelType(String brand, String model, String edition, FuelType fuelType);
+
     List<Vehicle> findModelsByModelName(String modelName);
 
     List<Vehicle> findModelsByEdition(String modelName);
