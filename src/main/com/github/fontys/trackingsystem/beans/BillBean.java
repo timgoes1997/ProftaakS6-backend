@@ -212,7 +212,7 @@ public class BillBean {
     private boolean compareYearAndMonth(Bill b, int year, int month) {
         System.out.println(String.format("Comparing year %s month %s", year, month));
         // Check if start date is within the same year/month
-        Calendar cal1 = b.getStartDate();
+        Calendar cal1 = b.getCalendarStartDate();
         if (cal1.get(Calendar.YEAR) == year &&
                 cal1.get(Calendar.MONTH) == month) {
             return true;
@@ -220,7 +220,7 @@ public class BillBean {
         System.out.println(String.format("Calendar year %s month %s", cal1.get(Calendar.YEAR), cal1.get(Calendar.MONTH)));
 
         // Check if end date is within the same year/month
-        Calendar cal2 = b.getEndDate();
+        Calendar cal2 = b.getCalendarEndDate();
         if (cal2.get(Calendar.YEAR) == year &&
                 cal2.get(Calendar.MONTH) == month) {
             return true;

@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity(name = "VEHICLE")
 @NamedQueries({
-        @NamedQuery(name= Vehicle.FIND_ALL,
+        @NamedQuery(name=Vehicle.FIND_ALL,
                 query="SELECT v FROM VEHICLE v"),
         @NamedQuery(name=Vehicle.FIND_BYID,
                 query="SELECT v FROM VEHICLE v WHERE v.id=:id"),
@@ -31,11 +31,15 @@ import java.util.Date;
         @NamedQuery(name=Vehicle.FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL,
                 query="SELECT v FROM VEHICLE v WHERE v.modelName=:modelName " +
                         "AND v.edition=:edition AND v.fuelType=:fuelType AND v.energyLabel=:energyLabel"),
+        @NamedQuery(name=Vehicle.FIND_BYNAMEEDITIONFUELTYPEENERGYLABELBRANDDATE,
+                query="SELECT v FROM VEHICLE v WHERE v.modelName=:modelName " +
+                        "AND v.edition=:edition AND v.fuelType=:fuelType AND v.energyLabel=:energyLabel AND v.brand=:brand " +
+                        "AND v.buildDate=:buildDate"),
 
  })
 public class Vehicle implements Serializable{
     // ======================================
-    // =             Queries              =
+    // =             Queries                =
     // ======================================
 
     public static final String FIND_ALL = "Vehicle.findAll";
@@ -50,9 +54,11 @@ public class Vehicle implements Serializable{
     public static final String FIND_BYENERGYLABEL = "Vehicle.findByEnergyLabel";
     public static final String FIND_BYNAMEANDEDITION = "Vehicle.findByNameAndEdition";
     public static final String FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL = "Vehicle.find";
+    public static final String FIND_BYNAMEEDITIONFUELTYPEENERGYLABELBRANDDATE = "Vehicle.findAllField";
+
 
     // ======================================
-    // =             Fields              =
+    // =             Fields                 =
     // ======================================
 
     @Id
