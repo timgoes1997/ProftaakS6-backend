@@ -1,0 +1,48 @@
+// Apply the java-library plugin to add support for Java Library
+apply plugin: 'java'
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.5'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+    testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
+    testCompile 'com.google.code.gson:gson:2.8.2'
+}
+
+test {
+    testLogging.showStandardStreams = true
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'io.github.edwinvanrooij.App'
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+}
+
