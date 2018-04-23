@@ -24,6 +24,9 @@ import java.util.Calendar;
 
         @NamedQuery(name = Bill.FIND_BYSTATUS,
                 query = "SELECT b FROM BILL b WHERE b.status=:status"),
+
+        @NamedQuery(name = Bill.FIND_BYOWNERID,
+                query = "SELECT b FROM BILL b WHERE b.registeredVehicle.customer.id=:ownerid"),
 })
 public class Bill implements Serializable {
 
@@ -35,6 +38,7 @@ public class Bill implements Serializable {
     public static final String FIND_BYID = "Bill.findByID";
     public static final String FIND_BYVEHICLEID = "Bill.findByVehicleId";
     public static final String FIND_BYSTATUS = "Bill.findByStatus";
+    public static final String FIND_BYOWNERID = "Bill.findByOwnerId";
 
     // ======================================
     // =             Fields              =

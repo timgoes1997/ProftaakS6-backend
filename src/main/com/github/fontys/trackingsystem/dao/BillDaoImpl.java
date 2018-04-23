@@ -41,8 +41,10 @@ public class BillDaoImpl implements BillDAO {
     @Override
     public List<Bill> findByOwnerId(int ownerId) {
         // TODO: 2-4-18 Wat bedoelen we hier met de owner? account of username id?
-        return null;
-//        throw new NotImplementedException();
+        TypedQuery<Bill> query =
+                em.createNamedQuery(Bill.FIND_BYOWNERID, Bill.class);
+        query.setParameter("ownerid", ownerId);
+        return query.getResultList();
     }
 
     @Override
