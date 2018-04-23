@@ -93,6 +93,21 @@ public class VehicleDAOImpl implements VehicleDAO{
     }
 
     @Override
+    public List<String> findModelsByBrand(String brand) {
+        Query query = em.createQuery("SELECT DISTINCT v.modelName FROM VEHICLE v WHERE v.brand = :brand");
+        query.setParameter("brand", brand);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<String> findEditionsByModelAndBrand(String brand, String model) {
+        Query query = em.createQuery("SELECT DISTINCT v.edition FROM VEHICLE v WHERE v.brand = :brand AND v.modelName = :modelName");
+        query.setParameter("brand", brand);
+        query.setParameter("modelName", model);
+        return query.getResultList();
+    }
+
+    @Override
     public List<Vehicle> findModelsByModelName(String modelName) {
         TypedQuery<Vehicle> query =
                 em.createNamedQuery(Vehicle.FIND_BYNAME, Vehicle.class);

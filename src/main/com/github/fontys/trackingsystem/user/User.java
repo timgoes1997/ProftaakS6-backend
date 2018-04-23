@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.user;
 
+import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 

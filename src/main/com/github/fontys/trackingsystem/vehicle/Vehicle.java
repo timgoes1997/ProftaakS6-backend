@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity(name = "VEHICLE")
 @NamedQueries({
-        @NamedQuery(name= Vehicle.FIND_ALL,
+        @NamedQuery(name=Vehicle.FIND_ALL,
                 query="SELECT v FROM VEHICLE v"),
         @NamedQuery(name=Vehicle.FIND_BYID,
                 query="SELECT v FROM VEHICLE v WHERE v.id=:id"),
@@ -35,7 +35,7 @@ import java.util.Date;
  })
 public class Vehicle implements Serializable{
     // ======================================
-    // =             Queries              =
+    // =             Queries                =
     // ======================================
 
     public static final String FIND_ALL = "Vehicle.findAll";
@@ -52,7 +52,7 @@ public class Vehicle implements Serializable{
     public static final String FIND_BYNAMEEDITIONFUELTYPEENERGYLABEL = "Vehicle.find";
 
     // ======================================
-    // =             Fields              =
+    // =             Fields                 =
     // ======================================
 
     @Id

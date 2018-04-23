@@ -1,5 +1,8 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.security.annotations.inject.CurrentESUser;
+import com.github.fontys.security.annotations.interceptors.EasySecurity;
+import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
@@ -15,6 +18,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.util.Nonbinding;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -34,6 +38,10 @@ import java.util.Random;
 public class VehicleBean {
 
     @Inject
+    @CurrentESUser
+    private ESUser currentUser;
+
+    @Inject
     private DummyDataGenerator db;
 
     @Inject
@@ -44,6 +52,22 @@ public class VehicleBean {
 
     @Inject
     private RegisteredVehicleDAO registeredVehicleDAO;
+
+    @GET
+    @EasySecurity(requiresUser = true)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/currentUser")
+    public Response getVehiclesFromUser() {
+        try {
+            User user = (User)currentUser;
+            List<RegisteredVehicle> registeredVehicles = registeredVehicleDAO.findByUser(user.getId());
+            GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(registeredVehicles){};
+            return (registeredVehicles.size() > 0)
+                    ? Response.ok(list).build() : Response.noContent().build();
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -62,44 +86,47 @@ public class VehicleBean {
     @Path("/brands")
     public Response getBrands() {
         List<String> brands = vehicleDAO.getBrands();
-        GenericEntity<List<String>> list = new GenericEntity<List<String>>(brands) {
-        };
-        return Response.ok(brands).build();
+        GenericEntity<List<String>> list = new GenericEntity<List<String>>(brands) { };
+        return (brands.size() > 0)
+                ? Response.ok(list).build() : Response.noContent().build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/brands/{brand}")
-    public Response getVehicles(@PathParam("brand") String brand) {
+    public Response getVehiclesByBrand(@PathParam("brand") String brand) {
         List<Vehicle> vehicles = vehicleDAO.findByBrand(brand);
-        GenericEntity<List<Vehicle>> list = new GenericEntity<List<Vehicle>>(vehicles) {
-        };
-        if (vehicles.size() > 0) {
-            return Response.ok(list).build();
-        } else {
-            return Response.noContent().build();
-        }
+        GenericEntity<List<Vehicle>> list = new GenericEntity<List<Vehicle>>(vehicles) { };
+        return (vehicles.size() > 0)
+                ? Response.ok(list).build() : Response.noContent().build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/active/all")
+    @Path("/{brand}/models")
+    public Response getVehicleModelsByBrand(@PathParam("brand") String brand) {
+        List<String> brands = vehicleDAO.findModelsByBrand(brand);
+        GenericEntity<List<String>> list = new GenericEntity<List<String>>(brands) { };
+        return (brands.size() > 0)
+                ? Response.ok(list).build() : Response.noContent().build();
+    }
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/vehicles/registered")
     public Response getVehicles() {
         List<RegisteredVehicle> vehicles = registeredVehicleDAO.getAll();
-        GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(vehicles) {
-        };
-        if (vehicles.size() > 0) {
-            return Response.ok(list).build();
-        } else {
-            return Response.noContent().build();
-        }
+        GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(vehicles) { };
+        return (vehicles.size() > 0)
+                ? Response.ok(list).build() : Response.noContent().build();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @EasySecurity(requiresUser = true)
     @Path("/register/vehicle")
     public Response registerVehicle(@FormParam("brand") String brand,
-                                    @FormParam("model") Long modelID,
                                     @FormParam("buildDate") String date,
                                     @FormParam("modelName") String modelName,
                                     @FormParam("edition") String edition,
@@ -127,66 +154,6 @@ public class VehicleBean {
 
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
-
-//    @POST
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/register/model")
-//    public Response registerModel(@FormParam("modelName") String modelName,
-//                                  @FormParam("edition") String edition,
-//                                  @FormParam("fuelType") FuelType fuelType,
-//                                  @FormParam("energyLabel") EnergyLabel energyLabel) {
-//        try {
-//            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
-//            if (vm != null) {
-//                return Response.status(Response.Status.CONFLICT).build();
-//            } else {
-//                vehicleModelDAO.create(new VehicleModel(modelName, edition, fuelType, energyLabel));
-//                VehicleModel vm2 = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
-//                return Response.status(Response.Status.CREATED).entity(vm2).build();
-//            }
-//        } catch (EJBException e) {
-//            vehicleModelDAO.create(new VehicleModel(modelName, edition, fuelType, energyLabel));
-//            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
-//            return Response.status(Response.Status.CREATED).entity(vm).build();
-//        }
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/model/find/{id}")
-//    public Response getModel(@PathParam("id") Long id) {
-//        try {
-//            VehicleModel vm = vehicleModelDAO.find(id);
-//            return Response.status(Response.Status.FOUND).entity(vm).build();
-//        } catch (Exception e) {
-//            return Response.noContent().build();
-//        }
-//    }
-
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/model/find/")
-//    public Response getModel(@QueryParam("modelName") String modelName, @QueryParam("edition") String edition, @QueryParam("fuelType") FuelType fuelType, @QueryParam("energyLabel") EnergyLabel energyLabel) {
-//        try {
-//            VehicleModel vm = vehicleModelDAO.find(modelName, edition, fuelType, energyLabel);
-//            return Response.ok(vm).build();
-//        } catch (Exception e) {
-//            return Response.noContent().build();
-//        }
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/model/find/name/{name}")
-//    public Response getModel(@PathParam("name") String name) {
-//        try {
-//            List<VehicleModel> vm = vehicleModelDAO.findModelsByModelName(name);
-//            return Response.ok(vm).build();
-//        } catch (Exception e) {
-//            return Response.noContent().build();
-//        }
-//    }
-
 
     @POST
     @Path("/register")
@@ -237,28 +204,6 @@ public class VehicleBean {
         }
     }
 
-    @POST
-    @Path("/upload")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
-                               @FormDataParam("file") FormDataContentDisposition fileDetails) throws Exception {
-
-        String uploadedFileLocation = "D://School//S6//Proftaak//Git//Test//";
-        String extension = FilenameUtils.getExtension(fileDetails.getFileName());
-
-        if (extension.equals("")) {
-            return Response.notModified("No file given").build();
-        }
-
-        File f = new File(uploadedFileLocation + fileDetails.getFileName());//getNewFile(uploadedFileLocation, extension);
-        // save it
-        writeToFile(uploadedInputStream, f);
-
-        String output = "File uploaded to : " + uploadedFileLocation + f.getName();
-
-        return Response.status(200).entity(output).build();
-    }
-
     private File getNewFile(String uploadFileLocation, String fileType) {
         Random random = new SecureRandom();
         File f = new File(uploadFileLocation + getRandomFileName(random, fileType));
@@ -269,14 +214,12 @@ public class VehicleBean {
     }
 
     private String getRandomFileName(Random random, String fileType) {
-        String newFileName = new BigInteger(130, random).toString(32) + "." + fileType;
-        return newFileName;
+        return new BigInteger(130, random).toString(32) + "." + fileType;
     }
 
     // save uploaded file to new location
     private void writeToFile(InputStream uploadedInputStream,
                              File f) {
-
         try {
             OutputStream out;
             int read = 0;
