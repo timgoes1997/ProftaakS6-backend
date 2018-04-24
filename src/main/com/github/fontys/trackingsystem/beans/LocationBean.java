@@ -1,9 +1,15 @@
 package com.github.fontys.trackingsystem.beans;
 
-import com.github.fontys.trackingsystem.DummyDataGenerator;
+import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.LocationDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.TrackedVehicleDAO;
 import com.github.fontys.trackingsystem.tracking.Location;
-import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 
+import com.github.fontys.trackingsystem.DummyDataGenerator;
+import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
+
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -21,21 +27,25 @@ public class LocationBean {
     @Inject
     private DummyDataGenerator db;
 
+    @Inject
+    private LocationDAO locationDAO;
+
+    @Inject
+    RegisteredVehicleDAO registeredVehicleDAO;
+
+    @Inject
+    TrackedVehicleDAO trackedVehicleDAO;
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{license}/date")
     public Response getVehicleOnLocation(@PathParam("license") String license, @FormParam("startdate") String startdate, @FormParam("enddate") String enddate) {
 
-        // get the vehicle
-        TrackedVehicle id = getTrackedVehicle(license);
+        List<Location> locations = new ArrayList<>();
 
-        // if no vehicle, wrong license
-        if (id == null) {
-            return Response.status(200, "Could not find license plate").build();
-        }
-
-        // parse the time
-        SimpleDateFormat parse = new SimpleDateFormat("yyyy-mm-dd");
+        // Not realtime
+        // Parse the time
+        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
         Date start = null;
         Date end = null;
 
@@ -47,15 +57,39 @@ public class LocationBean {
             return Response.status(500, "Unknown date format").build();
         }
 
-        // get the locations of the vehicle
-        // todo
-        List<Location> locations = new ArrayList<>();
-        if (start.equals(end)) { // realtime
-            locations.add(id.getLocation()); // Add last known location
-        } else {
-            locations.add(id.getLocation()); // not realtime
+        // Get the vehicle ID, then get all locations with the vehicle with that ID
+        RegisteredVehicle rv = registeredVehicleDAO.findByLicense(license);
+
+        if (rv == null) {
+            return Response.status(200, "Could not find license plate").build();
         }
-        GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {};
+        // Get all locations of the vehicle with retrieved vehicle ID
+        locations = trackedVehicleDAO.findLocationsByRegisteredVehicleID(rv.getId());
+
+        locations.removeAll(Collections.singleton(null));
+
+        // filter the map on date, if the map is not empty
+        if (!locations.isEmpty()) {
+            Iterator<Location> locIter = locations.iterator();
+            while (locIter.hasNext()) {
+                Location l = locIter.next();
+                Date cl = l.getTime().getTime();
+                // if the date of the location falls outside the specified dates, remove the location
+                if (l.getTime().getTime().before(start) || l.getTime().getTime().after(end)) {
+                    locIter.remove();
+                }
+            }
+        }
+
+        //Sort the list by dates
+        Collections.sort(locations, new Comparator<Location>() {
+            public int compare(Location o1, Location o2) {
+                return o1.getTime().compareTo(o2.getTime());
+            }
+        });
+
+        GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {
+        };
         return Response.ok(list).build();
     }
 
@@ -64,23 +98,19 @@ public class LocationBean {
     @Path("/{license}/realtime")
     public Response getVehicleOnLocation(@PathParam("license") String license) {
 
-        Calendar now = new GregorianCalendar();
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-mm-dd");
-        String dateFormatted = fmt.format(now.getTime());
-        return getVehicleOnLocation(license, dateFormatted, dateFormatted);
-    }
+        RegisteredVehicle rv = registeredVehicleDAO.findByLicense(license);
 
-    private TrackedVehicle getTrackedVehicle(String license) {
-        /*
-        List<TrackedVehicle> vehicleList = db.getTrackedVehicles();
-        for (TrackedVehicle veh : vehicleList) {
-            RegisteredVehicle a = veh.getRegisteredVehicle();
-            if (a != null) {
-                if (a.getLicensePlate().toLowerCase().equals(license.toLowerCase())) {
-                    return veh;
-                }
-            }
-        }*/
-        return null;
+        if (rv == null) {
+            return Response.status(200, "Could not find license plate").build();
+        }
+
+        TrackedVehicle tv = trackedVehicleDAO.findByRegisteredVehicleID(rv.getId());
+
+        List<Location> locations = new ArrayList<>();
+        locations.add(tv.getLastLocation()); // Add last known location
+
+        GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {
+        };
+        return Response.ok(list).build();
     }
 }
