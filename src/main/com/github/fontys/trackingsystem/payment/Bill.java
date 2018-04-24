@@ -103,7 +103,7 @@ public class Bill implements Serializable {
 
     @XmlAttribute
     public long getNumberEndDate() {
-        return startDate.getTimeInMillis() / 1000;
+        return endDate.getTimeInMillis() / 1000;
     }
 
     public Calendar getCalendarStartDate() {

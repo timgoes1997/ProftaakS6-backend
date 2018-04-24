@@ -153,7 +153,7 @@ public class VehicleBean {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/vehicles/registered")
+    @Path("/registered")
     public Response getVehicles() {
         List<RegisteredVehicle> vehicles = registeredVehicleDAO.getAll();
         GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(vehicles) { };
