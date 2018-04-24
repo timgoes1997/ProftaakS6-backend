@@ -176,7 +176,7 @@ public class VehicleBean {
         EnergyLabel energyLabel = EnergyLabel.valueOf(energyLabelString);
 
         Date inDate = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
             inDate = sdf.parse(date);
             Vehicle v = vehicleDAO.find(modelName, edition, fuelType, energyLabel);
@@ -254,7 +254,7 @@ public class VehicleBean {
         EnergyLabel energyLabel = EnergyLabel.valueOf(energyLabelString);
 
         Date inDate = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Vehicle v = null;
         try {
             inDate = sdf.parse(date);
