@@ -164,25 +164,22 @@ public class BillBean {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/vehicle/{vehicleId}")
-    public Response getBillByVehicleId(@PathParam("vehicleId") int vehicleId) {
+    public Response getBillsByVehicleId(@PathParam("vehicleId") int vehicleId) {
         // Check if owner exists
         Vehicle v = vehicleDAO.find(vehicleId);
         if (v == null) {
             // According to swagger endpoint, return 400 because of invalid vehicle id
             return Response.status(400).build();
-
-//            Return error during development
-//            throw new Exception(String.format("Could not find account by id '%s'", ownerId));
         }
 
         // Owner exists, get bills for owner
         List<Bill> bills = billDAO.findByVehicleId(vehicleId);
         if (bills.size() > 0) {
             // We have more than 0 bills, return status 200 with bills
-            return Response.ok(bills).build();
+            GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {
+            };
+            return Response.ok(list).build();
         } else {
-            // No bills found for vehicle with <vehicleId>, but request was valid
-            // Return 404 according to swagger endpoint documentation
             return Response.status(404).build();
         }
     }
