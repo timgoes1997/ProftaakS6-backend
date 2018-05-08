@@ -162,7 +162,7 @@ public class VehicleBean {
         // RETURN OWN VEHICLES FOR;
         // CUSTOMERS
         if (currentUser.getPrivilege() == Role.CUSTOMER) {
-            vehicles = ((User)currentUser).getRegisteredVehicles();
+            vehicles = registeredVehicleDAO.findByUser(((User)currentUser).getId());
         } else {
             // FOR ANY OTHER ROLE, RETURN ALL
             vehicles = registeredVehicleDAO.getAll();
