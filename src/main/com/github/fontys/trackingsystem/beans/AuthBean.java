@@ -5,12 +5,10 @@ import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.security.auth.ESAuth;
 import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
-import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
+import com.github.fontys.trackingsystem.services.AuthService;
 import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
 
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -28,44 +26,25 @@ public class AuthBean {
     @Inject
     private AccountDAO accountDAO;
 
+    @Inject
+    private AuthService authService;
+
     @POST
     @Path("/login")
-    public Response logon(@FormParam("email") String email, @FormParam("password") String pass, @Context HttpServletRequest req) {
-        try {
-            Account a = accountDAO.findByEmail(email);
-            if (a != null) {
-                if(!a.getUser().getVerified()){
-                    return Response.status(Response.Status.UNAUTHORIZED).entity("Not registered").build();
-                }
-                // do stuff with password
-                if (a.getPassword().equals(pass)) {
-                    ESAuth.logon(req, a.getUser());
-                    return Response.ok().build();
-                }
-            }
-        }catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+    public Account logon(@FormParam("email") String email, @FormParam("password") String pass, @Context HttpServletRequest req) {
+        return authService.logon(email, pass, req);
     }
 
     @GET
     @Path("/loggedIn")
-    public Response loggedIn() {
-        if (user != null) {
-            return Response.status(Response.Status.OK).build();
-        }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+    public void loggedIn() {
+        authService.isLoggedIn();
     }
 
     @POST
     @Path("/logout")
-    public Response logoff(@Context HttpServletRequest req) {
-        if (ESAuth.logout(req)) {
-            // logged out
-        }
-        // / shrug
-        return Response.ok().build();
+    public void logoff(@Context HttpServletRequest req) {
+        authService.logout(req);
     }
 
     // example getter

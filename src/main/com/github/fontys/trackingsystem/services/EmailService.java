@@ -1,4 +1,4 @@
-package com.github.fontys.services;
+package com.github.fontys.trackingsystem.services;
 
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.user.Account;

@@ -72,6 +72,7 @@ public class DummyDataGenerator {
                     String.format("Address %s", i),
                     String.format("Residency %s", i),
                     Role.CUSTOMER);
+            u.setVerified(true);
 
             Account account = new Account(String.format("email %s", i), String.format("user %s", i), String.format("password %s", i));
             account.setUser(u);

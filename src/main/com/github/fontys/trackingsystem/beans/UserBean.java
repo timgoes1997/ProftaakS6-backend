@@ -1,6 +1,6 @@
 package com.github.fontys.trackingsystem.beans;
 
-import com.github.fontys.services.EmailService;
+import com.github.fontys.trackingsystem.services.EmailService;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.user.Account;
