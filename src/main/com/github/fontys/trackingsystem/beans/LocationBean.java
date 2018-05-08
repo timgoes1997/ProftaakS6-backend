@@ -10,6 +10,7 @@ import com.github.fontys.trackingsystem.tracking.Location;
 
 import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
+import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
@@ -51,6 +52,7 @@ public class LocationBean {
     @Path("/{license}/date")
     public Response getVehicleOnLocation(@PathParam("license") String license, @FormParam("startdate") String startdate, @FormParam("enddate") String enddate) {
 
+        // only admins are allowed to backtrack all
         if (!isAuthorisedToTrack(license)) {
             return Response.status(403, "Not allowed to track unowned vehicle").build();
         }
@@ -108,8 +110,10 @@ public class LocationBean {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{license}/realtime")
     public Response getVehicleOnLocation(@PathParam("license") String license) {
-        if (!isAuthorisedToTrack(license)) {
-            return Response.status(403, "Not allowed to track unowned vehicle").build();
+        if (currentUser.getPrivilege() != Role.POLICE_EMPLOYEE) { // police is always allowed to track realtime
+            if (!isAuthorisedToTrack(license)) {
+                return Response.status(403, "Not allowed to track unowned vehicle").build();
+            }
         }
 
         RegisteredVehicle rv = registeredVehicleDAO.findByLicense(license);
@@ -132,11 +136,11 @@ public class LocationBean {
         RegisteredVehicle vehicle;
         try {
             vehicle = registeredVehicleDAO.findByLicense(license);
-        } catch(NoResultException nr) {
+        } catch (NoResultException nr) {
             return false; // not authorised to know if a car doesn't exist
         }
 
-        if (vehicle.getCustomer().getId() == ((User)currentUser).getId()) {
+        if (vehicle.getCustomer().getId() == ((User) currentUser).getId()) {
             return true;
         }
         return false;
