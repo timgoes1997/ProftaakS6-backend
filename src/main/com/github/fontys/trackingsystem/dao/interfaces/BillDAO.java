@@ -1,7 +1,6 @@
 package com.github.fontys.trackingsystem.dao.interfaces;
 
 import com.github.fontys.trackingsystem.payment.Bill;
-import com.github.fontys.trackingsystem.user.Account;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public interface BillDAO {
 
     Bill find(int id);
 
-    List<Bill> findByOwnerId(int ownerId);
+    List<Bill> findByOwnerId(Long ownerId);
 
     List<Bill> findByStatus(String status);
 

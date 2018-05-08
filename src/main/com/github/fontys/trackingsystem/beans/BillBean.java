@@ -10,6 +10,7 @@ import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
 
@@ -81,9 +82,21 @@ public class BillBean {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    @EasySecurity(requiresUser = true)
     @Path("/all")
     public Response getAllBills() {
-        List<Bill> bills = billDAO.getAll();
+
+        List<Bill> bills;
+
+        // RETURN OWN BILLS FOR;
+        // CUSTOMERS
+        if (currentUser.getPrivilege() == Role.CUSTOMER) {
+            bills = billDAO.findByOwnerId(((User)currentUser).getId());
+        } else {
+            // FOR ANY OTHER ROLE, RETURN ALL
+            bills = billDAO.getAll();
+        }
+
         GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {
         };
         return Response.ok(list).build();
@@ -145,7 +158,7 @@ public class BillBean {
         }
 
         // Owner exists, get bills for owner
-        List<Bill> bills = billDAO.findByOwnerId(ownerId);
+        List<Bill> bills = billDAO.findByOwnerId((long) ownerId);
         if (bills.size() > 0) {
             // We have more than 0 bills, return status 200 with bills
             return Response.ok(bills).build();
@@ -225,10 +238,7 @@ public class BillBean {
     {
         User casted = (User)currentUser;
 
-        List<Bill> bills = new ArrayList<>();
-
-        bills = billDAO.findByOwnerId(Math.toIntExact(casted.getId()));
-
+        List<Bill> bills = billDAO.findByOwnerId(casted.getId());
         GenericEntity<List<Bill>> listje = new GenericEntity<List<Bill>>(bills) {};
 
         return Response.ok(listje).build();

@@ -53,6 +53,11 @@ public class DummyDataGenerator {
     public void init() {
 
         Date date = new Date();
+        User admin = new User("admin", "straat", "berlijn", Role.BILL_ADMINISTRATOR);
+        Account adminAcc = new Account("admin@admin.com", "admin", "admin");
+        adminAcc.setUser(admin);
+        accountDAO.create(adminAcc);
+
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
 
             Vehicle v = new Vehicle(
@@ -66,7 +71,7 @@ public class DummyDataGenerator {
                     String.format("Name %s", i),
                     String.format("Address %s", i),
                     String.format("Residency %s", i),
-                    Role.BILL_ADMINISTRATOR);
+                    Role.CUSTOMER);
 
             Account account = new Account(String.format("email %s", i), String.format("user %s", i), String.format("password %s", i));
             account.setUser(u);

@@ -8,6 +8,7 @@ import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.DummyDataGenerator;
+import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
@@ -152,10 +153,20 @@ public class VehicleBean {
     }
 
     @GET
+    @EasySecurity(requiresUser = true)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/registered")
     public Response getVehicles() {
-        List<RegisteredVehicle> vehicles = registeredVehicleDAO.getAll();
+        List<RegisteredVehicle> vehicles;
+
+        // RETURN OWN VEHICLES FOR;
+        // CUSTOMERS
+        if (currentUser.getPrivilege() == Role.CUSTOMER) {
+            vehicles = registeredVehicleDAO.findByUser(((User)currentUser).getId());
+        } else {
+            // FOR ANY OTHER ROLE, RETURN ALL
+            vehicles = registeredVehicleDAO.getAll();
+        }
         GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(vehicles) { };
         return (vehicles.size() > 0)
                 ? Response.ok(list).build() : Response.noContent().build();

@@ -1,5 +1,8 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.security.annotations.inject.CurrentESUser;
+import com.github.fontys.security.annotations.interceptors.EasySecurity;
+import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.LocationDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.TrackedVehicleDAO;
@@ -7,11 +10,13 @@ import com.github.fontys.trackingsystem.tracking.Location;
 
 import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
+import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -23,6 +28,10 @@ import java.util.*;
 @RequestScoped
 @Path("/location")
 public class LocationBean {
+
+    @Inject
+    @CurrentESUser
+    private ESUser currentUser;
 
     @Inject
     private DummyDataGenerator db;
@@ -37,17 +46,22 @@ public class LocationBean {
     TrackedVehicleDAO trackedVehicleDAO;
 
     @POST
+    @EasySecurity(requiresUser = true)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{license}/date")
     public Response getVehicleOnLocation(@PathParam("license") String license, @FormParam("startdate") String startdate, @FormParam("enddate") String enddate) {
 
-        List<Location> locations = new ArrayList<>();
+        if (!isAuthorisedToTrack(license)) {
+            return Response.status(403, "Not allowed to track unowned vehicle").build();
+        }
+
+        List<Location> locations;
 
         // Not realtime
         // Parse the time
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
-        Date start = null;
-        Date end = null;
+        Date start;
+        Date end;
 
         // can't parse? Our fault
         try {
@@ -59,10 +73,6 @@ public class LocationBean {
 
         // Get the vehicle ID, then get all locations with the vehicle with that ID
         RegisteredVehicle rv = registeredVehicleDAO.findByLicense(license);
-
-        if (rv == null) {
-            return Response.status(200, "Could not find license plate").build();
-        }
         // Get all locations of the vehicle with retrieved vehicle ID
         locations = trackedVehicleDAO.findLocationsByRegisteredVehicleID(rv.getId());
 
@@ -94,9 +104,13 @@ public class LocationBean {
     }
 
     @POST
+    @EasySecurity(requiresUser = true)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{license}/realtime")
     public Response getVehicleOnLocation(@PathParam("license") String license) {
+        if (!isAuthorisedToTrack(license)) {
+            return Response.status(403, "Not allowed to track unowned vehicle").build();
+        }
 
         RegisteredVehicle rv = registeredVehicleDAO.findByLicense(license);
 
@@ -112,5 +126,19 @@ public class LocationBean {
         GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {
         };
         return Response.ok(list).build();
+    }
+
+    private boolean isAuthorisedToTrack(String license) {
+        RegisteredVehicle vehicle;
+        try {
+            vehicle = registeredVehicleDAO.findByLicense(license);
+        } catch(NoResultException nr) {
+            return false; // not authorised to know if a car doesn't exist
+        }
+
+        if (vehicle.getCustomer().getId() == ((User)currentUser).getId()) {
+            return true;
+        }
+        return false;
     }
 }
