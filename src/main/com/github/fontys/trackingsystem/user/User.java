@@ -6,6 +6,7 @@ import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -90,6 +91,7 @@ public class User implements Serializable, ESUser {
         this.name = name;
     }
 
+    @XmlTransient
     public String getAddress() {
         return address;
     }

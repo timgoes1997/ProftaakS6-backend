@@ -39,8 +39,7 @@ public class BillDaoImpl implements BillDAO {
     }
 
     @Override
-    public List<Bill> findByOwnerId(int ownerId) {
-        // TODO: 2-4-18 Wat bedoelen we hier met de owner? account of username id?
+    public List<Bill> findByOwnerId(Long ownerId) {
         TypedQuery<Bill> query =
                 em.createNamedQuery(Bill.FIND_BYOWNERID, Bill.class);
         query.setParameter("ownerid", ownerId);
@@ -59,7 +58,7 @@ public class BillDaoImpl implements BillDAO {
     public List<Bill> findByVehicleId(int vehicleId) {
         TypedQuery<Bill> query =
                 em.createNamedQuery(Bill.FIND_BYVEHICLEID, Bill.class);
-        query.setParameter("vehicleId", vehicleId);
+        query.setParameter("id", vehicleId);
         return query.getResultList();
     }
 

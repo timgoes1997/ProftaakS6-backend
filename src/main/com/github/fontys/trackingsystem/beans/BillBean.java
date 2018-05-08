@@ -10,6 +10,7 @@ import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
 
@@ -81,9 +82,21 @@ public class BillBean {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    @EasySecurity(requiresUser = true)
     @Path("/all")
     public Response getAllBills() {
-        List<Bill> bills = billDAO.getAll();
+
+        List<Bill> bills;
+
+        // RETURN OWN BILLS FOR;
+        // CUSTOMERS
+        if (currentUser.getPrivilege() == Role.CUSTOMER) {
+            bills = billDAO.findByOwnerId(((User) currentUser).getId());
+        } else {
+            // FOR ANY OTHER ROLE, RETURN ALL
+            bills = billDAO.getAll();
+        }
+
         GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {
         };
         return Response.ok(list).build();
@@ -139,45 +152,34 @@ public class BillBean {
         if (a == null) {
             // According to swagger endpoint, return 400 because of invalid owner id
             return Response.status(400).build();
-
-//            Return error during development
-//            throw new Exception(String.format("Could not find account by id '%s'", ownerId));
         }
 
         // Owner exists, get bills for owner
-        List<Bill> bills = billDAO.findByOwnerId(ownerId);
-        if (bills.size() > 0) {
-            // We have more than 0 bills, return status 200 with bills
-            return Response.ok(bills).build();
-        } else {
-            // No bills found for owner with <ownerId>, but request was valid
-            // Return 404 according to swagger endpoint documentation
-            return Response.status(404).build();
-        }
+        List<Bill> bills = billDAO.findByOwnerId((long) ownerId);
+        GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {
+        };
+        return Response.ok(list).build();
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/vehicle/{vehicleId}")
-    public Response getBillByVehicleId(@PathParam("vehicleId") int vehicleId) {
+    public Response getBillsByVehicleId(@PathParam("vehicleId") int vehicleId) {
         // Check if owner exists
         Vehicle v = vehicleDAO.find(vehicleId);
         if (v == null) {
             // According to swagger endpoint, return 400 because of invalid vehicle id
             return Response.status(400).build();
-
-//            Return error during development
-//            throw new Exception(String.format("Could not find account by id '%s'", ownerId));
         }
 
         // Owner exists, get bills for owner
         List<Bill> bills = billDAO.findByVehicleId(vehicleId);
         if (bills.size() > 0) {
             // We have more than 0 bills, return status 200 with bills
-            return Response.ok(bills).build();
+            GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {
+            };
+            return Response.ok(list).build();
         } else {
-            // No bills found for vehicle with <vehicleId>, but request was valid
-            // Return 404 according to swagger endpoint documentation
             return Response.status(404).build();
         }
     }
@@ -221,15 +223,12 @@ public class BillBean {
     @EasySecurity(requiresUser = true)
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/currentUser")
-    public Response getCurrentUserBills()
-    {
-        User casted = (User)currentUser;
+    public Response getCurrentUserBills() {
+        User casted = (User) currentUser;
 
-        List<Bill> bills = new ArrayList<>();
-
-        bills = billDAO.findByOwnerId(Math.toIntExact(casted.getId()));
-
-        GenericEntity<List<Bill>> listje = new GenericEntity<List<Bill>>(bills) {};
+        List<Bill> bills = billDAO.findByOwnerId(casted.getId());
+        GenericEntity<List<Bill>> listje = new GenericEntity<List<Bill>>(bills) {
+        };
 
         return Response.ok(listje).build();
     }
