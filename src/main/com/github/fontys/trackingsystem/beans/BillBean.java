@@ -91,7 +91,7 @@ public class BillBean {
         // RETURN OWN BILLS FOR;
         // CUSTOMERS
         if (currentUser.getPrivilege() == Role.CUSTOMER) {
-            bills = billDAO.findByOwnerId(((User)currentUser).getId());
+            bills = billDAO.findByOwnerId(((User) currentUser).getId());
         } else {
             // FOR ANY OTHER ROLE, RETURN ALL
             bills = billDAO.getAll();
@@ -152,21 +152,13 @@ public class BillBean {
         if (a == null) {
             // According to swagger endpoint, return 400 because of invalid owner id
             return Response.status(400).build();
-
-//            Return error during development
-//            throw new Exception(String.format("Could not find account by id '%s'", ownerId));
         }
 
         // Owner exists, get bills for owner
         List<Bill> bills = billDAO.findByOwnerId((long) ownerId);
-        if (bills.size() > 0) {
-            // We have more than 0 bills, return status 200 with bills
-            return Response.ok(bills).build();
-        } else {
-            // No bills found for owner with <ownerId>, but request was valid
-            // Return 404 according to swagger endpoint documentation
-            return Response.status(404).build();
-        }
+        GenericEntity<List<Bill>> list = new GenericEntity<List<Bill>>(bills) {
+        };
+        return Response.ok(list).build();
     }
 
     @GET
@@ -234,12 +226,12 @@ public class BillBean {
     @EasySecurity(requiresUser = true)
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/currentUser")
-    public Response getCurrentUserBills()
-    {
-        User casted = (User)currentUser;
+    public Response getCurrentUserBills() {
+        User casted = (User) currentUser;
 
         List<Bill> bills = billDAO.findByOwnerId(casted.getId());
-        GenericEntity<List<Bill>> listje = new GenericEntity<List<Bill>>(bills) {};
+        GenericEntity<List<Bill>> listje = new GenericEntity<List<Bill>>(bills) {
+        };
 
         return Response.ok(listje).build();
     }

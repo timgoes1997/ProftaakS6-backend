@@ -58,7 +58,7 @@ public class BillDaoImpl implements BillDAO {
     public List<Bill> findByVehicleId(int vehicleId) {
         TypedQuery<Bill> query =
                 em.createNamedQuery(Bill.FIND_BYVEHICLEID, Bill.class);
-        query.setParameter("vehicleId", vehicleId);
+        query.setParameter("id", vehicleId);
         return query.getResultList();
     }
 
