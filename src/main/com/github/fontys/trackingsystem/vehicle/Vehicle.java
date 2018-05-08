@@ -3,6 +3,7 @@ package com.github.fontys.trackingsystem.vehicle;
 import com.github.fontys.trackingsystem.EnergyLabel;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAttribute;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -146,6 +147,9 @@ public class Vehicle implements Serializable{
     public Date getBuildDate() {
         return buildDate;
     }
+
+    @XmlAttribute
+    public Long getBuildDateLong() {return buildDate.getTime() * 1000;}
 
     public void setBuildDate(Date buildDate) {
         this.buildDate = buildDate;
