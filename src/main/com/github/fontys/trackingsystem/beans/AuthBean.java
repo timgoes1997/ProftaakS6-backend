@@ -2,10 +2,9 @@ package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.security.annotations.interceptors.EasySecurity;
-import com.github.fontys.security.auth.ESAuth;
 import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
-import com.github.fontys.trackingsystem.services.AuthService;
+import com.github.fontys.trackingsystem.services.beans.AuthService;
 import com.github.fontys.trackingsystem.user.Account;
 
 import javax.inject.Inject;

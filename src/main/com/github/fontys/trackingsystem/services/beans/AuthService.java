@@ -1,4 +1,4 @@
-package com.github.fontys.trackingsystem.services;
+package com.github.fontys.trackingsystem.services.beans;
 
 import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.security.auth.ESAuth;
@@ -7,7 +7,9 @@ import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.services.interfaces.AuthServiceInterface;
 import com.github.fontys.trackingsystem.user.Account;
 
+import javax.ejb.EJBException;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAuthorizedException;
@@ -37,7 +39,7 @@ public class AuthService implements AuthServiceInterface {
                     return a;
                 }
             }
-        }catch (Exception e) {
+        }catch (EJBException e) {
             throw new NotFoundException("User entered a invalid email or password");
         }
         throw new NotAuthorizedException("User entered a invalid email or password");
