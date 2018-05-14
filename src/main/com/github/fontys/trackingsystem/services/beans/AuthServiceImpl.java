@@ -4,19 +4,17 @@ import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.security.auth.ESAuth;
 import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
-import com.github.fontys.trackingsystem.services.interfaces.AuthServiceInterface;
+import com.github.fontys.trackingsystem.services.interfaces.AuthService;
 import com.github.fontys.trackingsystem.user.Account;
 
 import javax.ejb.EJBException;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Context;
 
-public class AuthService implements AuthServiceInterface {
+public class AuthServiceImpl implements AuthService {
 
     @Inject
     @CurrentESUser

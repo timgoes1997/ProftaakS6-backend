@@ -34,3 +34,19 @@ Tue May 08 09:52:15 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unver
 Tue May 08 09:52:40 CEST 2018: Shutting down Derby engine
 ----------------------------------------------------------------
 Tue May 08 09:52:40 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) shutdown
+Mon May 14 19:34:45 CEST 2018 : Security manager installed using the Basic server security policy.
+Mon May 14 19:34:47 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
+Mon May 14 19:34:47 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
+----------------------------------------------------------------
+Mon May 14 19:37:30 CEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (Unversioned directory): instance a816c00e-0163-5fb8-08e1-ffff9f144699 
+on database directory D:\School\S6\Proftaak\Git\ProftaakS6-backend\sun-appserv-samples with class loader sun.misc.Launcher$AppClassLoader@33909752 
+Loaded from file:/D:/Java/glassfish5/javadb/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_161-b12
+user.dir=D:\School\S6\Proftaak\Git\ProftaakS6-backend
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=D:\School\S6\Proftaak\Git\ProftaakS6-backend
+Database Class Loader started - derby.database.classpath=''
