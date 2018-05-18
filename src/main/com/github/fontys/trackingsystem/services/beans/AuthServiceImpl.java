@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
         }catch (EJBException e) {
             throw new NotFoundException("User entered a invalid email or password");
         }
-        throw new NotAuthorizedException("User entered a invalid email or password");
+        throw new NotFoundException("User entered a invalid email or password");
     }
 
     @Override
