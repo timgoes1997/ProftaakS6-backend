@@ -4,24 +4,19 @@ import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
-import com.github.fontys.trackingsystem.dao.interfaces.LocationDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.TrackedVehicleDAO;
 import com.github.fontys.trackingsystem.tracking.Location;
 
-import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -35,12 +30,6 @@ public class LocationBean {
     private ESUser currentUser;
 
     @Inject
-    private DummyDataGenerator db;
-
-    @Inject
-    private LocationDAO locationDAO;
-
-    @Inject
     RegisteredVehicleDAO registeredVehicleDAO;
 
     @Inject
@@ -50,14 +39,13 @@ public class LocationBean {
     @EasySecurity(requiresUser = true)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{license}/date")
-    public Response getVehicleOnLocation(@PathParam("license") String license, @FormParam("startdate") String startdate, @FormParam("enddate") String enddate) {
+    public List<Location> getVehicleOnLocation(@PathParam("license") String license, @FormParam("startdate") String startdate, @FormParam("enddate") String enddate) {
 
         // only admins are allowed to backtrack all
         if (!isAuthorisedToTrack(license)) {
-            return Response.status(403, "Not allowed to track unowned vehicle").build();
+            throw new NotAuthorizedException("Not allowed to track unowned vehicle");
         }
 
-        List<Location> locations;
 
         // Not realtime
         // Parse the time
@@ -70,8 +58,10 @@ public class LocationBean {
             start = parse.parse(startdate);
             end = parse.parse(enddate);
         } catch (ParseException e) {
-            return Response.status(500, "Unknown date format").build();
+            throw new BadRequestException();
         }
+
+        List<Location> locations;
 
         // Get the vehicle ID, then get all locations with the vehicle with that ID
         RegisteredVehicle rv = registeredVehicleDAO.findByLicense(license);
@@ -100,36 +90,31 @@ public class LocationBean {
             }
         });
 
-        GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {
-        };
-        return Response.ok(list).build();
+        return locations;
     }
 
     @POST
     @EasySecurity(requiresUser = true)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{license}/realtime")
-    public Response getVehicleOnLocation(@PathParam("license") String license) {
+    public List<Location> getVehicleOnLocation(@PathParam("license") String license) {
         if (currentUser.getPrivilege() != Role.POLICE_EMPLOYEE) { // police is always allowed to track realtime
             if (!isAuthorisedToTrack(license)) {
-                return Response.status(403, "Not allowed to track unowned vehicle").build();
+                throw new NotAuthorizedException("Not allowed to track unowned vehicle");
             }
         }
+        List<Location> locations = new ArrayList<>();
 
         RegisteredVehicle rv = registeredVehicleDAO.findByLicense(license);
 
         if (rv == null) {
-            return Response.status(200, "Could not find license plate").build();
+            return locations;
         }
 
         TrackedVehicle tv = trackedVehicleDAO.findByRegisteredVehicleID(rv.getId());
 
-        List<Location> locations = new ArrayList<>();
         locations.add(tv.getLastLocation()); // Add last known location
-
-        GenericEntity<List<Location>> list = new GenericEntity<List<Location>>(locations) {
-        };
-        return Response.ok(list).build();
+        return locations;
     }
 
     private boolean isAuthorisedToTrack(String license) {
