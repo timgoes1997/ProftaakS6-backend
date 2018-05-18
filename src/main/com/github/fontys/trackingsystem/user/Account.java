@@ -3,7 +3,9 @@ package com.github.fontys.trackingsystem.user;
 import com.sun.mail.imap.ACL;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.Calendar;
 
 @Entity(name = "ACCOUNT")
 @NamedQueries({

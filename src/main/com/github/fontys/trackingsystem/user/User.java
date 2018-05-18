@@ -1,13 +1,14 @@
 package com.github.fontys.trackingsystem.user;
 
-import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity(name = "CUSTOMER")
@@ -64,6 +65,10 @@ public class User implements Serializable, ESUser {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST)
     private Account account;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name="LAST_LOGGED_IN")
+    private Calendar lastSeen;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "DEPARTMENT")
     private Department department;
@@ -94,6 +99,15 @@ public class User implements Serializable, ESUser {
     @XmlTransient
     public String getAddress() {
         return address;
+    }
+
+    public void setLastSeen() {
+        this.lastSeen = Calendar.getInstance();
+    }
+
+    @XmlAttribute
+    public boolean isAppUser() {
+        return lastSeen != null;
     }
 
     public void setAddress(String address) {

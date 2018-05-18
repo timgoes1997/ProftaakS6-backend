@@ -4,8 +4,10 @@ import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.security.auth.ESAuth;
 import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.services.interfaces.AuthService;
 import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.trackingsystem.user.User;
 
 import javax.ejb.EJBException;
 import javax.inject.Inject;
@@ -23,6 +25,9 @@ public class AuthServiceImpl implements AuthService {
     @Inject
     private AccountDAO accountDAO;
 
+    @Inject
+    private UserDAO userDAO;
+
     @Override
     public Account logon(String email, String password, HttpServletRequest req) {
         try {
@@ -33,7 +38,13 @@ public class AuthServiceImpl implements AuthService {
                 }
                 // do stuff with password
                 if (a.getPassword().equals(password)) {
-                    ESAuth.logon(req, a.getUser());
+
+                    User u = a.getUser();
+                    ESAuth.logon(req, u);
+                    // set the last seen
+                    u.setLastSeen();
+                    // save
+                    userDAO.edit(u);
                     return a;
                 }
             }
