@@ -44,7 +44,7 @@ public class User implements Serializable, ESUser {
     @Column(name = "VERIFIED", nullable = false)
     private Boolean verified;
 
-    @Size(min = 0, max = 32)
+    @Size(min = 0, max = 128)
     @Column(name = "VERIFICATION_LINK")
     private String verifyLink;
 

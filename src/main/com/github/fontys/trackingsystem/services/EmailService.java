@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @Stateless
@@ -31,9 +32,7 @@ public class EmailService {
     private Session session;
 
     public String generateVerificationLink(User user){
-        Random random = new SecureRandom();
-        random.setSeed(user.getId() + new Date().getTime());
-        String token = new BigInteger(130, random).toString(32);
+        String token = UUID.randomUUID().toString();
         if(userDAO.verificationLinkExists(token)){
             return generateVerificationLink(user);
         }else{

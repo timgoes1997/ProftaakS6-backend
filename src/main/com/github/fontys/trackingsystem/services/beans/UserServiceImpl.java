@@ -15,9 +15,10 @@ import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.NotAuthorizedException;
+import java.util.logging.Logger;
 
 @Stateless
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Inject
     private AccountDAO accountDAO;
@@ -27,6 +28,9 @@ public class UserServiceImpl implements UserService{
 
     @Inject
     private EmailService emailService;
+
+    @Inject
+    private Logger logger;
 
     @Override
     public Account getAccount(int id) {
@@ -66,17 +70,17 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User confirmRegistration(String token) {
-        try{
-            if(!userDAO.verificationLinkExists(token)){
+        try {
+            if (!userDAO.verificationLinkExists(token)) {
                 throw new NotAcceptableException("Verification link doesn't exist");
             }
 
-            if(userDAO.hasBeenVerified(token)){
+            if (userDAO.hasBeenVerified(token)) {
                 throw new NotAcceptableException("You have already verified your account");
             }
 
             User user = userDAO.findByVerificationLink(token);
-            if(user == null){
+            if (user == null) {
                 throw new InternalServerErrorException("Couldn't find a user with the given verification link");
             }
             user.setVerified(true);
@@ -84,23 +88,18 @@ public class UserServiceImpl implements UserService{
 
             return user;
 
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new InternalServerErrorException("Something went wrong while trying to verify user!");
         }
     }
 
     @Override
     public User createCustomer(String name, String address, String residency, String email, String username, String password) {
-        Account acc;
-        try {
-            acc = accountDAO.findByEmail(email);
-            if (acc != null) {
-                throw new ForbiddenException("User already exists for given email");
-            }
-        } catch (Exception e) {
-            if (!(e instanceof EJBException)) {
-                throw new InternalServerErrorException("Unkown error while creating customer");
-            }
+
+
+        Account acc = accountDAO.findByEmail(email);
+        if (acc != null) {
+            throw new ForbiddenException("User already exists for given email");
         }
 
         User user = new User(name, address, residency, Role.CUSTOMER);
@@ -116,7 +115,7 @@ public class UserServiceImpl implements UserService{
             emailService.sendVerificationMail(userAccount);
             return createdUser;
         } catch (Exception e) { //Expects a NoResultException but that is hidden in EJBException
-            throw new InternalServerErrorException("Failed to create customer: " + e.getMessage());
+            throw new InternalServerErrorException("Failed to create customer: " + e.toString());
         }
     }
 }

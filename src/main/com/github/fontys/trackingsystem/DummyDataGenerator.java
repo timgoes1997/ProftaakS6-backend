@@ -109,7 +109,7 @@ public class DummyDataGenerator {
             );
 
             em.persist(b);
-            em.persist(account);
+            accountDAO.create(account);
             em.persist(tv);
             em.persist(u);
         }
