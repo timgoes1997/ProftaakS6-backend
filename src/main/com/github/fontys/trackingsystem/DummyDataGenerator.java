@@ -55,6 +55,7 @@ public class DummyDataGenerator {
         Date date = new Date();
         User admin = new User("admin", "straat", "berlijn", Role.BILL_ADMINISTRATOR);
         Account adminAcc = new Account("admin@admin.com", "admin", "admin");
+        admin.setVerified(true);
         adminAcc.setUser(admin);
         accountDAO.create(adminAcc);
 
