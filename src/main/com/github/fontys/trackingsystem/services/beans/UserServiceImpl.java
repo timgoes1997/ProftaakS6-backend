@@ -2,19 +2,18 @@ package com.github.fontys.trackingsystem.services.beans;
 
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
-import com.github.fontys.trackingsystem.services.EmailService;
+import com.github.fontys.trackingsystem.services.email.EmailRecoveryService;
+import com.github.fontys.trackingsystem.services.email.EmailVerificationService;
 import com.github.fontys.trackingsystem.services.interfaces.UserService;
 import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
 
-import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAcceptableException;
-import javax.ws.rs.NotAuthorizedException;
 import java.util.logging.Logger;
 
 @Stateless
@@ -27,7 +26,10 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     @Inject
-    private EmailService emailService;
+    private EmailVerificationService emailVerificationService;
+
+    @Inject
+    private EmailRecoveryService emailRecoveryService;
 
     @Inject
     private Logger logger;
@@ -96,7 +98,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createCustomer(String name, String address, String residency, String email, String username, String password) {
 
-
         Account acc = accountDAO.findByEmail(email);
         if (acc != null) {
             throw new ForbiddenException("User already exists for given email");
@@ -110,12 +111,55 @@ public class UserServiceImpl implements UserService {
             accountDAO.create(account);
             Account userAccount = accountDAO.findByEmail(account.getEmail());
             User createdUser = userDAO.findByAccount(userAccount);
-            createdUser.setVerifyLink(emailService.generateVerificationLink(createdUser));
+            if(userAccount == null){
+                throw new InternalServerErrorException("Server had a problem while creating a user account");
+            }
+            createdUser.setVerifyLink(emailVerificationService.generateVerificationLink(createdUser));
             userDAO.edit(createdUser);
-            emailService.sendVerificationMail(userAccount);
+            emailVerificationService.sendVerificationMail(userAccount);
             return createdUser;
-        } catch (Exception e) { //Expects a NoResultException but that is hidden in EJBException
+        } catch (Exception e) {
             throw new InternalServerErrorException("Failed to create customer: " + e.toString());
         }
+    }
+
+    @Override
+    public boolean recoverPassword(String email) {
+        Account acc = accountDAO.findByEmail(email);
+        if (acc == null) {
+            throw new ForbiddenException("User for given email doesn't exist");
+        }
+
+        try {
+            acc.setRecoveryLink(emailRecoveryService.generateRecoveryLink(acc));
+            accountDAO.edit(acc);
+            emailRecoveryService.sendRecoveryMail(acc);
+            return true;
+        }catch (Exception e){
+            throw new InternalServerErrorException("Couldn't send recovery mail, please contact a administrator");
+        }
+    }
+
+    @Override
+    public boolean hasRecoveryLink(String email, String recoveryLink) {
+        Account acc = accountDAO.findByEmail(email);
+        if (acc == null) {
+            throw new ForbiddenException("User for given email doesn't exist");
+        }
+
+        return acc.getRecoveryLink().equals(recoveryLink);
+    }
+
+    @Override
+    public User resetPassword(String email, String newPassword, String recoveryLink) {
+        Account acc = accountDAO.findByEmail(email);
+        if (acc == null && acc.getRecoveryLink().equals(recoveryLink)) {
+            throw new ForbiddenException("User or recovery link doesn't exist");
+        }
+
+        acc.setPassword(newPassword);
+        acc.setRecoveryLink(null);
+        accountDAO.edit(acc);
+        return acc.getUser();
     }
 }

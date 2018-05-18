@@ -1,19 +1,13 @@
 package com.github.fontys.trackingsystem.beans;
 
-import com.github.fontys.trackingsystem.services.EmailService;
-import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
-import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.services.interfaces.UserService;
 import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
 
-import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @RequestScoped
 @Path("/users")
@@ -52,9 +46,32 @@ public class UserBean {
 
     @GET
     @Path("/verify/{token}")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
     public User confirmRegistration(@PathParam("token") String token){
         return userService.confirmRegistration(token);
+    }
+
+    @GET
+    @Path("/recovery/{link}/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean hasRecoveryLink(@PathParam("link") String link, @PathParam("email") String email){
+        return userService.hasRecoveryLink(email, link);
+    }
+
+    @POST
+    @Path("/recovery/create")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean createRecoveryLink(@FormParam("email") String email){
+        return userService.recoverPassword(email);
+    }
+
+    @POST
+    @Path("/recovery/reset")
+    @Produces(MediaType.APPLICATION_JSON)
+    public User resetPassword(@FormParam("email") String email,
+                              @FormParam("password") String password,
+                              @FormParam("link") String link){
+        return userService.resetPassword(email, password, link);
     }
 
     @POST
@@ -68,4 +85,5 @@ public class UserBean {
                                     @FormParam("password") String password) {
         return userService.createCustomer(name, address, residency, email, username, password);
     }
+
 }

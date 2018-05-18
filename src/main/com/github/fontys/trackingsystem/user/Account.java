@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlTransient;
                 query = "SELECT a FROM ACCOUNT a WHERE a.username=:username"),
         @NamedQuery(name = Account.FIND_BYEMAIL,
                 query = "SELECT a FROM ACCOUNT a WHERE a.email=:email"),
+        @NamedQuery(name = Account.FIND_RECOVERY_LINK,
+                query = "SELECT a FROM ACCOUNT a WHERE a.recoveryLink=:link"),
 })
 public class Account {
 
@@ -23,6 +25,7 @@ public class Account {
     public static final String FIND_BYID = "User.findById";
     public static final String FIND_BYUSERNAME = "User.findByUsername";
     public static final String FIND_BYEMAIL = "User.findByEmail";
+    public static final String FIND_RECOVERY_LINK = "User.findRecoveryLink";
 
     // ======================================
     // =             Fields              =
@@ -41,6 +44,9 @@ public class Account {
 
     @Column(name="PASSWORD")
     private String password;
+
+    @Column(name="RECOVERY_LINK")
+    private String recoveryLink;
 
     @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name="USER_ID")
@@ -89,5 +95,13 @@ public class Account {
 
     public Long getId() {
         return id;
+    }
+
+    public String getRecoveryLink() {
+        return recoveryLink;
+    }
+
+    public void setRecoveryLink(String recoveryLink) {
+        this.recoveryLink = recoveryLink;
     }
 }

@@ -1,50 +1,44 @@
-package com.github.fontys.trackingsystem.services;
+package com.github.fontys.trackingsystem.services.email;
 
-import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
 
 import javax.annotation.Resource;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-@Stateless
-public class EmailService {
+public class EmailRecoveryService {
 
     @Inject
-    private UserDAO userDAO;
-
-    @Inject
-    private Logger logger;
+    private AccountDAO accountDAO;
 
     @Resource(name="mail/kwetter")
     private Session session;
 
-    public String generateVerificationLink(User user){
+    @Inject
+    private Logger logger;
+
+    public String generateRecoveryLink(Account account){
         String token = UUID.randomUUID().toString();
-        if(userDAO.verificationLinkExists(token)){
-            return generateVerificationLink(user);
+        if(accountDAO.recoveryLinkExists(token)){
+            return generateRecoveryLink(account);
         }else{
             return token;
         }
     }
 
-    public void sendVerificationMail(Account acc) throws MessagingException {
+    public void sendRecoveryMail(Account acc) throws MessagingException {
         Message message = new MimeMessage(session);
 
         logger.info("Set subject");
-        message.setSubject("Verify your user for RekeningRijden");
+        message.setSubject("Password recovery for RekeningRijden");
 
         logger.info("Set from");
         message.setFrom();
@@ -55,9 +49,9 @@ public class EmailService {
 
         BodyPart messageBody = new MimeBodyPart();
         messageBody.setText(System.lineSeparator()
-                + "Please use this verification link to verify your account:"
+                + "You have requested a password recovery, please click on the following link to enter your new password:"
                 + System.lineSeparator()
-                + "http://localhost:8080/Rekeningrijden/api/users/verify/" + acc.getUser().getVerifyLink());
+                + "http://localhost:8080/Rekeningrijden/api/users/verify/" + acc.getRecoveryLink());
 
         BodyPart signatureBody = new MimeBodyPart();
         signatureBody.setText(System.lineSeparator()
@@ -84,4 +78,5 @@ public class EmailService {
         logger.info("Send mail");
         Transport.send(message);
     }
+
 }

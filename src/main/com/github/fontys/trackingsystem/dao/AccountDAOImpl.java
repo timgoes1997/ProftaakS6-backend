@@ -71,6 +71,12 @@ public class AccountDAOImpl implements AccountDAO {
         }
     }
 
+    @Override
+    public boolean recoveryLinkExists(String link) {
+        TypedQuery<Account> query = em.createNamedQuery(Account.FIND_RECOVERY_LINK, Account.class);
+        return query.setParameter("link", link).getResultList().size() > 0;
+    }
+
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }
