@@ -66,3 +66,17 @@ os.arch=amd64
 os.version=10.0
 derby.system.home=D:\School\S6\Proftaak\Git\ProftaakS6-backend
 Database Class Loader started - derby.database.classpath=''
+Fri May 18 11:09:59 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (1765088) started and ready to accept connections on port 1527
+----------------------------------------------------------------
+Fri May 18 11:10:18 CEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0163-7283-54b9-0000207fac47 
+on database directory /home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend/rekeningrijden with class loader sun.misc.Launcher$AppClassLoader@70dea4e 
+Loaded from file:/opt/payara5/javadb/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_172-solus-b00
+user.dir=/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend
+os.name=Linux
+os.arch=amd64
+os.version=4.9.88-83.lts
+derby.system.home=/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend
+Database Class Loader started - derby.database.classpath=''
