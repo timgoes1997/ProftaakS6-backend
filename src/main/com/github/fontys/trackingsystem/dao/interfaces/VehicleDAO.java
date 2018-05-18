@@ -24,7 +24,7 @@ public interface VehicleDAO {
 
     List<Vehicle> findByBrand(String brand);
 
-    List<String> getBrands();
+    List getBrands();
 
     Vehicle find(String modelName, String edition, FuelType fuelType, EnergyLabel energyLabel);
 
