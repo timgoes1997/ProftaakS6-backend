@@ -45,16 +45,13 @@ public class VehicleServiceImpl implements VehicleService {
     private RegisteredVehicleDAO registeredVehicleDAO;
 
     @Override
-    public GenericEntity<List<RegisteredVehicle>> getVehiclesFromUser() {
+    public List<RegisteredVehicle> getVehiclesFromUser() {
         try {
             User user = (User) currentUser;
             if (user == null) {
                 throw new NotAuthorizedException("User is not logged in");
             }
-            List<RegisteredVehicle> registeredVehicles = registeredVehicleDAO.findByUser(user.getId());
-            GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(registeredVehicles) {
-            };
-            return list;
+            return registeredVehicleDAO.findByUser(user.getId());
         } catch (Exception e) {
             throw new InternalServerErrorException("Couldn't find any vehicles by user");
         }
@@ -70,63 +67,42 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public GenericEntity<List<String>> getBrands() {
-        List<String> brands = vehicleDAO.getBrands();
-        GenericEntity<List<String>> list = new GenericEntity<List<String>>(brands) {
-        };
-        return list;
+    public List<String> getBrands() {
+        return vehicleDAO.getBrands();
     }
 
     @Override
-    public GenericEntity<List<Vehicle>> getVehiclesByBrand(String brand) {
-        List<Vehicle> vehicles = vehicleDAO.findByBrand(brand);
-        GenericEntity<List<Vehicle>> list = new GenericEntity<List<Vehicle>>(vehicles) {
-        };
-        return list;
+    public List<Vehicle> getVehiclesByBrand(String brand) {
+        return vehicleDAO.findByBrand(brand);
     }
 
     @Override
-    public GenericEntity<List<String>> getVehicleModelsByBrand(String brand) {
-        List<String> models = vehicleDAO.findModelsByBrand(brand);
-        GenericEntity<List<String>> list = new GenericEntity<List<String>>(models) {
-        };
-        return list;
+    public List<String> getVehicleModelsByBrand(String brand) {
+        return vehicleDAO.findModelsByBrand(brand);
     }
 
     @Override
-    public GenericEntity<List<String>> getEditionsByModelAndBrand(String brand, String model) {
-        List<String> models = vehicleDAO.findEditionsByModelAndBrand(brand, model);
-        GenericEntity<List<String>> list = new GenericEntity<List<String>>(models) {
-        };
-        return list;
+    public List<String> getEditionsByModelAndBrand(String brand, String model) {
+        return vehicleDAO.findEditionsByModelAndBrand(brand, model);
     }
 
     @Override
-    public GenericEntity<List<String>> getFuelTypesByModelBrandAndEdition(String brand, String model, String edition) {
-        List<String> fuelTypes = vehicleDAO.findFuelTypesByModelBrandAndEdition(brand, model, edition);
-        GenericEntity<List<String>> list = new GenericEntity<List<String>>(fuelTypes) {
-        };
-        return list;
+    public List<String> getFuelTypesByModelBrandAndEdition(String brand, String model, String edition) {
+        return vehicleDAO.findFuelTypesByModelBrandAndEdition(brand, model, edition);
     }
 
     @Override
-    public GenericEntity<List<String>> getEnergyLabelsByModelBrandAndEdition(String brand, String model, String edition) {
-        List<String> fuelTypes = vehicleDAO.findEnergyLabelsByModelBrandAndEdition(brand, model, edition);
-        GenericEntity<List<String>> list = new GenericEntity<List<String>>(fuelTypes) {
-        };
-        return list;
+    public List<String> getEnergyLabelsByModelBrandAndEdition(String brand, String model, String edition) {
+        return vehicleDAO.findEnergyLabelsByModelBrandAndEdition(brand, model, edition);
     }
 
     @Override
-    public GenericEntity<List<String>> getEnergyLabelsByModelBrandEditionAndFuelType(String brand, String model, String edition, FuelType fuelType) {
-        List<String> fuelTypes = vehicleDAO.findEnergyLabelsByModelBrandEditionAndFuelType(brand, model, edition, fuelType);
-        GenericEntity<List<String>> list = new GenericEntity<List<String>>(fuelTypes) {
-        };
-        return list;
+    public List<String> getEnergyLabelsByModelBrandEditionAndFuelType(String brand, String model, String edition, FuelType fuelType) {
+        return vehicleDAO.findEnergyLabelsByModelBrandEditionAndFuelType(brand, model, edition, fuelType);
     }
 
     @Override
-    public GenericEntity<List<RegisteredVehicle>> getVehicles() {
+    public List<RegisteredVehicle> getVehicles() {
         List<RegisteredVehicle> vehicles;
 
         // RETURN OWN VEHICLES FOR;
@@ -137,9 +113,7 @@ public class VehicleServiceImpl implements VehicleService {
             // FOR ANY OTHER ROLE, RETURN ALL
             vehicles = registeredVehicleDAO.getAll();
         }
-        GenericEntity<List<RegisteredVehicle>> list = new GenericEntity<List<RegisteredVehicle>>(vehicles) {
-        };
-        return list;
+        return vehicles;
     }
 
     @Override

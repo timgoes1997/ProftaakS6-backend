@@ -12,16 +12,16 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface VehicleService {
-    GenericEntity<List<RegisteredVehicle>> getVehiclesFromUser();
+    List<RegisteredVehicle> getVehiclesFromUser();
     Vehicle getVehicle(int id);
-    GenericEntity<List<String>> getBrands();
-    GenericEntity<List<Vehicle>> getVehiclesByBrand(String brand);
-    GenericEntity<List<String>> getVehicleModelsByBrand(String brand);
-    GenericEntity<List<String>> getEditionsByModelAndBrand(String brand, String model);
-    GenericEntity<List<String>> getFuelTypesByModelBrandAndEdition(String brand, String model, String edition);
-    GenericEntity<List<String>> getEnergyLabelsByModelBrandAndEdition(String brand, String model, String edition);
-    GenericEntity<List<String>> getEnergyLabelsByModelBrandEditionAndFuelType(String brand, String model, String edition, FuelType fuelType);
-    GenericEntity<List<RegisteredVehicle>> getVehicles();
+    List<String> getBrands();
+    List<Vehicle> getVehiclesByBrand(String brand);
+    List<String> getVehicleModelsByBrand(String brand);
+    List<String> getEditionsByModelAndBrand(String brand, String model);
+    List<String> getFuelTypesByModelBrandAndEdition(String brand, String model, String edition);
+    List<String> getEnergyLabelsByModelBrandAndEdition(String brand, String model, String edition);
+    List<String> getEnergyLabelsByModelBrandEditionAndFuelType(String brand, String model, String edition, FuelType fuelType);
+    List<RegisteredVehicle> getVehicles();
 
     Vehicle registerVehicle(String brand,
                             String date,

@@ -27,7 +27,7 @@ public class VehicleBean {
     @EasySecurity(requiresUser = true)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/currentUser")
-    public GenericEntity<List<RegisteredVehicle>> getVehiclesFromUser() {
+    public List<RegisteredVehicle> getVehiclesFromUser() {
         return vehicleService.getVehiclesFromUser();
     }
 
@@ -41,49 +41,49 @@ public class VehicleBean {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/brands")
-    public GenericEntity<List<String>> getBrands() {
+    public List<String> getBrands() {
         return vehicleService.getBrands();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/brands/{brand}")
-    public GenericEntity<List<Vehicle>> getVehiclesByBrand(@PathParam("brand") String brand) {
+    public List<Vehicle> getVehiclesByBrand(@PathParam("brand") String brand) {
         return vehicleService.getVehiclesByBrand(brand);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{brand}/models")
-    public GenericEntity<List<String>> getVehicleModelsByBrand(@PathParam("brand") String brand) {
+    public List<String> getVehicleModelsByBrand(@PathParam("brand") String brand) {
         return vehicleService.getVehicleModelsByBrand(brand);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{brand}/{model}/editions")
-    public GenericEntity<List<String>> getEditionsByModelAndBrand(@PathParam("brand") String brand, @PathParam("model") String model) {
+    public List<String> getEditionsByModelAndBrand(@PathParam("brand") String brand, @PathParam("model") String model) {
         return vehicleService.getEditionsByModelAndBrand(brand, model);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{brand}/{model}/{edition}/fueltypes")
-    public GenericEntity<List<String>> getFuelTypesByModelBrandAndEdition(@PathParam("brand") String brand, @PathParam("model") String model, @PathParam("edition") String edition) {
+    public List<String> getFuelTypesByModelBrandAndEdition(@PathParam("brand") String brand, @PathParam("model") String model, @PathParam("edition") String edition) {
         return vehicleService.getFuelTypesByModelBrandAndEdition(brand, model, edition);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{brand}/{model}/{edition}/energylabels")
-    public GenericEntity<List<String>> getEnergyLabelsByModelBrandAndEdition(@PathParam("brand") String brand, @PathParam("model") String model, @PathParam("edition") String edition) {
+    public List<String> getEnergyLabelsByModelBrandAndEdition(@PathParam("brand") String brand, @PathParam("model") String model, @PathParam("edition") String edition) {
         return vehicleService.getEnergyLabelsByModelBrandAndEdition(brand, model, edition);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{brand}/{model}/{edition}/{fuelType}/energylabels")
-    public GenericEntity<List<String>> getEnergyLabelsByModelBrandEditionAndFuelType(@PathParam("brand") String brand, @PathParam("model") String model, @PathParam("edition") String edition, @PathParam("fuelType") FuelType fuelType) {
+    public List<String> getEnergyLabelsByModelBrandEditionAndFuelType(@PathParam("brand") String brand, @PathParam("model") String model, @PathParam("edition") String edition, @PathParam("fuelType") FuelType fuelType) {
         return vehicleService.getEnergyLabelsByModelBrandEditionAndFuelType(brand, model, edition, fuelType);
     }
 
@@ -91,7 +91,7 @@ public class VehicleBean {
     @EasySecurity(requiresUser = true)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/registered")
-    public GenericEntity<List<RegisteredVehicle>> getVehicles() {
+    public List<RegisteredVehicle> getVehicles() {
         return vehicleService.getVehicles();
     }
 
