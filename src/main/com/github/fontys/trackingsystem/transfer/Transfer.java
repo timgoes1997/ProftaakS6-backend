@@ -55,6 +55,9 @@ public class Transfer implements Serializable{
     @Column(name="TOKEN")
     private String transferToken;
 
+    @Column(name="PROOF_OF_OWNERSHIP")
+    private String proofOfOwnership;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
     private TransferStatus status;
@@ -82,7 +85,7 @@ public class Transfer implements Serializable{
         this.status = TransferStatus.DeclinedNewOwner;
     }
 
-    public void acceptedTransferOwner(){
+    public void acceptedCurrentOwner(){
         this.status = TransferStatus.AcceptedCurrentOwner;
     }
 
@@ -90,7 +93,8 @@ public class Transfer implements Serializable{
         this.status = TransferStatus.DeclinedCurrentOwner;
     }
 
-    public void confirmOwnerShip(){
+    public void confirmOwnerShip(String proofOfOwnership){
+        this.proofOfOwnership = proofOfOwnership;
         this.status = TransferStatus.ConfirmedOwnership;
     }
 
@@ -140,5 +144,13 @@ public class Transfer implements Serializable{
 
     public void setStatus(TransferStatus status) {
         this.status = status;
+    }
+
+    public String getProofOfOwnership() {
+        return proofOfOwnership;
+    }
+
+    public void setProofOfOwnership(String proofOfOwnership) {
+        this.proofOfOwnership = proofOfOwnership;
     }
 }

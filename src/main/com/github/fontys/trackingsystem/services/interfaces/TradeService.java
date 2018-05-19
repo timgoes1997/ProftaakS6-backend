@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface TradeService {
+    Transfer getTransfer(long id);
     Transfer createTransfer(String email);
     Transfer acceptTokenAlreadyLoggedIn(String token);
     Transfer acceptTokenLogin(String token, String email, String password);

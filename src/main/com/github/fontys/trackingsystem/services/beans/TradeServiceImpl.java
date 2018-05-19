@@ -7,6 +7,7 @@ import com.github.fontys.trackingsystem.dao.interfaces.TradeDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.services.email.EmailTradeService;
+import com.github.fontys.trackingsystem.services.interfaces.FileService;
 import com.github.fontys.trackingsystem.services.interfaces.TradeService;
 import com.github.fontys.trackingsystem.transfer.Transfer;
 import com.github.fontys.trackingsystem.transfer.TransferStatus;
@@ -38,6 +39,9 @@ public class TradeServiceImpl implements TradeService {
     private UserDAO userDAO;
 
     @Inject
+    private FileService fileService;
+
+    @Inject
     private EmailTradeService emailTradeService;
 
     @Override
@@ -62,59 +66,76 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     public Transfer acceptTransferNewOwner(long id) {
-        return null;
+        Transfer transfer = getTransfer(id);
+        transfer.acceptedNewOwner();
+        tradeDAO.edit(transfer);
+        return transfer;
     }
 
     @Override
     public Transfer declineTransferNewOwner(long id) {
-        return null;
+        Transfer transfer = getTransfer(id);
+        transfer.declineNewOwner();
+        tradeDAO.edit(transfer);
+        return transfer;
     }
 
     @Override
     public Transfer acceptTransferCurrentOwner(long id) {
-        return null;
+        Transfer transfer = getTransfer(id);
+        transfer.acceptedCurrentOwner();
+        tradeDAO.edit(transfer);
+        return transfer;
     }
 
     @Override
     public Transfer declineTransferCurrentOwner(long id) {
-        return null;
+        Transfer transfer = getTransfer(id);
+        transfer.declineCurrentOwner();
+        tradeDAO.edit(transfer);
+        return transfer;
     }
 
     @Override
     public Transfer confirmOwnership(long id, InputStream uploadedInputStream, FormDataContentDisposition fileDetails) {
-        return null;
+        Transfer transfer = getTransfer(id);
+        transfer.confirmOwnerShip(fileService.writeToFile(uploadedInputStream, fileDetails));
+        tradeDAO.edit(transfer);
+        return transfer;
     }
 
     @Override
     public Transfer completeTransfer(long id) {
-
-        Transfer transfer = null;
-        try {
-            transfer = tradeDAO.find(id);
-        } catch (Exception e) {
-            throw new NotFoundException("There are no transfers with given id");
-        }
-
-        if (transfer == null) {
-            throw new NotFoundException("There are no transfers with given id");
-        }
-
+        Transfer transfer = getTransfer(id);
         RegisteredVehicle registeredVehicle = transfer.getVehicleToTransfer();
-        if(registeredVehicle == null){
+        if (registeredVehicle == null) {
             throw new NotFoundException("There are no vehicles for transfer with given id");
         }
 
-        registeredVehicle.setCustomer(transfer.getOwnerToTransferTo());
-        registeredVehicleDAO.edit(registeredVehicle);
-
-
         if (transfer.getStatus() == TransferStatus.ConfirmedOwnership) {
+            registeredVehicle.setCustomer(transfer.getOwnerToTransferTo());
+            registeredVehicle.setProofOfOwnership(transfer.getProofOfOwnership());
+            registeredVehicleDAO.edit(registeredVehicle);
             transfer.completed();
             tradeDAO.edit(transfer);
         } else {
             throw new NotAllowedException("You are not allowed to complete the transaction yet!");
         }
 
+        return transfer;
+    }
+
+    @Override
+    public Transfer getTransfer(long id) {
+        Transfer transfer;
+        try {
+            transfer = tradeDAO.find(id);
+            if (transfer == null) {
+                throw new NotFoundException("There are no transfers with given id");
+            }
+        } catch (Exception e) {
+            throw new NotFoundException("There are no transfers with given id");
+        }
         return transfer;
     }
 
