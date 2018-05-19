@@ -28,4 +28,6 @@ public interface TradeService {
     List<Transfer> getTransfersFromUser(long id);
     List<Transfer> getTransfersToUser(long id);
     List<Transfer> getTransfersVehicle(long id);
+
+    String generateTradeToken();
 }
