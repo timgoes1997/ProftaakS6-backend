@@ -66,7 +66,8 @@ public class Transfer implements Serializable{
 
     }
 
-    public Transfer(RegisteredVehicle vehicleToTransfer, String transferToken){
+    public Transfer(User currentOwner, RegisteredVehicle vehicleToTransfer, String transferToken){
+        this.currentOwner = currentOwner;
         this.vehicleToTransfer = vehicleToTransfer;
         this.transferToken = transferToken;
         this.status = TransferStatus.WaitingForResponseNewOwner;

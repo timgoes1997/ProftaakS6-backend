@@ -5,15 +5,17 @@ import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.util.List;
 
 public interface TradeService {
     Transfer getTransfer(long id);
-    Transfer createTransfer(String email);
+    Transfer createTransfer(long vehicleId, String email);
     Transfer acceptTokenAlreadyLoggedIn(String token);
-    Transfer acceptTokenLogin(String token, String email, String password);
-    Transfer acceptTokenRegister(String token, String name, String address, String residency, String email, String username, String password);
+    Transfer acceptTokenLogin(String token, String email, String password, HttpServletRequest req);
+    Transfer acceptTokenRegister(String token, String name, String address, String residency, String email, String username, String password, HttpServletRequest req);
+    Transfer accept(User user, String token);
 
     Transfer acceptTransferNewOwner(long id);
     Transfer declineTransferNewOwner(long id);

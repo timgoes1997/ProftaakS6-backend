@@ -8,7 +8,9 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
 import java.util.List;
@@ -114,8 +116,9 @@ public class TradeBean {
     @Produces(MediaType.APPLICATION_JSON)
     @EasySecurity(requiresUser = true)
     @Path("/create")
-    public Transfer createTransfer(@FormParam("email") String email) {
-        return tradeService.createTransfer(email);
+    public Transfer createTransfer(@FormParam("id") long vehicleId,
+                                   @FormParam("email") String email) {
+        return tradeService.createTransfer(vehicleId, email);
     }
 
     @POST
@@ -131,8 +134,9 @@ public class TradeBean {
     @Path("/login")
     public Transfer acceptTokenLogin(@FormParam("token") String token,
                                      @FormParam("email") String email,
-                                     @FormParam("password") String password) {
-        return tradeService.acceptTokenLogin(token, email, password);
+                                     @FormParam("password") String password,
+                                     @Context HttpServletRequest req) {
+        return tradeService.acceptTokenLogin(token, email, password, req);
     }
 
     @POST
@@ -144,7 +148,8 @@ public class TradeBean {
                                         @FormParam("residency") String residency,
                                         @FormParam("email") String email,
                                         @FormParam("username") String username,
-                                        @FormParam("password") String password) {
-        return tradeService.acceptTokenRegister(token, name, address, residency, email, username, password);
+                                        @FormParam("password") String password,
+                                        @Context HttpServletRequest req) {
+        return tradeService.acceptTokenRegister(token, name, address, residency, email, username, password, req);
     }
 }

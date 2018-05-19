@@ -7,15 +7,19 @@ import com.github.fontys.trackingsystem.dao.interfaces.TradeDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.services.email.EmailTradeService;
+import com.github.fontys.trackingsystem.services.interfaces.AuthService;
 import com.github.fontys.trackingsystem.services.interfaces.FileService;
 import com.github.fontys.trackingsystem.services.interfaces.TradeService;
+import com.github.fontys.trackingsystem.services.interfaces.UserService;
 import com.github.fontys.trackingsystem.transfer.Transfer;
 import com.github.fontys.trackingsystem.transfer.TransferStatus;
+import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
@@ -39,69 +43,137 @@ public class TradeServiceImpl implements TradeService {
     private UserDAO userDAO;
 
     @Inject
+    private UserService userService;
+
+    @Inject
     private FileService fileService;
 
     @Inject
     private EmailTradeService emailTradeService;
 
+    @Inject
+    private AuthService authService;
+
     @Override
-    public Transfer createTransfer(String email) {
-        return null;
+    public Transfer createTransfer(long vehicleId, String email) {
+        RegisteredVehicle registeredVehicle;
+        try {
+            registeredVehicle = registeredVehicleDAO.find(vehicleId);
+            if (registeredVehicle == null) {
+                throw new NotFoundException("There are no vehicles for given id");
+            }
+        } catch (Exception e) {
+            throw new NotFoundException("There are no vehicles for given id");
+        }
+
+        //Check for transfers that are still in progress
+        List<Transfer> transfers = tradeDAO.findForVehicle(registeredVehicle);
+        for(Transfer t : transfers){
+            if(t.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
+                    t.getStatus() == TransferStatus.AcceptedCurrentOwner ||
+                    t.getStatus() == TransferStatus.AcceptedNewOwner ||
+                    t.getStatus() == TransferStatus.ConfirmedOwnership){
+                throw new BadRequestException("There are still transfers in progress please complete them before requesting a new one");
+            }
+        }
+
+        Transfer transfer = new Transfer((User) currentUser, registeredVehicle, generateTradeToken());
+        tradeDAO.create(transfer);
+        emailTradeService.sendTransferMail(transfer, email);
+        return transfer;
     }
 
     @Override
     public Transfer acceptTokenAlreadyLoggedIn(String token) {
-        return null;
+        authService.isLoggedIn();
+        return accept((User) currentUser, token);
     }
 
     @Override
-    public Transfer acceptTokenLogin(String token, String email, String password) {
-        return null;
+    public Transfer acceptTokenLogin(String token, String email, String password, HttpServletRequest req) {
+        Account account = authService.logon(email, password, req);
+        return accept(account.getUser(), token);
     }
 
     @Override
-    public Transfer acceptTokenRegister(String token, String name, String address, String residency, String email, String username, String password) {
-        return null;
+    public Transfer acceptTokenRegister(String token, String name, String address, String residency, String email, String username, String password, HttpServletRequest req) {
+        return accept(userService.createCustomer(name, address, residency, email, username, password), token);
+    }
+
+    @Override
+    public Transfer accept(User user, String token) {
+        Transfer transfer = tradeDAO.findByToken(token);
+        if (transfer == null) {
+            throw new NotFoundException("Couldn't find a transfer with the given token");
+        }
+        transfer.setOwnerToTransferTo(user);
+        tradeDAO.edit(transfer);
+        return transfer;
     }
 
     @Override
     public Transfer acceptTransferNewOwner(long id) {
         Transfer transfer = getTransfer(id);
-        transfer.acceptedNewOwner();
-        tradeDAO.edit(transfer);
-        return transfer;
+        if (transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner) {
+            transfer.acceptedNewOwner();
+            tradeDAO.edit(transfer);
+            return transfer;
+        } else {
+            throw new NotAllowedException("You are not allowed to accept this transfer");
+        }
     }
 
     @Override
     public Transfer declineTransferNewOwner(long id) {
         Transfer transfer = getTransfer(id);
-        transfer.declineNewOwner();
-        tradeDAO.edit(transfer);
-        return transfer;
+        if (transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
+                transfer.getStatus() == TransferStatus.AcceptedCurrentOwner ||
+                transfer.getStatus() == TransferStatus.AcceptedNewOwner) {
+            transfer.declineNewOwner();
+            tradeDAO.edit(transfer);
+            return transfer;
+        } else {
+            throw new NotAllowedException("You are not allowed to accept this transfer");
+        }
     }
 
     @Override
     public Transfer acceptTransferCurrentOwner(long id) {
         Transfer transfer = getTransfer(id);
-        transfer.acceptedCurrentOwner();
-        tradeDAO.edit(transfer);
-        return transfer;
+        if (transfer.getStatus() == TransferStatus.AcceptedNewOwner) {
+            transfer.acceptedCurrentOwner();
+            tradeDAO.edit(transfer);
+            return transfer;
+        } else {
+            throw new NotAllowedException("You are not allowed to accept this transfer");
+        }
     }
 
     @Override
     public Transfer declineTransferCurrentOwner(long id) {
         Transfer transfer = getTransfer(id);
-        transfer.declineCurrentOwner();
-        tradeDAO.edit(transfer);
-        return transfer;
+        if (transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
+                transfer.getStatus() == TransferStatus.AcceptedCurrentOwner ||
+                transfer.getStatus() == TransferStatus.AcceptedNewOwner ||
+                transfer.getStatus() == TransferStatus.ConfirmedOwnership) {
+            transfer.declineCurrentOwner();
+            tradeDAO.edit(transfer);
+            return transfer;
+        } else {
+            throw new NotAllowedException("You are not allowed to accept this transfer");
+        }
     }
 
     @Override
     public Transfer confirmOwnership(long id, InputStream uploadedInputStream, FormDataContentDisposition fileDetails) {
         Transfer transfer = getTransfer(id);
-        transfer.confirmOwnerShip(fileService.writeToFile(uploadedInputStream, fileDetails));
-        tradeDAO.edit(transfer);
-        return transfer;
+        if (transfer.getStatus() == TransferStatus.AcceptedCurrentOwner) {
+            transfer.confirmOwnerShip(fileService.writeToFile(uploadedInputStream, fileDetails));
+            tradeDAO.edit(transfer);
+            return transfer;
+        } else {
+            throw new NotAllowedException("You are not allowed to confirm this transfer");
+        }
     }
 
     @Override
