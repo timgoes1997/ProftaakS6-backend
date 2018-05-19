@@ -7,7 +7,33 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity(name = "TRANSFER")
+@NamedQueries({
+        @NamedQuery(name = Transfer.FIND_BYID,
+                query = "SELECT t FROM TRANSFER t WHERE t.id=:id"),
+        @NamedQuery(name = Transfer.FIND_BY_VEHICLE,
+                query = "SELECT t FROM TRANSFER t WHERE t.vehicleToTransfer.id=:id"),
+        @NamedQuery(name = Transfer.FIND_BY_TOKEN,
+                query = "SELECT t FROM TRANSFER t WHERE t.transferToken=:token"),
+        @NamedQuery(name = Transfer.FIND_BY_CURRENT_OWNER,
+                query = "SELECT t FROM TRANSFER t WHERE t.currentOwner.id=:id"),
+        @NamedQuery(name = Transfer.FIND_BY_NEW_OWNER,
+                query = "SELECT t FROM TRANSFER t WHERE t.ownerToTransferTo.id=:id"),
+})
 public class Transfer implements Serializable{
+
+    // ======================================
+    // =             Queries              =
+    // ======================================
+
+    public static final String FIND_BYID = "Transfer.findByID";
+    public static final String FIND_BY_VEHICLE = "Transfer.findByVehicle";
+    public static final String FIND_BY_NEW_OWNER = "Transfer.findByNewOwner";
+    public static final String FIND_BY_CURRENT_OWNER = "Transfer.findByCurrentOwner";
+    public static final String FIND_BY_TOKEN = "Transfer.findByToken";
+
+    // ======================================
+    // =             Fields              =
+    // ======================================
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
