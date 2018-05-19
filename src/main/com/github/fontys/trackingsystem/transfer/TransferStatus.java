@@ -6,5 +6,6 @@ public enum TransferStatus {
     DeclinedNewOwner,
     AcceptedCurrentOwner,
     DeclinedCurrentOwner,
+    ConfirmedOwnership,
     Completed,
 }

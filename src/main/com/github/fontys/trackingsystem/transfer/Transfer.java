@@ -44,13 +44,15 @@ public class Transfer implements Serializable{
         this.currentOwner = vehicleToTransfer.getCustomer();
     }
 
-    public void acceptedNewOwner(User newUser){
-        this.ownerToTransferTo = newUser;
+    public void setNewOwner(User newOwner){
+        this.ownerToTransferTo = newOwner;
+    }
+
+    public void acceptedNewOwner(){
         this.status = TransferStatus.AcceptedNewOwner;
     }
 
-    public void declineNewOwner(User newUser){
-        this.ownerToTransferTo = newUser;
+    public void declineNewOwner(){
         this.status = TransferStatus.DeclinedNewOwner;
     }
 
@@ -60,6 +62,10 @@ public class Transfer implements Serializable{
 
     public void declineCurrentOwner(){
         this.status = TransferStatus.DeclinedCurrentOwner;
+    }
+
+    public void confirmOwnerShip(){
+        this.status = TransferStatus.ConfirmedOwnership;
     }
 
     public void completed(){
