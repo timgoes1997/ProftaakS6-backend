@@ -68,27 +68,27 @@ public class TradeServiceImpl implements TradeService {
             throw new NotFoundException("There are no vehicles for given id");
         }
 
-        if(registeredVehicle.getCustomer().getId() != ((User)currentUser).getId()){
+        if (registeredVehicle.getCustomer().getId() != ((User) currentUser).getId()) {
             throw new NotAuthorizedException("You don't own the given vehicle");
         }
-
+        
         //Check for transfers that are still in progress
         List<Transfer> transfers = tradeDAO.findForVehicle(registeredVehicle);
-        for(Transfer t : transfers){
-            if(t.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
+        for (Transfer t : transfers) {
+            if (t.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
                     t.getStatus() == TransferStatus.AcceptedCurrentOwner ||
                     t.getStatus() == TransferStatus.AcceptedNewOwner ||
-                    t.getStatus() == TransferStatus.ConfirmedOwnership){
+                    t.getStatus() == TransferStatus.ConfirmedOwnership) {
                 throw new BadRequestException("There are still transfers in progress please complete them before requesting a new one");
             }
         }
 
+        Transfer transfer = new Transfer((User) currentUser, registeredVehicle, generateTradeToken());
+        tradeDAO.create(transfer);
         try {
-            Transfer transfer = new Transfer((User) currentUser, registeredVehicle, generateTradeToken());
-            tradeDAO.create(transfer);
             emailTradeService.sendTransferMail(transfer, email);
             return transfer;
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.severe(e.getMessage());
             throw new InternalServerErrorException("Either couldn't create transfer or send a e-mail to given email adress");
         }
@@ -116,7 +116,7 @@ public class TradeServiceImpl implements TradeService {
         if (transfer == null) {
             throw new NotFoundException("Couldn't find a transfer with the given token");
         }
-        if(transfer.getOwnerToTransferTo() != null){
+        if (transfer.getOwnerToTransferTo() != null) {
             throw new NotAllowedException("Token has already been used by a user");
         }
         transfer.setOwnerToTransferTo(user);
