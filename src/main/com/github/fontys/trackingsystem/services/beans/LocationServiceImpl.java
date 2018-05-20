@@ -121,4 +121,16 @@ public class LocationServiceImpl implements LocationService {
         }
         return false;
     }
+
+    public void setCurrentUser(ESUser currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void setRegisteredVehicleDAO(RegisteredVehicleDAO registeredVehicleDAO) {
+        this.registeredVehicleDAO = registeredVehicleDAO;
+    }
+
+    public void setTrackedVehicleDAO(TrackedVehicleDAO trackedVehicleDAO) {
+        this.trackedVehicleDAO = trackedVehicleDAO;
+    }
 }

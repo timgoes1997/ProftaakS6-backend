@@ -204,4 +204,24 @@ public class VehicleServiceImpl implements VehicleService {
         registeredVehicleDAO.create(cv);
         return cv;
     }
+
+    public void setCurrentUser(ESUser currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void setVehicleDAO(VehicleDAO vehicleDAO) {
+        this.vehicleDAO = vehicleDAO;
+    }
+
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public void setRegisteredVehicleDAO(RegisteredVehicleDAO registeredVehicleDAO) {
+        this.registeredVehicleDAO = registeredVehicleDAO;
+    }
+
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
 }

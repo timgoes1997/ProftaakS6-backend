@@ -21,11 +21,13 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class TradeServiceImpl implements TradeService {
 
@@ -54,6 +56,9 @@ public class TradeServiceImpl implements TradeService {
     @Inject
     private AuthService authService;
 
+    @Inject
+    private Logger logger;
+
     @Override
     public Transfer createTransfer(long vehicleId, String email) {
         RegisteredVehicle registeredVehicle;
@@ -77,10 +82,15 @@ public class TradeServiceImpl implements TradeService {
             }
         }
 
-        Transfer transfer = new Transfer((User) currentUser, registeredVehicle, generateTradeToken());
-        tradeDAO.create(transfer);
-        emailTradeService.sendTransferMail(transfer, email);
-        return transfer;
+        try {
+            Transfer transfer = new Transfer((User) currentUser, registeredVehicle, generateTradeToken());
+            tradeDAO.create(transfer);
+            emailTradeService.sendTransferMail(transfer, email);
+            return transfer;
+        }catch (Exception e){
+            logger.severe(e.getMessage());
+            throw new InternalServerErrorException("Either couldn't create transfer or send a e-mail to given email adress");
+        }
     }
 
     @Override
@@ -105,6 +115,9 @@ public class TradeServiceImpl implements TradeService {
         Transfer transfer = tradeDAO.findByToken(token);
         if (transfer == null) {
             throw new NotFoundException("Couldn't find a transfer with the given token");
+        }
+        if(transfer.getOwnerToTransferTo() != null){
+            throw new NotAllowedException("Token has already been used by a user");
         }
         transfer.setOwnerToTransferTo(user);
         tradeDAO.edit(transfer);

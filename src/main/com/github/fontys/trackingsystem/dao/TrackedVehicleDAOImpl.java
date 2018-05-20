@@ -64,4 +64,8 @@ public class TrackedVehicleDAOImpl implements TrackedVehicleDAO {
         query.setParameter("id", trackedVehicleID);
         return query.getSingleResult();
     }
+
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
+    }
 }

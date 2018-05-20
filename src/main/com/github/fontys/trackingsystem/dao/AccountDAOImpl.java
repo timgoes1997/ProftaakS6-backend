@@ -16,12 +16,8 @@ public class AccountDAOImpl implements AccountDAO {
     @PersistenceContext(name = "Proftaak")
     private EntityManager em;
 
-    @Inject
-    private Logger logger;
-
     @Override
     public void create(Account account) {
-        logger.info("lekker bezig");
         em.persist(account);
     }
 

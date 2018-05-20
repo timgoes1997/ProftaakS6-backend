@@ -75,4 +75,8 @@ public class FileServiceImpl implements FileService {
             logger.info(e.getMessage());
         }
     }
+
+    public void setLogger() {
+        this.logger = Logger.getLogger(FileServiceImpl.class.getName());
+    }
 }

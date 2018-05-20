@@ -119,4 +119,28 @@ public class DummyDataGenerator {
     public static int getAmountToGenerate() {
         return AMOUNT_TO_GENERATE;
     }
+
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
+    public void setVehicleDAO(VehicleDAO vehicleDAO) {
+        this.vehicleDAO = vehicleDAO;
+    }
+
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public void setAccountDAO(AccountDAO accountDAO) {
+        this.accountDAO = accountDAO;
+    }
+
+    public void setRegisteredVehicleDAO(RegisteredVehicleDAO registeredVehicleDAO) {
+        this.registeredVehicleDAO = registeredVehicleDAO;
+    }
+
+    public void setBillDAO(BillDAO billDAO) {
+        this.billDAO = billDAO;
+    }
 }

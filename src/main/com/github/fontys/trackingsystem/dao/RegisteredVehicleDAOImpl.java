@@ -69,4 +69,8 @@ public class RegisteredVehicleDAOImpl implements RegisteredVehicleDAO {
                 em.createNamedQuery(RegisteredVehicle.FIND_ALL, RegisteredVehicle.class);
         return query.getResultList();
     }
+
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
+    }
 }

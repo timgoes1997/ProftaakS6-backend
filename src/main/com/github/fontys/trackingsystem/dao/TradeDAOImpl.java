@@ -85,4 +85,8 @@ public class TradeDAOImpl implements TradeDAO {
             return null;
         }
     }
+
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
+    }
 }

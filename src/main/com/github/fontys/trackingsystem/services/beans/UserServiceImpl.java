@@ -162,4 +162,24 @@ public class UserServiceImpl implements UserService {
         accountDAO.edit(acc);
         return acc.getUser();
     }
+
+    public void setAccountDAO(AccountDAO accountDAO) {
+        this.accountDAO = accountDAO;
+    }
+
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public void setEmailVerificationService(EmailVerificationService emailVerificationService) {
+        this.emailVerificationService = emailVerificationService;
+    }
+
+    public void setEmailRecoveryService(EmailRecoveryService emailRecoveryService) {
+        this.emailRecoveryService = emailRecoveryService;
+    }
+
+    public void setLogger() {
+        this.logger = Logger.getLogger(UserServiceImpl.class.getName());
+    }
 }

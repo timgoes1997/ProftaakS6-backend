@@ -36,4 +36,8 @@ public class LocationDAOImpl implements LocationDAO {
     public Location findByID(long id) {
         return em.find(Location.class, id);
     }
+
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
+    }
 }
