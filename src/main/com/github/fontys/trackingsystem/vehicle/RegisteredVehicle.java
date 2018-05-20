@@ -6,6 +6,7 @@ import com.github.fontys.trackingsystem.user.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity(name="REGISTERED_VEHICLE")
@@ -55,6 +56,10 @@ public class RegisteredVehicle implements Serializable {
 
     @Column(name="PROOF_OF_OWNERSHIP")
     private String proofOfOwnership;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name="DESTROY_DATE")
+    private Calendar destroyDate;
 
     @OneToMany(mappedBy="registeredVehicle", cascade = CascadeType.PERSIST)
     private List<Bill> bills;
@@ -120,6 +125,10 @@ public class RegisteredVehicle implements Serializable {
 
     public void setProofOfOwnership(String proofOfOwnership) {
         this.proofOfOwnership = proofOfOwnership;
+    }
+
+    public void destroy() {
+        this.destroyDate = Calendar.getInstance();
     }
 
     /*

@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.List;
 
@@ -95,6 +96,18 @@ public class VehicleBean {
         return vehicleService.getVehicles();
     }
 
+    @GET
+    @EasySecurity(requiresUser = true)
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("/ownership/{license}")
+    public Response getOwnerShip(@PathParam("license") String license){
+        File poo = vehicleService.getProofOfOwnership(license);
+        String fileName = poo.getName();
+        return Response.ok((Object)poo)
+                .header("Content-Disposition", "attachment; filename=" + fileName)
+                .build();
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @EasySecurity(requiresUser = true)
@@ -107,6 +120,14 @@ public class VehicleBean {
                                    @FormParam("energyLabel") String energyLabelString
     ) {
         return vehicleService.registerVehicle(brand, date, modelName, edition, fuelTypeString, energyLabelString);
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @EasySecurity(requiresUser = true)
+    @Path("/destroy")
+    public RegisteredVehicle destroyVehicle(@FormParam("license") String license) {
+        return vehicleService.destroyVehicle(license);
     }
 
     @POST

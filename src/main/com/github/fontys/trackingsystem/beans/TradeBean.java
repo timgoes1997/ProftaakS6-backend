@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
@@ -60,6 +62,19 @@ public class TradeBean {
     @Path("/transfers/to")
     public List<Transfer> getTransfersToCurrentUser() {
         return tradeService.getTransfersToCurrentUser();
+    }
+
+
+    @GET
+    @EasySecurity(requiresUser = true)
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("/ownership/{id}")
+    public Response getOwnerShip(@PathParam("id") long id){
+        File poo = tradeService.getProofOfOwnership(id);
+        String fileName = poo.getName();
+        return Response.ok((Object)poo)
+                .header("Content-Disposition", "attachment; filename=" + fileName)
+                .build();
     }
 
     @POST

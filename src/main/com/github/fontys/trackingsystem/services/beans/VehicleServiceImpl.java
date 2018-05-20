@@ -28,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class VehicleServiceImpl implements VehicleService {
@@ -203,6 +204,46 @@ public class VehicleServiceImpl implements VehicleService {
         RegisteredVehicle cv = new RegisteredVehicle(u, license, v, location);
         registeredVehicleDAO.create(cv);
         return cv;
+    }
+
+    @Override
+    public RegisteredVehicle destroyVehicle(String license) {
+        RegisteredVehicle registeredVehicle = getRegisteredVehicle(license);
+
+        //TODO: Permissions for Bill Administrators etc to destroy vehicles. For now only the owner can do it.
+        if(!Objects.equals(registeredVehicle.getCustomer().getId(), ((User) currentUser).getId())){
+            throw new NotAuthorizedException("You are not authorized to destroy this vehicle");
+        }
+
+        registeredVehicle.destroy();
+        registeredVehicle.setCustomer(null);
+        registeredVehicleDAO.edit(registeredVehicle);
+        return registeredVehicle;
+    }
+
+    @Override
+    public File getProofOfOwnership(String license) {
+        RegisteredVehicle registeredVehicle = getRegisteredVehicle(license);
+
+        //TODO: Permissions for Bill Administrators etc to get ownership
+        if(!Objects.equals(registeredVehicle.getCustomer().getId(), ((User) currentUser).getId())){
+            throw new NotAuthorizedException("You are not authorized to destroy this vehicle");
+        }
+
+        return new File(registeredVehicle.getProofOfOwnership());
+    }
+
+    private RegisteredVehicle getRegisteredVehicle(String license) {
+        RegisteredVehicle registeredVehicle;
+        try{
+            registeredVehicle = registeredVehicleDAO.findByLicense(license);
+            if(registeredVehicle == null){
+                throw new NotFoundException("Couldn't find given vehicle");
+            }
+        }catch (Exception e){
+            throw new NotFoundException("Couldn't find given vehicle");
+        }
+        return registeredVehicle;
     }
 
     public void setCurrentUser(ESUser currentUser) {

@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
@@ -291,6 +292,27 @@ public class TradeServiceImpl implements TradeService {
         } else {
             return token;
         }
+    }
+
+    @Override
+    public File getProofOfOwnership(long id) {
+        Transfer transfer;
+        try{
+            transfer = tradeDAO.find(id);
+            if(transfer == null){
+                throw new NotFoundException("Couldn't find given transfer");
+            }
+        }catch (Exception e){
+            throw new NotFoundException("Couldn't find given transfer");
+        }
+
+        //TODO: Permissions for Bill Administrators etc to get ownership
+        if(!Objects.equals(transfer.getOwnerToTransferTo().getId(), ((User) currentUser).getId()) ||
+                !Objects.equals(transfer.getCurrentOwner().getId(), ((User) currentUser).getId())){
+            throw new NotAuthorizedException("You are not authorized to destroy this vehicle");
+        }
+
+        return new File(transfer.getProofOfOwnership());
     }
 
     public void setCurrentUser(ESUser currentUser) {

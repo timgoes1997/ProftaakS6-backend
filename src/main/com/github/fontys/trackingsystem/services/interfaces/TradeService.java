@@ -6,6 +6,7 @@ import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
@@ -33,4 +34,6 @@ public interface TradeService {
     List<Transfer> getTransfersVehicle(long id);
 
     String generateTradeToken();
+
+    File getProofOfOwnership(long id);
 }
