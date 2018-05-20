@@ -49,15 +49,15 @@ public class PersistenceHelper {
         entityManager.getTransaction().begin();
         entityManager.createQuery("DELETE FROM ACCOUNT");
         entityManager.createQuery("DELETE FROM BILL");
-        entityManager.createQuery("UPDATE TRACKED_VEHICLE SET REGISTERED_VEHICLE = null");
-        entityManager.createQuery("UPDATE TRACKED_VEHICLE SET LAST_LOCATION = null");
-        entityManager.createQuery("UPDATE TRACKED_VEHICLE SET HARDWARE = null");
-        entityManager.createQuery("UPDATE TRANSFER SET CURRENT_OWNER_ID = null");
-        entityManager.createQuery("UPDATE TRANSFER SET TRANSFER_OWNER_ID = null");
-        entityManager.createQuery("UPDATE TRANSFER SET REGISTERED_VEHICLE_ID = null");
+        entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET REGISTERED_VEHICLE = null");
+        entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET LAST_LOCATION = null");
+        entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET HARDWARE = null");
+        entityManager.createNativeQuery("UPDATE TRANSFER SET CURRENT_OWNER_ID = null");
+        entityManager.createNativeQuery("UPDATE TRANSFER SET TRANSFER_OWNER_ID = null");
+        entityManager.createNativeQuery("UPDATE TRANSFER SET REGISTERED_VEHICLE_ID = null");
         entityManager.createQuery("DELETE FROM REGISTERED_VEHICLE");
-        entityManager.createQuery("DELETE FROM TRACKEDVEHICLE_LOCATIONS");
         entityManager.createQuery("DELETE FROM TRACKED_VEHICLE");
+        //entityManager.createQuery("DELETE FROM TRACKEDVEHICLE_LOCATIONS");
         entityManager.createQuery("DELETE FROM CUSTOMER");
         entityManager.createQuery("DELETE FROM HARDWARE");
         entityManager.createQuery("DELETE FROM VEHICLE");
@@ -69,6 +69,7 @@ public class PersistenceHelper {
     }
 
     public static void generateDummyData(){
+        entityManager.getTransaction().begin();
         DummyDataGenerator dataGenerator = new DummyDataGenerator();
         dataGenerator.setAccountDAO(getAccountDAO());
         dataGenerator.setBillDAO(getBillDAO());
@@ -77,6 +78,7 @@ public class PersistenceHelper {
         dataGenerator.setVehicleDAO(getVehicleDAO());
         dataGenerator.setEm(entityManager);
         dataGenerator.init();
+        entityManager.getTransaction().commit();
     }
 
     public static AccountDAO getAccountDAO(){
@@ -146,10 +148,9 @@ public class PersistenceHelper {
     public static TradeServiceImpl getTradeService(){
         if(tradeServiceImpl != null) return tradeServiceImpl;
         tradeServiceImpl = new TradeServiceImpl();
-        tradeServiceImpl.setUserDAO(userDAO);
-        tradeServiceImpl.setRegisteredVehicleDAO(registeredVehicleDAO);
-        tradeServiceImpl.setTradeDAO(tradeDAO);
-
+        tradeServiceImpl.setUserDAO(getUserDAO());
+        tradeServiceImpl.setRegisteredVehicleDAO(getRegisteredVehicleDAO());
+        tradeServiceImpl.setTradeDAO(getTradeDAO());
         tradeServiceImpl.setFileService(getFileService());
         tradeServiceImpl.setEmailTradeService(new MockEmailTradeService());
         tradeServiceImpl.setAuthService(getAuthService());
