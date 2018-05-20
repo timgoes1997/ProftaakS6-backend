@@ -20,10 +20,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.NotAllowedException;
-import javax.ws.rs.NotFoundException;
+import javax.ws.rs.*;
 import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
@@ -60,15 +57,19 @@ public class TradeServiceImpl implements TradeService {
     private Logger logger;
 
     @Override
-    public Transfer createTransfer(long vehicleId, String email) {
+    public Transfer createTransfer(String license, String email) {
         RegisteredVehicle registeredVehicle;
         try {
-            registeredVehicle = registeredVehicleDAO.find(vehicleId);
+            registeredVehicle = registeredVehicleDAO.findByLicense(license);
             if (registeredVehicle == null) {
                 throw new NotFoundException("There are no vehicles for given id");
             }
         } catch (Exception e) {
             throw new NotFoundException("There are no vehicles for given id");
+        }
+
+        if(registeredVehicle.getCustomer().getId() != ((User)currentUser).getId()){
+            throw new NotAuthorizedException("You don't own the given vehicle");
         }
 
         //Check for transfers that are still in progress

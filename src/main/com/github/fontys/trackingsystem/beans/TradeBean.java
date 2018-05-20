@@ -116,9 +116,9 @@ public class TradeBean {
     @Produces(MediaType.APPLICATION_JSON)
     @EasySecurity(requiresUser = true)
     @Path("/create")
-    public Transfer createTransfer(@FormParam("id") long vehicleId,
+    public Transfer createTransfer(@FormParam("license") String license,
                                    @FormParam("email") String email) {
-        return tradeService.createTransfer(vehicleId, email);
+        return tradeService.createTransfer(license, email);
     }
 
     @POST

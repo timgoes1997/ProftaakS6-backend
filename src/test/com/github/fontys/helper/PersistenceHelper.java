@@ -47,24 +47,24 @@ public class PersistenceHelper {
 
     public static void cleanDataBase(){
         entityManager.getTransaction().begin();
-        entityManager.createQuery("DELETE FROM ACCOUNT");
-        entityManager.createQuery("DELETE FROM BILL");
-        entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET REGISTERED_VEHICLE = null");
-        entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET LAST_LOCATION = null");
-        entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET HARDWARE = null");
-        entityManager.createNativeQuery("UPDATE TRANSFER SET CURRENT_OWNER_ID = null");
-        entityManager.createNativeQuery("UPDATE TRANSFER SET TRANSFER_OWNER_ID = null");
-        entityManager.createNativeQuery("UPDATE TRANSFER SET REGISTERED_VEHICLE_ID = null");
-        entityManager.createQuery("DELETE FROM REGISTERED_VEHICLE");
-        entityManager.createQuery("DELETE FROM TRACKED_VEHICLE");
+        entityManager.createQuery("DELETE FROM ACCOUNT").executeUpdate();
+        entityManager.createQuery("DELETE FROM BILL").executeUpdate();
+        entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET REGISTERED_VEHICLE = null").executeUpdate();
+        entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET LAST_LOCATION = null").executeUpdate();
+        entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET HARDWARE = null").executeUpdate();
+        entityManager.createNativeQuery("UPDATE TRANSFER SET CURRENT_OWNER_ID = null").executeUpdate();
+        entityManager.createNativeQuery("UPDATE TRANSFER SET TRANSFER_OWNER_ID = null").executeUpdate();
+        entityManager.createNativeQuery("UPDATE TRANSFER SET REGISTERED_VEHICLE_ID = null").executeUpdate();
+        entityManager.createQuery("DELETE FROM REGISTERED_VEHICLE").executeUpdate();
+        entityManager.createQuery("DELETE FROM TRACKED_VEHICLE").executeUpdate();
         //entityManager.createQuery("DELETE FROM TRACKEDVEHICLE_LOCATIONS");
-        entityManager.createQuery("DELETE FROM CUSTOMER");
-        entityManager.createQuery("DELETE FROM HARDWARE");
-        entityManager.createQuery("DELETE FROM VEHICLE");
-        entityManager.createQuery("DELETE FROM TRACKING_LOCATION");
-        entityManager.createQuery("DELETE FROM TRANSFER");
-        entityManager.createQuery("DELETE FROM RATE");
-        entityManager.createQuery("DELETE FROM REGION");
+        entityManager.createQuery("DELETE FROM CUSTOMER").executeUpdate();
+        entityManager.createQuery("DELETE FROM HARDWARE").executeUpdate();
+        entityManager.createQuery("DELETE FROM VEHICLE").executeUpdate();
+        entityManager.createQuery("DELETE FROM TRACKING_LOCATION").executeUpdate();
+        entityManager.createQuery("DELETE FROM TRANSFER").executeUpdate();
+        entityManager.createQuery("DELETE FROM RATE").executeUpdate();
+        entityManager.createQuery("DELETE FROM REGION").executeUpdate();
         entityManager.getTransaction().commit();
     }
 

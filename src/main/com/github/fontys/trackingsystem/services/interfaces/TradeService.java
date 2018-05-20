@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TradeService {
     Transfer getTransfer(long id);
-    Transfer createTransfer(long vehicleId, String email);
+    Transfer createTransfer(String license, String email);
     Transfer acceptTokenAlreadyLoggedIn(String token);
     Transfer acceptTokenLogin(String token, String email, String password, HttpServletRequest req);
     Transfer acceptTokenRegister(String token, String name, String address, String residency, String email, String username, String password, HttpServletRequest req);
