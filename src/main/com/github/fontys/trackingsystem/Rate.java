@@ -1,7 +1,5 @@
 package com.github.fontys.trackingsystem;
 
-
-import com.github.fontys.trackingsystem.payment.Currency;
 import com.github.fontys.trackingsystem.region.Region;
 
 import javax.persistence.*;

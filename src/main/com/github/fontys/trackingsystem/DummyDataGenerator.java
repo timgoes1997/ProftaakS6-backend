@@ -2,7 +2,6 @@ package com.github.fontys.trackingsystem;
 
 import com.github.fontys.trackingsystem.dao.interfaces.*;
 import com.github.fontys.trackingsystem.payment.Bill;
-import com.github.fontys.trackingsystem.payment.Currency;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.tracking.Hardware;
 import com.github.fontys.trackingsystem.tracking.Location;
@@ -100,7 +99,6 @@ public class DummyDataGenerator {
 
             Bill b = new Bill(
                     rv,
-                    Currency.EUR,
                     new BigDecimal(i * 200),
                     new BigDecimal(i * 400),
                     startdate,

@@ -77,7 +77,7 @@ public class Bill implements Serializable {
     public Bill() {
     }
 
-    public Bill(RegisteredVehicle registeredVehicle, Currency currency, BigDecimal price, BigDecimal alreadyPaid, Calendar startDate, Calendar endDate, PaymentStatus paymentStatus, double mileage) {
+    public Bill(RegisteredVehicle registeredVehicle, BigDecimal price, BigDecimal alreadyPaid, Calendar startDate, Calendar endDate, PaymentStatus paymentStatus, double mileage) {
         this.registeredVehicle = registeredVehicle;
         this.price = price;
         this.alreadyPaid = alreadyPaid;
