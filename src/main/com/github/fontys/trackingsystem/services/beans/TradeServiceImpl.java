@@ -84,16 +84,14 @@ public class TradeServiceImpl implements TradeService {
             }
         }
 
-
-        User user = userDAO.find(((User) currentUser).getId());
-        Transfer transfer = new Transfer(user, registeredVehicle, generateTradeToken());
-        tradeDAO.create(transfer);
         try {
+            Transfer transfer = new Transfer((User) currentUser, registeredVehicle, generateTradeToken());
+            tradeDAO.create(transfer);
             emailTradeService.sendTransferMail(transfer, email);
             return transfer;
         } catch (Exception e) {
             logger.severe(e.getMessage());
-            throw new InternalServerErrorException("Either couldn't create transfer or send a e-mail to given email adress");
+            throw new NotFoundException("Given e-mail couldn't be found!");
         }
     }
 
