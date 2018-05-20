@@ -1,8 +1,17 @@
 package com.github.fontys.helper;
 
+import com.github.fontys.mock.MockEmailRecoveryService;
+import com.github.fontys.mock.MockEmailTradeService;
+import com.github.fontys.mock.MockEmailVerificationService;
 import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.dao.*;
 import com.github.fontys.trackingsystem.dao.interfaces.*;
+import com.github.fontys.trackingsystem.services.beans.AuthServiceImpl;
+import com.github.fontys.trackingsystem.services.beans.TradeServiceImpl;
+import com.github.fontys.trackingsystem.services.beans.UserServiceImpl;
+import com.github.fontys.trackingsystem.services.email.EmailTradeServiceImpl;
+import com.github.fontys.trackingsystem.services.file.FileServiceImpl;
+import com.github.fontys.trackingsystem.services.interfaces.AuthService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -10,6 +19,7 @@ import javax.persistence.Persistence;
 
 public class PersistenceHelper {
 
+    //DAO
     private static AccountDAO accountDAO;
     private static BillDAO billDAO;
     private static LocationDAO locationDAO;
@@ -18,6 +28,11 @@ public class PersistenceHelper {
     private static TradeDAO tradeDAO;
     private static UserDAO userDAO;
     private static VehicleDAO vehicleDAO;
+
+    //Services
+    private static TradeServiceImpl tradeServiceImpl;
+    private static AuthServiceImpl authServiceImpl;
+    private static UserServiceImpl userServiceImpl;
 
 
 
@@ -126,5 +141,50 @@ public class PersistenceHelper {
         vehicleDAOImpl.setEntityManager(entityManager);
         vehicleDAO = vehicleDAOImpl;
         return vehicleDAO;
+    }
+
+    public static TradeServiceImpl getTradeService(){
+        if(tradeServiceImpl != null) return tradeServiceImpl;
+        tradeServiceImpl = new TradeServiceImpl();
+        tradeServiceImpl.setUserDAO(userDAO);
+        tradeServiceImpl.setRegisteredVehicleDAO(registeredVehicleDAO);
+        tradeServiceImpl.setTradeDAO(tradeDAO);
+
+        tradeServiceImpl.setFileService(getFileService());
+        tradeServiceImpl.setEmailTradeService(new MockEmailTradeService());
+        tradeServiceImpl.setAuthService(getAuthService());
+        tradeServiceImpl.setUserService(getUserService());
+
+        tradeServiceImpl.setLogger();
+        return tradeServiceImpl;
+    }
+
+    private static UserServiceImpl getUserService(){
+        if(userServiceImpl != null) return userServiceImpl;
+        userServiceImpl = new UserServiceImpl();
+        userServiceImpl.setAccountDAO(getAccountDAO());
+        userServiceImpl.setEmailRecoveryService(new MockEmailRecoveryService());
+        userServiceImpl.setEmailVerificationService(new MockEmailVerificationService());
+        userServiceImpl.setUserDAO(getUserDAO());
+        userServiceImpl.setLogger();
+        return userServiceImpl;
+    }
+
+    private static AuthServiceImpl getAuthService(){
+        if(authServiceImpl != null) return authServiceImpl;
+        authServiceImpl = new AuthServiceImpl();
+        authServiceImpl.setAccountDAO(accountDAO);
+        authServiceImpl.setUserDAO(userDAO);
+        return authServiceImpl;
+    }
+
+    public static FileServiceImpl getFileService(){
+        FileServiceImpl fileService = new FileServiceImpl();
+        fileService.setLogger();
+        return fileService;
+    }
+
+    public static EmailTradeServiceImpl getEmailTradeService(){
+        return new EmailTradeServiceImpl();
     }
 }

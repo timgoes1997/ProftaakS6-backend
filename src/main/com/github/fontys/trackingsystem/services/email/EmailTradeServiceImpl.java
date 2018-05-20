@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.services.email;
 
+import com.github.fontys.trackingsystem.services.email.interfaces.EmailTradeService;
 import com.github.fontys.trackingsystem.transfer.Transfer;
 
 import javax.annotation.Resource;
@@ -15,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class EmailTradeService {
+public class EmailTradeServiceImpl implements EmailTradeService{
 
     @Inject
     private Logger logger;
@@ -23,6 +24,7 @@ public class EmailTradeService {
     @Resource(name = "mail/kwetter")
     private Session session;
 
+    @Override
     public void sendTransferMail(Transfer transfer, String email) {
         try {
             Message message = new MimeMessage(session);
@@ -62,6 +64,7 @@ public class EmailTradeService {
         }
     }
 
+    @Override
     public void sendStatusUpdate(Transfer transfer){
         if(transfer.getCurrentOwner() == null || transfer.getOwnerToTransferTo() == null){
             throw new NotFoundException("No owners found");

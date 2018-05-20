@@ -5,8 +5,8 @@ import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.TradeDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
-import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
-import com.github.fontys.trackingsystem.services.email.EmailTradeService;
+import com.github.fontys.trackingsystem.services.email.EmailTradeServiceImpl;
+import com.github.fontys.trackingsystem.services.email.interfaces.EmailTradeService;
 import com.github.fontys.trackingsystem.services.interfaces.AuthService;
 import com.github.fontys.trackingsystem.services.interfaces.FileService;
 import com.github.fontys.trackingsystem.services.interfaces.TradeService;
@@ -95,7 +95,6 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     public Transfer acceptTokenAlreadyLoggedIn(String token) {
-        authService.isLoggedIn();
         return accept((User) currentUser, token);
     }
 
@@ -282,5 +281,41 @@ public class TradeServiceImpl implements TradeService {
         } else {
             return token;
         }
+    }
+
+    public void setCurrentUser(ESUser currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void setTradeDAO(TradeDAO tradeDAO) {
+        this.tradeDAO = tradeDAO;
+    }
+
+    public void setRegisteredVehicleDAO(RegisteredVehicleDAO registeredVehicleDAO) {
+        this.registeredVehicleDAO = registeredVehicleDAO;
+    }
+
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
+
+    public void setEmailTradeService(EmailTradeService emailTradeService) {
+        this.emailTradeService = emailTradeService;
+    }
+
+    public void setAuthService(AuthService authService) {
+        this.authService = authService;
+    }
+
+    public void setLogger() {
+        this.logger = Logger.getLogger(TradeServiceImpl.class.getName());
     }
 }

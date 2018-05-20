@@ -1,6 +1,9 @@
 package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.helper.PersistenceHelper;
+import com.github.fontys.trackingsystem.transfer.Transfer;
+import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.trackingsystem.user.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +28,9 @@ public class TradeDAOImplTest {
     @Test
     public void create(){
         PersistenceHelper.generateDummyData();
-        
+        Account acc = PersistenceHelper.getAccountDAO().findByEmail("admin@Admin.com");
+        User user = PersistenceHelper.getUserDAO().findByAccount(acc);
+
+        //Transfer transfer = new Transfer(user, );
     }
 }
