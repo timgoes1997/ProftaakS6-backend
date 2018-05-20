@@ -20,6 +20,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.io.InputStream;
 import java.util.List;
@@ -83,7 +84,9 @@ public class TradeServiceImpl implements TradeService {
             }
         }
 
-        Transfer transfer = new Transfer((User) currentUser, registeredVehicle, generateTradeToken());
+
+        User user = userDAO.find(((User) currentUser).getId());
+        Transfer transfer = new Transfer(user, registeredVehicle, generateTradeToken());
         tradeDAO.create(transfer);
         try {
             emailTradeService.sendTransferMail(transfer, email);
@@ -119,7 +122,8 @@ public class TradeServiceImpl implements TradeService {
         if (transfer.getOwnerToTransferTo() != null) {
             throw new NotAllowedException("Token has already been used by a user");
         }
-        transfer.setOwnerToTransferTo(user);
+        User persistent = userDAO.find(user.getId());
+        transfer.setOwnerToTransferTo(persistent);
         tradeDAO.edit(transfer);
         return transfer;
     }

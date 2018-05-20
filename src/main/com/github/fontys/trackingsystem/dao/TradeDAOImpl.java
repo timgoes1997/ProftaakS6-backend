@@ -5,11 +5,13 @@ import com.github.fontys.trackingsystem.transfer.Transfer;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+@Stateless
 public class TradeDAOImpl implements TradeDAO {
 
     @PersistenceContext(name="Proftaak")

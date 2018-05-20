@@ -76,6 +76,7 @@ public class PersistenceHelper {
         dataGenerator.setRegisteredVehicleDAO(getRegisteredVehicleDAO());
         dataGenerator.setUserDAO(getUserDAO());
         dataGenerator.setVehicleDAO(getVehicleDAO());
+        dataGenerator.setTradeDAO(getTradeDAO());
         dataGenerator.setEm(entityManager);
         dataGenerator.init();
         entityManager.getTransaction().commit();

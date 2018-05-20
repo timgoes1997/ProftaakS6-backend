@@ -181,4 +181,8 @@ public class DummyDataGenerator {
     public void setBillDAO(BillDAO billDAO) {
         this.billDAO = billDAO;
     }
+
+    public void setTradeDAO(TradeDAO tradeDAO) {
+        this.tradeDAO = tradeDAO;
+    }
 }
