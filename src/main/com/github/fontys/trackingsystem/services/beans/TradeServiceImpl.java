@@ -71,7 +71,7 @@ public class TradeServiceImpl implements TradeService {
         if (registeredVehicle.getCustomer().getId() != ((User) currentUser).getId()) {
             throw new NotAuthorizedException("You don't own the given vehicle");
         }
-        
+
         //Check for transfers that are still in progress
         List<Transfer> transfers = tradeDAO.findForVehicle(registeredVehicle);
         for (Transfer t : transfers) {

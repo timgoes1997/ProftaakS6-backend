@@ -7,6 +7,7 @@ import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.tracking.Hardware;
 import com.github.fontys.trackingsystem.tracking.Location;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
+import com.github.fontys.trackingsystem.transfer.Transfer;
 import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
@@ -41,6 +42,9 @@ public class DummyDataGenerator {
     private AccountDAO accountDAO;
 
     @Inject
+    private TradeDAO tradeDAO;
+
+    @Inject
     private RegisteredVehicleDAO registeredVehicleDAO;
 
     @Inject
@@ -58,6 +62,8 @@ public class DummyDataGenerator {
         admin.setVerified(true);
         adminAcc.setUser(admin);
         accountDAO.create(adminAcc);
+
+        generateSimpleTransfer();
 
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
 
@@ -114,6 +120,38 @@ public class DummyDataGenerator {
             em.persist(tv);
             em.persist(u);
         }
+    }
+
+    private void generateSimpleTransfer() {
+        Date date = new Date();
+        User transferFrom = new User("transferFrom", "trans", "trans", Role.BILL_ADMINISTRATOR);
+        Account transferFromAcc = new Account("transfer@from.com", "transferFrom", "transferFrom");
+        transferFrom.setVerified(true);
+        transferFromAcc.setUser(transferFrom);
+        accountDAO.create(transferFromAcc);
+
+        User transferTo = new User("transferTo", "trans", "trans", Role.BILL_ADMINISTRATOR);
+        Account transferToAcc = new Account("transfer@to.com", "transferTo", "transferTo");
+        transferTo.setVerified(true);
+        transferToAcc.setUser(transferTo);
+        accountDAO.create(transferToAcc);
+
+        Vehicle trans = new Vehicle(
+                String.format("Brand trans"),
+                date,
+                String.format("Model trans"),
+                String.format("Edition trans"),
+                FuelType.ELECTRIC,
+                EnergyLabel.A);
+
+        RegisteredVehicle rv = new RegisteredVehicle(transferFrom,
+                String.format("XXX-FROM"),
+                trans,
+                String.format("Proof trans"));
+        registeredVehicleDAO.create(rv);
+
+        Transfer transfer = new Transfer(transferFrom, rv, "CXCXCXCXCXCX");
+        tradeDAO.create(transfer);
     }
 
     public static int getAmountToGenerate() {
