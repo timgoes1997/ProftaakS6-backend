@@ -18,13 +18,17 @@ public class FileServiceImpl implements FileService {
     @Override
     public String writeToFile(InputStream inputStream, FormDataContentDisposition fileDetails) {
         File file = getNewFile(getUploadFilePath(), checkForExtenstion(fileDetails));
-        writeToFile(inputStream, fileDetails);
+        writeToFile(inputStream, file);
         return file.getAbsolutePath();
     }
 
     @Override
     public String getUploadFilePath() {
-        return System.getProperty("user.dir") + "//files//";
+        File f = new File(System.getProperty("user.dir") + "//files//");
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+        return f.getAbsolutePath() + "\\";
     }
 
     @Override

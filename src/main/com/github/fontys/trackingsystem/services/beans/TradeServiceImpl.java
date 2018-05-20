@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -129,7 +130,8 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public Transfer acceptTransferNewOwner(long id) {
         Transfer transfer = getTransfer(id);
-        if (transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner) {
+        if (transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner
+                && Objects.equals(transfer.getOwnerToTransferTo().getId(), ((User) currentUser).getId())) {
             transfer.acceptedNewOwner();
             tradeDAO.edit(transfer);
             return transfer;
@@ -141,9 +143,10 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public Transfer declineTransferNewOwner(long id) {
         Transfer transfer = getTransfer(id);
-        if (transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
+        if ((transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
                 transfer.getStatus() == TransferStatus.AcceptedCurrentOwner ||
-                transfer.getStatus() == TransferStatus.AcceptedNewOwner) {
+                transfer.getStatus() == TransferStatus.AcceptedNewOwner) &&
+                Objects.equals(transfer.getOwnerToTransferTo().getId(), ((User) currentUser).getId())) {
             transfer.declineNewOwner();
             tradeDAO.edit(transfer);
             return transfer;
@@ -155,7 +158,8 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public Transfer acceptTransferCurrentOwner(long id) {
         Transfer transfer = getTransfer(id);
-        if (transfer.getStatus() == TransferStatus.AcceptedNewOwner) {
+        if (transfer.getStatus() == TransferStatus.AcceptedNewOwner
+                && Objects.equals(transfer.getCurrentOwner().getId(), ((User) currentUser).getId())) {
             transfer.acceptedCurrentOwner();
             tradeDAO.edit(transfer);
             return transfer;
@@ -167,10 +171,11 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public Transfer declineTransferCurrentOwner(long id) {
         Transfer transfer = getTransfer(id);
-        if (transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
+        if ((transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
                 transfer.getStatus() == TransferStatus.AcceptedCurrentOwner ||
                 transfer.getStatus() == TransferStatus.AcceptedNewOwner ||
-                transfer.getStatus() == TransferStatus.ConfirmedOwnership) {
+                transfer.getStatus() == TransferStatus.ConfirmedOwnership) &&
+                Objects.equals(transfer.getCurrentOwner().getId(), ((User) currentUser).getId())) {
             transfer.declineCurrentOwner();
             tradeDAO.edit(transfer);
             return transfer;
@@ -182,7 +187,8 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public Transfer confirmOwnership(long id, InputStream uploadedInputStream, FormDataContentDisposition fileDetails) {
         Transfer transfer = getTransfer(id);
-        if (transfer.getStatus() == TransferStatus.AcceptedCurrentOwner) {
+        if (transfer.getStatus() == TransferStatus.AcceptedCurrentOwner
+                && Objects.equals(transfer.getOwnerToTransferTo().getId(), ((User) currentUser).getId())) {
             transfer.confirmOwnerShip(fileService.writeToFile(uploadedInputStream, fileDetails));
             tradeDAO.edit(transfer);
             return transfer;
@@ -199,7 +205,8 @@ public class TradeServiceImpl implements TradeService {
             throw new NotFoundException("There are no vehicles for transfer with given id");
         }
 
-        if (transfer.getStatus() == TransferStatus.ConfirmedOwnership) {
+        if (transfer.getStatus() == TransferStatus.ConfirmedOwnership
+                && Objects.equals(transfer.getCurrentOwner().getId(), ((User) currentUser).getId())) {
             registeredVehicle.setCustomer(transfer.getOwnerToTransferTo());
             registeredVehicle.setProofOfOwnership(transfer.getProofOfOwnership());
             registeredVehicleDAO.edit(registeredVehicle);

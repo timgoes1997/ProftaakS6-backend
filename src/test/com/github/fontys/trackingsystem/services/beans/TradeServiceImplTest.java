@@ -3,15 +3,19 @@ package com.github.fontys.trackingsystem.services.beans;
 import com.github.fontys.helper.PersistenceHelper;
 import com.github.fontys.trackingsystem.services.interfaces.TradeService;
 import com.github.fontys.trackingsystem.transfer.Transfer;
+import com.github.fontys.trackingsystem.transfer.TransferStatus;
 import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
 
+import java.io.InputStream;
+import java.text.ParseException;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -47,12 +51,62 @@ public class TradeServiceImplTest {
         TradeServiceImpl tradeService = PersistenceHelper.getTradeService();
         tradeService.setCurrentUser(user);
 
+        //User createsTransfer
         String licensePlate = registeredVehicle.getLicensePlate();
         PersistenceHelper.getEntityManager().getTransaction().begin();
         Transfer transfer = tradeService.createTransfer(registeredVehicle.getLicensePlate(),acc.getEmail());
         PersistenceHelper.getEntityManager().getTransaction().commit();
 
+        //Transfer is still waiting for response new owner after the user has accepted it's token.
         assertNotNull(transfer);
+        assertEquals(transfer.getStatus(), TransferStatus.WaitingForResponseNewOwner);
 
+        //The user which received the email accepts the transfer with the token.
+        tradeService.setCurrentUser(user2);
+        PersistenceHelper.getEntityManager().getTransaction().begin();
+        tradeService.accept(user2, transfer.getTransferToken());
+        PersistenceHelper.getEntityManager().getTransaction().commit();
+
+        assertEquals(transfer.getOwnerToTransferTo().getId(), user2.getId());
+
+        //The user which has accepted the transfer by owner now confirms it to the other user.
+        PersistenceHelper.getEntityManager().getTransaction().begin();
+        tradeService.acceptTransferNewOwner(transfer.getId());
+        PersistenceHelper.getEntityManager().getTransaction().commit();
+
+        //The new user has accepted the transfer status and the transfer status has been set to AcceptedNewOwner
+        assertEquals(transfer.getStatus(), TransferStatus.AcceptedNewOwner);
+
+        //Switch back to user and accept the trade on it's end.
+        tradeService.setCurrentUser(user);
+        PersistenceHelper.getEntityManager().getTransaction().begin();
+        tradeService.acceptTransferCurrentOwner(transfer.getId());
+        PersistenceHelper.getEntityManager().getTransaction().commit();
+
+        //Status has been set to AcceptedCurrentOwner
+        assertEquals(transfer.getStatus(), TransferStatus.AcceptedCurrentOwner);
+
+        //Switch back to NewOwner to confirm ownership of transfer and upload a file.
+        PersistenceHelper.getEntityManager().getTransaction().begin();
+        tradeService.setCurrentUser(user2);
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream input = classLoader.getResourceAsStream("test.png");
+        try {
+            FormDataContentDisposition formDataContentDisposition = new FormDataContentDisposition("form-data; name=\"file\"; filename=\"test.png\"");
+            tradeService.confirmOwnership(transfer.getId(), input, formDataContentDisposition);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        PersistenceHelper.getEntityManager().getTransaction().commit();
+
+        assertEquals(transfer.getStatus(), TransferStatus.ConfirmedOwnership);
+
+        //Switch back to user to complete the transfer
+        tradeService.setCurrentUser(user);
+        PersistenceHelper.getEntityManager().getTransaction().begin();
+        tradeService.completeTransfer(transfer.getId());
+        PersistenceHelper.getEntityManager().getTransaction().commit();
+
+        assertEquals(transfer.getStatus(), TransferStatus.Completed);
     }
 }
