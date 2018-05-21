@@ -15,7 +15,9 @@ import java.util.List;
         @NamedQuery(name = TrackedVehicle.FIND_TRACKEDVEHICLEBYCUSTOMERVEHICLEID,
                 query = "SELECT tv FROM TRACKED_VEHICLE tv WHERE tv.registeredVehicle.id=:id"),
         @NamedQuery(name = TrackedVehicle.FIND_LASTLOCATIONBYTRACKEDVEHICLEID,
-        query = "SELECT tv.lastLocation FROM TRACKED_VEHICLE tv WHERE tv.id=:id"),
+                query = "SELECT tv.lastLocation FROM TRACKED_VEHICLE tv WHERE tv.id=:id"),
+        @NamedQuery(name=TrackedVehicle.FIND_LASTMONTHSLOCATIONSBYREGISTEREDVEHICLEID,
+                query = "SELECT tv.locations FROM TRACKED_VEHICLE tv, TRACKING_LOCATION tl WHERE tv.registeredVehicle.id =:id AND tl.time BETWEEN :startdate AND :enddate"),
 })
 
 public class TrackedVehicle implements Serializable {
@@ -24,6 +26,7 @@ public class TrackedVehicle implements Serializable {
     public static final String FIND_LOCATIONSBYREGISTEREDVEHICLEID = "TrackedVehicle.findLocationsByRegisteredVehicleID";
     public static final String FIND_TRACKEDVEHICLEBYCUSTOMERVEHICLEID = "TrackedVehicle.findTrackedVehicleByCustomerVehicleID";
     public static final String FIND_LASTLOCATIONBYTRACKEDVEHICLEID = "TrackedVehicle.findLastLocationByTrackedVehicleID";
+    public static final String FIND_LASTMONTHSLOCATIONSBYREGISTEREDVEHICLEID = "TrackedVehicle.findLastMonthsLocationsByRegisteredVehicleID";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

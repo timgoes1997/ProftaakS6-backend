@@ -64,4 +64,12 @@ public class TrackedVehicleDAOImpl implements TrackedVehicleDAO {
         query.setParameter("id", trackedVehicleID);
         return query.getSingleResult();
     }
+
+    @Override
+    public List<Location> findLastMonthsLocationsByRegisteredVehicleID(long registeredVehicleID) {
+        TypedQuery<Location> query =
+                em.createNamedQuery(TrackedVehicle.FIND_LASTMONTHSLOCATIONSBYREGISTEREDVEHICLEID, Location.class);
+        query.setParameter("id", registeredVehicleID);
+        return query.getResultList();
+    }
 }

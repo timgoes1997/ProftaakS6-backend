@@ -3,7 +3,6 @@ package com.github.fontys.trackingsystem.dao.interfaces;
 import com.github.fontys.trackingsystem.tracking.Location;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 
-import javax.sound.midi.Track;
 import java.util.List;
 
 public interface TrackedVehicleDAO {
@@ -23,4 +22,6 @@ public interface TrackedVehicleDAO {
     List<Location> findLocationsByRegisteredVehicleID(long customerVehicleID);
 
     Location findLastLocationByTrackedVehicleID(long trackedVehicleID);
+
+    List<Location> findLastMonthsLocationsByRegisteredVehicleID(long registeredVehicleID);
 }

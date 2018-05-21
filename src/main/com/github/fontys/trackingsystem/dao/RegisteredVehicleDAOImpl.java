@@ -56,11 +56,11 @@ public class RegisteredVehicleDAOImpl implements RegisteredVehicleDAO {
     }
 
     @Override
-    public List<RegisteredVehicle> findByVehicle(long id) {
+    public RegisteredVehicle findByVehicle(long id) {
         TypedQuery<RegisteredVehicle> query =
                 em.createNamedQuery(RegisteredVehicle.FIND_BYVEHICLE, RegisteredVehicle.class);
         query.setParameter("id", id);
-        return query.getResultList();
+        return query.getSingleResult();
     }
 
     @Override

@@ -17,7 +17,7 @@ public interface RegisteredVehicleDAO {
 
     List<RegisteredVehicle> findByUser(long id);
 
-    List<RegisteredVehicle> findByVehicle(long id);
+    RegisteredVehicle findByVehicle(long id);
 
     List<RegisteredVehicle> getAll();
 }

@@ -5,10 +5,7 @@ import com.github.fontys.trackingsystem.services.interfaces.GenerationService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -19,10 +16,10 @@ public class GenerationBean {
     @Inject
     GenerationService generationService;
 
-    @GET
+    @POST
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("/{vehicleId}")
-    public List<Bill> generateBillsForVehicle(@PathParam("vehicleId") int vehicleId) {
-        return generationService.generateBillsForVehicle(vehicleId);
+    @Path("/bill/{registeredvehicleid}")
+    public List<Bill> generateBillsForVehicle(@PathParam("registeredvehicleid") long registeredVehicleId) {
+        return generationService.generateBillsForVehicle(registeredVehicleId);
     }
 }
