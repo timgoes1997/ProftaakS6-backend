@@ -4,11 +4,13 @@ import com.github.fontys.trackingsystem.dao.interfaces.TrackedVehicleDAO;
 import com.github.fontys.trackingsystem.tracking.Location;
 import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+@Stateless
 public class TrackedVehicleDAOImpl implements TrackedVehicleDAO {
 
     @PersistenceContext(name = "Proftaak")
@@ -39,6 +41,11 @@ public class TrackedVehicleDAOImpl implements TrackedVehicleDAO {
         TypedQuery<TrackedVehicle> query = em.createNamedQuery(TrackedVehicle.FIND_TRACKEDVEHICLEBYCUSTOMERVEHICLEID, TrackedVehicle.class);
         query.setParameter("id", id);
         return query.getSingleResult();
+    }
+
+    @Override
+    public void addNewLocationByTrackedVehicle(long trackedVehicleID) {
+
     }
 
     @Override
