@@ -1,5 +1,7 @@
 package com.github.fontys.trackingsystem.services.beans;
 
+import com.github.fontys.security.annotations.inject.CurrentESUser;
+import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.services.email.EmailRecoveryServiceImpl;
@@ -32,6 +34,10 @@ public class UserServiceImpl implements UserService {
 
     @Inject
     private EmailRecoveryService emailRecoveryService;
+
+    @Inject
+    @CurrentESUser
+    private ESUser currentUser;
 
     @Inject
     private Logger logger;
@@ -113,7 +119,7 @@ public class UserServiceImpl implements UserService {
             accountDAO.create(account);
             Account userAccount = accountDAO.findByEmail(account.getEmail());
             User createdUser = userDAO.findByAccount(userAccount);
-            if(userAccount == null){
+            if (userAccount == null) {
                 throw new InternalServerErrorException("Server had a problem while creating a user account");
             }
             createdUser.setVerifyLink(emailVerificationService.generateVerificationLink(createdUser));
@@ -137,7 +143,7 @@ public class UserServiceImpl implements UserService {
             accountDAO.edit(acc);
             emailRecoveryService.sendRecoveryMail(acc);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new InternalServerErrorException("Couldn't send recovery mail, please contact a administrator");
         }
     }
@@ -163,6 +169,17 @@ public class UserServiceImpl implements UserService {
         acc.setRecoveryLink(null);
         accountDAO.edit(acc);
         return acc.getUser();
+    }
+
+    @Override
+    public User edit(String email) {
+        User user = (User) currentUser;
+        Account acc = user.getAccount();
+        acc.setEmail(email);
+        accountDAO.edit(acc);
+        user.setVerified(false);
+        userDAO.edit(user);
+        return user;
     }
 
     public void setAccountDAO(AccountDAO accountDAO) {

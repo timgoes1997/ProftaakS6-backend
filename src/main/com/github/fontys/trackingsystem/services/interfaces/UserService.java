@@ -13,4 +13,5 @@ public interface UserService {
     boolean recoverPassword(String email);
     boolean hasRecoveryLink(String email, String recoveryLink);
     User resetPassword(String email, String newPassword, String recoveryLink);
+    User edit(String email);
 }

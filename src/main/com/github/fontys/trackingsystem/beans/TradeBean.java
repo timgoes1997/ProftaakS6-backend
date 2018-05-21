@@ -80,6 +80,14 @@ public class TradeBean {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @EasySecurity(requiresUser = true)
+    @Path("/accept/")
+    public Transfer acceptTransfer(@FormParam("id") long transferId) {
+        return tradeService.acceptTransfer(transferId);
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @EasySecurity(requiresUser = true)
     @Path("/accept/new/")
     public Transfer acceptTransferNewOwner(@FormParam("id") long transferId) {
         return tradeService.acceptTransferNewOwner(transferId);
@@ -91,6 +99,14 @@ public class TradeBean {
     @Path("/accept/current/")
     public Transfer acceptTransferCurrentOwner(@FormParam("id") long transferId) {
         return tradeService.acceptTransferCurrentOwner(transferId);
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @EasySecurity(requiresUser = true)
+    @Path("/decline/")
+    public Transfer declineTransfer(@FormParam("id") long transferId) {
+        return tradeService.declineTransfer(transferId);
     }
 
     @POST

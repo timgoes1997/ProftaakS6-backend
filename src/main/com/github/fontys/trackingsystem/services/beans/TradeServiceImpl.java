@@ -129,8 +129,38 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
-    public Transfer acceptTransferNewOwner(long id) {
+    public Transfer acceptTransfer(long id) {
         Transfer transfer = getTransfer(id);
+        User cur = (User)currentUser;
+        if(Objects.equals(transfer.getOwnerToTransferTo().getId(), cur.getId())){
+            acceptTransferNewOwner(transfer);
+        }
+        if(Objects.equals(transfer.getCurrentOwner().getId(), cur.getId())){
+            acceptTransferCurrentOwner(transfer);
+        }
+        return transfer;
+    }
+
+    @Override
+    public Transfer declineTransfer(long id) {
+        Transfer transfer = getTransfer(id);
+        User cur = (User)currentUser;
+        if(Objects.equals(transfer.getOwnerToTransferTo().getId(), cur.getId())){
+            declineTransferNewOwner(transfer);
+        }
+        if(Objects.equals(transfer.getCurrentOwner().getId(), cur.getId())){
+            declineTransferCurrentOwner(transfer);
+        }
+        return transfer;
+    }
+
+    @Override
+    public Transfer acceptTransferNewOwner(long id) {
+        return acceptTransferNewOwner(getTransfer(id));
+    }
+
+    @Override
+    public Transfer acceptTransferNewOwner(Transfer transfer) {
         if (transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner
                 && Objects.equals(transfer.getOwnerToTransferTo().getId(), ((User) currentUser).getId())) {
             transfer.acceptedNewOwner();
@@ -143,7 +173,11 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     public Transfer declineTransferNewOwner(long id) {
-        Transfer transfer = getTransfer(id);
+        return declineTransferNewOwner(getTransfer(id));
+    }
+
+    @Override
+    public Transfer declineTransferNewOwner(Transfer transfer) {
         if ((transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
                 transfer.getStatus() == TransferStatus.AcceptedCurrentOwner ||
                 transfer.getStatus() == TransferStatus.AcceptedNewOwner) &&
@@ -158,7 +192,12 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     public Transfer acceptTransferCurrentOwner(long id) {
-        Transfer transfer = getTransfer(id);
+        return acceptTransferCurrentOwner( getTransfer(id));
+
+    }
+
+    @Override
+    public Transfer acceptTransferCurrentOwner(Transfer transfer) {
         if (transfer.getStatus() == TransferStatus.AcceptedNewOwner
                 && Objects.equals(transfer.getCurrentOwner().getId(), ((User) currentUser).getId())) {
             transfer.acceptedCurrentOwner();
@@ -171,7 +210,11 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     public Transfer declineTransferCurrentOwner(long id) {
-        Transfer transfer = getTransfer(id);
+        return declineTransferCurrentOwner(getTransfer(id));
+    }
+
+    @Override
+    public Transfer declineTransferCurrentOwner(Transfer transfer) {
         if ((transfer.getStatus() == TransferStatus.WaitingForResponseNewOwner ||
                 transfer.getStatus() == TransferStatus.AcceptedCurrentOwner ||
                 transfer.getStatus() == TransferStatus.AcceptedNewOwner ||
@@ -225,6 +268,20 @@ public class TradeServiceImpl implements TradeService {
         Transfer transfer;
         try {
             transfer = tradeDAO.find(id);
+            if (transfer == null) {
+                throw new NotFoundException("There are no transfers with given id");
+            }
+        } catch (Exception e) {
+            throw new NotFoundException("There are no transfers with given id");
+        }
+        return transfer;
+    }
+
+    @Override
+    public Transfer getTransfer(String token) {
+        Transfer transfer;
+        try {
+            transfer = tradeDAO.findByToken(token);
             if (transfer == null) {
                 throw new NotFoundException("There are no transfers with given id");
             }
