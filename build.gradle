@@ -26,6 +26,8 @@ dependencies {
     compile "org.glassfish.jersey.inject:jersey-hk2:2.26"
     compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.1'
 
+    compile files('libs/queue-library.jar')
+
     compile group: 'org.jvnet.mimepull', name: 'mimepull', version: '1.9.7'
     compile group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: '2.26'
     compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.26'
