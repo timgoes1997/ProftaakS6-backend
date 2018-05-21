@@ -1,6 +1,7 @@
 package com.github.fontys.trackingsystem.services.interfaces;
 
 import com.github.fontys.trackingsystem.transfer.Transfer;
+import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -14,10 +15,10 @@ public interface TradeService {
     Transfer getTransfer(long id);
     Transfer getTransfer(String token);
     Transfer createTransfer(String license, String email);
-    Transfer acceptTokenAlreadyLoggedIn(String token);
-    Transfer acceptTokenLogin(String token, String email, String password, HttpServletRequest req);
-    Transfer acceptTokenRegister(String token, String name, String address, String residency, String email, String username, String password, HttpServletRequest req);
-    Transfer accept(User user, String token);
+    Account acceptTokenAlreadyLoggedIn(String token);
+    Account acceptTokenLogin(String token, String email, String password, HttpServletRequest req);
+    Account acceptTokenRegister(String token, String name, String address, String residency, String email, String username, String password, HttpServletRequest req);
+    Account accept(User user, String token);
 
     Transfer acceptTransfer(long id);
     Transfer declineTransfer(long id);

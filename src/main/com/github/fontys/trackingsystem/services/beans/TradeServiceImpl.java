@@ -98,23 +98,23 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
-    public Transfer acceptTokenAlreadyLoggedIn(String token) {
+    public Account acceptTokenAlreadyLoggedIn(String token) {
         return accept((User) currentUser, token);
     }
 
     @Override
-    public Transfer acceptTokenLogin(String token, String email, String password, HttpServletRequest req) {
+    public Account acceptTokenLogin(String token, String email, String password, HttpServletRequest req) {
         Account account = authService.logon(email, password, req);
         return accept(account.getUser(), token);
     }
 
     @Override
-    public Transfer acceptTokenRegister(String token, String name, String address, String residency, String email, String username, String password, HttpServletRequest req) {
+    public Account acceptTokenRegister(String token, String name, String address, String residency, String email, String username, String password, HttpServletRequest req) {
         return accept(userService.createCustomer(name, address, residency, email, username, password), token);
     }
 
     @Override
-    public Transfer accept(User user, String token) {
+    public Account accept(User user, String token) {
         Transfer transfer = tradeDAO.findByToken(token);
         if (transfer == null) {
             throw new NotFoundException("Couldn't find a transfer with the given token");
@@ -125,7 +125,7 @@ public class TradeServiceImpl implements TradeService {
         User persistent = userDAO.find(user.getId());
         transfer.setOwnerToTransferTo(persistent);
         tradeDAO.edit(transfer);
-        return transfer;
+        return persistent.getAccount();
     }
 
     @Override
