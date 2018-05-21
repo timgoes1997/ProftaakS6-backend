@@ -28,7 +28,7 @@ public class FileServiceImpl implements FileService {
         if (!f.exists()) {
             f.mkdirs();
         }
-        return f.getAbsolutePath() + "\\";
+        return f.getAbsolutePath() + File.separator;
     }
 
     @Override
