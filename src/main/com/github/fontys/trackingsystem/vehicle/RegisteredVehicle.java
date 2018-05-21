@@ -47,7 +47,7 @@ public class RegisteredVehicle implements Serializable {
     @JoinColumn(name="OWNER_ID")
     private User customer;
 
-    @Column(name="LICENSEPLATE")
+    @Column(name="LICENSEPLATE", unique = true)
     private String licensePlate;
 
     @OneToOne(cascade = CascadeType.PERSIST)
