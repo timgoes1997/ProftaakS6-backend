@@ -4,6 +4,7 @@ import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAttribute;
 import java.io.Serializable;
 
 @Entity(name = "TRANSFER")
@@ -103,7 +104,8 @@ public class Transfer implements Serializable{
         this.status = TransferStatus.Completed;
     }
 
-    public Long getId() {
+    @XmlAttribute
+    public long getId() {
         return id;
     }
 
