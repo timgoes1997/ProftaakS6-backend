@@ -177,7 +177,7 @@ public class VehicleServiceImpl implements VehicleService {
         EnergyLabel energyLabel = EnergyLabel.valueOf(energyLabelString);
 
         Date inDate = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Vehicle v = null;
         try {
             inDate = sdf.parse(date);
