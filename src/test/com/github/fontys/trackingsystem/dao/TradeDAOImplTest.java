@@ -53,7 +53,6 @@ public class TradeDAOImplTest {
         PersistenceHelper.getEntityManager().getTransaction().commit();
 
         Transfer test = PersistenceHelper.getTradeDAO().findByToken(transfer.getTransferToken());
-        assertTrue(test.getId() != null);
         assertTrue(test.getId() >= 1);
 
         assertTrue(transfer.getTransferToken() != null);
@@ -78,7 +77,6 @@ public class TradeDAOImplTest {
         PersistenceHelper.getEntityManager().getTransaction().commit();
 
         Transfer test = PersistenceHelper.getTradeDAO().findByToken(transfer.getTransferToken());
-        assertTrue(test.getId() != null);
         assertTrue(test.getId() >= 1);
 
         test.setOwnerToTransferTo(user2);
