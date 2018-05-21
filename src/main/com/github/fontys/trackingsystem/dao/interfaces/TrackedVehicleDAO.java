@@ -17,6 +17,8 @@ public interface TrackedVehicleDAO {
 
     TrackedVehicle findByRegisteredVehicleID(long id);
 
+    void addNewLocationByTrackedVehicle(long trackedVehicleID);
+
     List<Location> findLocationsByTrackedVehicleID(long trackedVehicleID);
 
     List<Location> findLocationsByRegisteredVehicleID(long customerVehicleID);

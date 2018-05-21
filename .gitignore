@@ -84,3 +84,5 @@ gradle-app.setting
 /sun-appserv-samples/
 
 # End of https://www.gitignore.io/api/gradle,intellij
+
+files/

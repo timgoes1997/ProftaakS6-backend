@@ -1,98 +1,13 @@
 ----------------------------------------------------------------
-Sun Apr 01 18:21:24 CEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0162-8203-6850-000007693c78 
-on database directory memory:/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend/testDB with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
-Loaded from file:/home/tim/.gradle/caches/modules-2/files-2.1/org.apache.derby/derby/10.14.1.0/3bcd8b1af3f8cd022d54d331e00064776be04f9c/derby-10.14.1.0.jar
+Tue May 22 01:20:04 CEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-8500-acd7-0000051596b0 
+on database directory memory:D:\School\IntelliJProjects\Rekeningrijden\ProftaakS6-backend\testDB with class loader sun.misc.Launcher$AppClassLoader@659e0bfd 
+Loaded from file:/C:/Users/Daniël%20Richtersz/.gradle/caches/modules-2/files-2.1/org.apache.derby/derby/10.14.1.0/3bcd8b1af3f8cd022d54d331e00064776be04f9c/derby-10.14.1.0.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_172-solus-b00
-user.dir=/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend
-os.name=Linux
+java.runtime.version=1.8.0_162-b12
+user.dir=D:\School\IntelliJProjects\Rekeningrijden\ProftaakS6-backend
+os.name=Windows 10
 os.arch=amd64
-os.version=4.9.88-83.lts
+os.version=10.0
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
-Mon Apr 23 10:28:31 CEST 2018 : Security manager installed using the Basic server security policy.
-Mon Apr 23 10:28:31 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-Mon Apr 23 10:28:31 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-----------------------------------------------------------------
-Mon Apr 23 10:29:46 CEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (Unversioned directory): instance a816c00e-0162-f19e-625b-0000207fac47 
-on database directory /home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend/sun-appserv-samples with class loader sun.misc.Launcher$AppClassLoader@70dea4e 
-Loaded from file:/opt/glassfish5/javadb/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_172-solus-b00
-user.dir=/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend
-os.name=Linux
-os.arch=amd64
-os.version=4.9.88-83.lts
-derby.system.home=/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend
-Database Class Loader started - derby.database.classpath=''
-Tue May 08 09:52:15 CEST 2018 : Security manager installed using the Basic server security policy.
-Tue May 08 09:52:15 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-Tue May 08 09:52:15 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-----------------------------------------------------------------
-Tue May 08 09:52:40 CEST 2018: Shutting down Derby engine
-----------------------------------------------------------------
-Tue May 08 09:52:40 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) shutdown
-Mon May 14 19:34:45 CEST 2018 : Security manager installed using the Basic server security policy.
-Mon May 14 19:34:47 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-Mon May 14 19:34:47 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-----------------------------------------------------------------
-Mon May 14 19:37:30 CEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (Unversioned directory): instance a816c00e-0163-5fb8-08e1-ffff9f144699 
-on database directory D:\School\S6\Proftaak\Git\ProftaakS6-backend\sun-appserv-samples with class loader sun.misc.Launcher$AppClassLoader@33909752 
-Loaded from file:/D:/Java/glassfish5/javadb/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_161-b12
-user.dir=D:\School\S6\Proftaak\Git\ProftaakS6-backend
-os.name=Windows 10
-os.arch=amd64
-os.version=10.0
-derby.system.home=D:\School\S6\Proftaak\Git\ProftaakS6-backend
-Database Class Loader started - derby.database.classpath=''
-Fri May 18 08:36:35 CEST 2018 : Security manager installed using the Basic server security policy.
-Fri May 18 08:36:36 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-Fri May 18 08:36:36 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-----------------------------------------------------------------
-Fri May 18 08:37:54 CEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (Unversioned directory): instance a816c00e-0163-71f6-e587-ffff9f144699 
-on database directory D:\School\S6\Proftaak\Git\ProftaakS6-backend\sun-appserv-samples with class loader sun.misc.Launcher$AppClassLoader@33909752 
-Loaded from file:/D:/Java/glassfish5/javadb/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_161-b12
-user.dir=D:\School\S6\Proftaak\Git\ProftaakS6-backend
-os.name=Windows 10
-os.arch=amd64
-os.version=10.0
-derby.system.home=D:\School\S6\Proftaak\Git\ProftaakS6-backend
-Database Class Loader started - derby.database.classpath=''
-Fri May 18 11:09:59 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (1765088) started and ready to accept connections on port 1527
-----------------------------------------------------------------
-Fri May 18 11:10:18 CEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0163-7283-54b9-0000207fac47 
-on database directory /home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend/rekeningrijden with class loader sun.misc.Launcher$AppClassLoader@70dea4e 
-Loaded from file:/opt/payara5/javadb/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_172-solus-b00
-user.dir=/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend
-os.name=Linux
-os.arch=amd64
-os.version=4.9.88-83.lts
-derby.system.home=/home/tim/Documents/GitProjects/Proftaak/ProftaakS6-backend
-Database Class Loader started - derby.database.classpath=''
-Sat May 19 11:56:35 CEST 2018 : Security manager installed using the Basic server security policy.
-Sat May 19 11:56:35 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-Sat May 19 11:56:35 CEST 2018 : Apache Derby Network Server - 10.13.1.1 - (Unversioned directory) started and ready to accept connections on port 1527
-----------------------------------------------------------------
-Sat May 19 11:57:12 CEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (Unversioned directory): instance a816c00e-0163-77d4-5b7f-ffff9f144699 
-on database directory D:\School\S6\Proftaak\Git\ProftaakS6-backend\sun-appserv-samples with class loader sun.misc.Launcher$AppClassLoader@33909752 
-Loaded from file:/D:/Java/glassfish5/javadb/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_161-b12
-user.dir=D:\School\S6\Proftaak\Git\ProftaakS6-backend
-os.name=Windows 10
-os.arch=amd64
-os.version=10.0
-derby.system.home=D:\School\S6\Proftaak\Git\ProftaakS6-backend
 Database Class Loader started - derby.database.classpath=''

@@ -6,6 +6,7 @@ import com.github.fontys.trackingsystem.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
+import com.github.fontys.trackingsystem.services.interfaces.FileService;
 import com.github.fontys.trackingsystem.services.interfaces.VehicleService;
 import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
@@ -27,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class VehicleServiceImpl implements VehicleService {
@@ -43,6 +45,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Inject
     private RegisteredVehicleDAO registeredVehicleDAO;
+
+    @Inject
+    private FileService fileService;
 
     @Override
     public List<RegisteredVehicle> getVehiclesFromUser() {
@@ -155,19 +160,7 @@ public class VehicleServiceImpl implements VehicleService {
             throw new NotFoundException("Couldn't find given user");
         }
 
-        String uploadedFileLocation = System.getProperty("user.dir") + "//files//";
-
-        String extension = FilenameUtils.getExtension(fileDetails.getFileName());
-
-        if (extension.equals("")) {
-            throw new NotAcceptableException("No file given");
-        }
-
-        File f = getNewFile(uploadedFileLocation, extension);//getNewFile(uploadedFileLocation, extension);
-        // save it
-        writeToFile(uploadedInputStream, f);
-
-        String location = uploadedFileLocation + f.getName();
+        String location = fileService.writeToFile(uploadedInputStream, fileDetails);
 
         if (v == null || u == null) {
             throw new NotFoundException("Vehicle and user are invalid");
@@ -202,19 +195,7 @@ public class VehicleServiceImpl implements VehicleService {
             throw new NotFoundException("Couldn't find given user");
         }
 
-        String uploadedFileLocation = System.getProperty("user.dir") + "//files//";
-
-        String extension = FilenameUtils.getExtension(fileDetails.getFileName());
-
-        if (extension.equals("")) {
-            throw new NotAcceptableException("No file given");
-        }
-
-        File f = getNewFile(uploadedFileLocation, extension);//getNewFile(uploadedFileLocation, extension);
-        // save it
-        writeToFile(uploadedInputStream, f);
-
-        String location = uploadedFileLocation + f.getName();
+        String location = fileService.writeToFile(uploadedInputStream, fileDetails);
 
         if (v == null || u == null) {
             throw new NotFoundException("Vehicle and user are invalid");
@@ -225,38 +206,63 @@ public class VehicleServiceImpl implements VehicleService {
         return cv;
     }
 
-    private File getNewFile(String uploadFileLocation, String fileType) {
-        Random random = new SecureRandom();
-        File f = new File(uploadFileLocation + getRandomFileName(random, fileType));
-        while (f.exists()) {
-            f = new File(uploadFileLocation + getRandomFileName(random, fileType));
+    @Override
+    public RegisteredVehicle destroyVehicle(String license) {
+        RegisteredVehicle registeredVehicle = getRegisteredVehicle(license);
+
+        //TODO: Permissions for Bill Administrators etc to destroy vehicles. For now only the owner can do it.
+        if(!Objects.equals(registeredVehicle.getCustomer().getId(), ((User) currentUser).getId())){
+            throw new NotAuthorizedException("You are not authorized to destroy this vehicle");
         }
-        return f;
+
+        registeredVehicle.destroy();
+        registeredVehicle.setCustomer(null);
+        registeredVehicleDAO.edit(registeredVehicle);
+        return registeredVehicle;
     }
 
-    private String getRandomFileName(Random random, String fileType) {
-        return new BigInteger(130, random).toString(32) + "." + fileType;
+    @Override
+    public File getProofOfOwnership(String license) {
+        RegisteredVehicle registeredVehicle = getRegisteredVehicle(license);
+
+        //TODO: Permissions for Bill Administrators etc to get ownership
+        if(!Objects.equals(registeredVehicle.getCustomer().getId(), ((User) currentUser).getId())){
+            throw new NotAuthorizedException("You are not authorized to destroy this vehicle");
+        }
+
+        return new File(registeredVehicle.getProofOfOwnership());
     }
 
-    // save uploaded file to new location
-    private void writeToFile(InputStream uploadedInputStream,
-                             File f) {
-        try {
-            OutputStream out;
-            int read = 0;
-            byte[] bytes = new byte[1024];
-
-            out = new FileOutputStream(f);
-            while ((read = uploadedInputStream.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
+    private RegisteredVehicle getRegisteredVehicle(String license) {
+        RegisteredVehicle registeredVehicle;
+        try{
+            registeredVehicle = registeredVehicleDAO.findByLicense(license);
+            if(registeredVehicle == null){
+                throw new NotFoundException("Couldn't find given vehicle");
             }
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-
-            e.printStackTrace();
+        }catch (Exception e){
+            throw new NotFoundException("Couldn't find given vehicle");
         }
+        return registeredVehicle;
     }
 
+    public void setCurrentUser(ESUser currentUser) {
+        this.currentUser = currentUser;
+    }
 
+    public void setVehicleDAO(VehicleDAO vehicleDAO) {
+        this.vehicleDAO = vehicleDAO;
+    }
+
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public void setRegisteredVehicleDAO(RegisteredVehicleDAO registeredVehicleDAO) {
+        this.registeredVehicleDAO = registeredVehicleDAO;
+    }
+
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
 }

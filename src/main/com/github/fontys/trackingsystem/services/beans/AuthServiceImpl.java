@@ -68,4 +68,17 @@ public class AuthServiceImpl implements AuthService {
             throw new InternalServerErrorException("Server failed to destroy user session");
         }
     }
+
+    //test methods
+    public void setUser(ESUser user) {
+        this.user = user;
+    }
+
+    public void setAccountDAO(AccountDAO accountDAO) {
+        this.accountDAO = accountDAO;
+    }
+
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 }

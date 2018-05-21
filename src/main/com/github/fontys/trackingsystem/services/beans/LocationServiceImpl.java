@@ -121,4 +121,37 @@ public class LocationServiceImpl implements LocationService {
         }
         return false;
     }
+
+    @Override
+    public void updateCurrentLocation(String license, double lat, double lon) {
+        RegisteredVehicle vehicle = registeredVehicleDAO.findByLicense(license);
+        TrackedVehicle trackedVehicle = trackedVehicleDAO.findByRegisteredVehicleID(vehicle.getId());
+
+        Location currentLocation = new Location(lat, lon, Calendar.getInstance());
+
+        // Add previous last location to list of locations
+        trackedVehicle.getLocations().add(trackedVehicle.getLastLocation());
+
+        // Set current location as last location
+        trackedVehicle.setLastLocation(currentLocation);
+
+        trackedVehicleDAO.edit(trackedVehicle);
+        // Backup in case above doesn't work:
+//        List<Location> currentLocations = trackedVehicle.getLocations();
+//        currentLocations.add(currentLocation);
+//        trackedVehicle.setLocations(currentLocations);
+//        locations = trackedVehicleDAO.findLocationsByRegisteredVehicleID(rv.getId());
+    }
+
+    public void setCurrentUser(ESUser currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void setRegisteredVehicleDAO(RegisteredVehicleDAO registeredVehicleDAO) {
+        this.registeredVehicleDAO = registeredVehicleDAO;
+    }
+
+    public void setTrackedVehicleDAO(TrackedVehicleDAO trackedVehicleDAO) {
+        this.trackedVehicleDAO = trackedVehicleDAO;
+    }
 }

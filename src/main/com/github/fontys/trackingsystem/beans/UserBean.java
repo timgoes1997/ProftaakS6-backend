@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.trackingsystem.services.interfaces.UserService;
 import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.User;
@@ -84,6 +85,14 @@ public class UserBean {
                                     @FormParam("username") String username,
                                     @FormParam("password") String password) {
         return userService.createCustomer(name, address, residency, email, username, password);
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @EasySecurity(requiresUser = true)
+    @Path("/edit")
+    public User edit(@FormParam("email") String email) {
+        return userService.edit(email);
     }
 
 }

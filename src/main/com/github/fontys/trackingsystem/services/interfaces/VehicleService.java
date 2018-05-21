@@ -8,6 +8,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
@@ -45,4 +46,7 @@ public interface VehicleService {
                                  InputStream uploadedInputStream,
                                  FormDataContentDisposition fileDetails);
 
+    RegisteredVehicle destroyVehicle(String license);
+
+    File getProofOfOwnership(String license);
 }

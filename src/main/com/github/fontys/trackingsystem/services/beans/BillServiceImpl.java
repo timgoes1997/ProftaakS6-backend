@@ -228,4 +228,20 @@ public class BillServiceImpl implements BillService {
         }
         return true;
     }
+
+    public void setCurrentUser(ESUser currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void setBillDAO(BillDAO billDAO) {
+        this.billDAO = billDAO;
+    }
+
+    public void setAccountDAO(AccountDAO accountDAO) {
+        this.accountDAO = accountDAO;
+    }
+
+    public void setVehicleDAO(VehicleDAO vehicleDAO) {
+        this.vehicleDAO = vehicleDAO;
+    }
 }

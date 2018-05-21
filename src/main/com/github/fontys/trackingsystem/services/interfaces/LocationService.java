@@ -9,4 +9,6 @@ public interface LocationService {
     List<Location> getVehicleOnLocation(String license, String startdate, String enddate);
     List<Location> getVehicleOnLocation(String license);
     boolean isAuthorisedToTrack(String license);
+
+    void updateCurrentLocation(String license, double lat, double lon);
 }
