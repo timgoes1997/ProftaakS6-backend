@@ -49,7 +49,7 @@ public class DummyDataGenerator {
     @Inject
     private BillDAO billDAO;
 
-    private static int AMOUNT_TO_GENERATE = 10;
+    private static int AMOUNT_TO_GENERATE = 20;
 
     private static int AMOUNT_LOCATIONS_TO_GENERATE = 20;
     @PostConstruct

@@ -33,13 +33,15 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<Location> getVehicleOnLocation(String license, String startdate, String enddate) {
-
         // only admins are allowed to backtrack all
         if (!isAuthorisedToTrack(license)) {
             throw new NotAuthorizedException("Not allowed to track unowned vehicle");
         }
+        return getLocationsBetweenDatesByVehicleLicense(license, startdate, enddate);
+    }
 
-
+    @Override
+    public List<Location> getLocationsBetweenDatesByVehicleLicense(String license, String startdate, String enddate) {
         // Not realtime
         // Parse the time
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");

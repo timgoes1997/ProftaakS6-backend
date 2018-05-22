@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Calendar;
 import java.util.List;
 
 @Stateless
@@ -73,10 +74,12 @@ public class TrackedVehicleDAOImpl implements TrackedVehicleDAO {
     }
 
     @Override
-    public List<Location> findLastMonthsLocationsByRegisteredVehicleID(long registeredVehicleID) {
+    public List<Location> findLastMonthsLocationsByRegisteredVehicleID(long registeredVehicleID, Calendar startDate, Calendar endDate) {
         TypedQuery<Location> query =
                 em.createNamedQuery(TrackedVehicle.FIND_LASTMONTHSLOCATIONSBYREGISTEREDVEHICLEID, Location.class);
         query.setParameter("id", registeredVehicleID);
+        query.setParameter("startdate", startDate);
+        query.setParameter("enddate", endDate);
         return query.getResultList();
     }
 

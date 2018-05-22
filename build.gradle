@@ -24,9 +24,13 @@ dependencies {
     compile "com.sun.faces:jsf-api:2.2.16"
     compile "com.sun.faces:jsf-impl:2.2.16"
     compile "org.glassfish.jersey.inject:jersey-hk2:2.26"
+    compile 'com.rabbitmq:amqp-client:5.2.0'
+
     compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.1'
 
     compile files('libs/queue-library.jar')
+
+    compile files('libs/gson-2.8.1.jar')
 
     compile group: 'org.jvnet.mimepull', name: 'mimepull', version: '1.9.7'
     compile group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: '2.26'
