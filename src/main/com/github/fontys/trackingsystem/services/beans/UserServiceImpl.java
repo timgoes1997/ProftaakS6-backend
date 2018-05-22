@@ -15,6 +15,7 @@ import com.github.fontys.trackingsystem.user.User;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAcceptableException;
@@ -80,27 +81,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User confirmRegistration(String token) {
-        try {
-            if (!userDAO.verificationLinkExists(token)) {
-                throw new NotAcceptableException("Verification link doesn't exist");
-            }
-
-            if (userDAO.hasBeenVerified(token)) {
-                throw new NotAcceptableException("You have already verified your account");
-            }
-
-            User user = userDAO.findByVerificationLink(token);
-            if (user == null) {
-                throw new InternalServerErrorException("Couldn't find a user with the given verification link");
-            }
-            user.setVerified(true);
-            userDAO.edit(user);
-
-            return user;
-
-        } catch (Exception e) {
-            throw new InternalServerErrorException("Something went wrong while trying to verify user!");
+        if (!userDAO.verificationLinkExists(token)) {
+            throw new BadRequestException("Verification link doesn't exist");
         }
+
+        if (userDAO.hasBeenVerified(token)) {
+            throw new NotAcceptableException("You have already verified your account");
+        }
+
+        User user = userDAO.findByVerificationLink(token);
+        if (user == null) {
+            throw new InternalServerErrorException("Couldn't find a user with the given verification link");
+        }
+        user.setVerified(true);
+        userDAO.edit(user);
+
+        return user;
     }
 
     @Override
