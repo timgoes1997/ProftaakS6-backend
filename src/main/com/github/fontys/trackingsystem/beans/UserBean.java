@@ -51,14 +51,7 @@ public class UserBean {
     public User confirmRegistration(@PathParam("token") String token){
         return userService.confirmRegistration(token);
     }
-
-    @GET
-    @Path("/recovery/{link}/{email}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean hasRecoveryLink(@PathParam("link") String link, @PathParam("email") String email){
-        return userService.hasRecoveryLink(email, link);
-    }
-
+    
     @POST
     @Path("/recovery/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -72,7 +65,7 @@ public class UserBean {
     public User resetPassword(@FormParam("email") String email,
                               @FormParam("password") String password,
                               @FormParam("link") String link){
-        return userService.resetPassword(email, password, link);
+        return userService.resetPassword(password, link);
     }
 
     @POST
