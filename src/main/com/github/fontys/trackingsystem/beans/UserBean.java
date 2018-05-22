@@ -62,8 +62,8 @@ public class UserBean {
     @POST
     @Path("/recovery/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean createRecoveryLink(@FormParam("email") String email){
-        return userService.recoverPassword(email);
+    public void createRecoveryLink(@FormParam("email") String email){
+        userService.recoverPassword(email);
     }
 
     @POST
