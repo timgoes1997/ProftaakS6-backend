@@ -145,22 +145,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean hasRecoveryLink(String email, String recoveryLink) {
-        Account acc = accountDAO.findByEmail(email);
-        if (acc == null) {
-            throw new ForbiddenException("User for given email doesn't exist");
-        }
-
-        return acc.getRecoveryLink().equals(recoveryLink);
-    }
-
-    @Override
-    public User resetPassword(String email, String newPassword, String recoveryLink) {
-        Account acc = accountDAO.findByEmail(email);
+    public User resetPassword(String newPassword, String recoveryLink) {
+        Account acc = accountDAO.findByRecoveryLink(recoveryLink);
         if (acc == null && acc.getRecoveryLink().equals(recoveryLink)) {
             throw new ForbiddenException("User or recovery link doesn't exist");
         }
-
         acc.setPassword(newPassword);
         acc.setRecoveryLink(null);
         accountDAO.edit(acc);

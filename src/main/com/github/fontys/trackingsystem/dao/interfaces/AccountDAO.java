@@ -19,4 +19,6 @@ public interface AccountDAO {
     Account findByEmail(String email);
 
     boolean recoveryLinkExists(String link);
+
+    Account findByRecoveryLink(String recoveryLink);
 }
