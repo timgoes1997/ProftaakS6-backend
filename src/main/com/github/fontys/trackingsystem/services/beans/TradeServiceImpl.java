@@ -132,11 +132,14 @@ public class TradeServiceImpl implements TradeService {
     public Transfer acceptTransfer(long id) {
         Transfer transfer = getTransfer(id);
         User cur = (User)currentUser;
-        if(Objects.equals(transfer.getOwnerToTransferTo().getId(), cur.getId())){
-            acceptTransferNewOwner(transfer);
-        }
         if(Objects.equals(transfer.getCurrentOwner().getId(), cur.getId())){
-            acceptTransferCurrentOwner(transfer);
+            return acceptTransferCurrentOwner(transfer);
+        }
+        if(transfer.getOwnerToTransferTo() == null){
+            throw new BadRequestException("Nieuwe eigenaar is niet aangemaakt");
+        }
+        if(Objects.equals(transfer.getOwnerToTransferTo().getId(), cur.getId())){
+            return acceptTransferNewOwner(transfer);
         }
         return transfer;
     }
@@ -145,11 +148,14 @@ public class TradeServiceImpl implements TradeService {
     public Transfer declineTransfer(long id) {
         Transfer transfer = getTransfer(id);
         User cur = (User)currentUser;
-        if(Objects.equals(transfer.getOwnerToTransferTo().getId(), cur.getId())){
-            declineTransferNewOwner(transfer);
-        }
         if(Objects.equals(transfer.getCurrentOwner().getId(), cur.getId())){
-            declineTransferCurrentOwner(transfer);
+            return declineTransferCurrentOwner(transfer);
+        }
+        if(transfer.getOwnerToTransferTo() == null){
+            throw new BadRequestException("Nieuwe eigenaar is niet aangemaakt");
+        }
+        if(Objects.equals(transfer.getOwnerToTransferTo().getId(), cur.getId())){
+            return declineTransferNewOwner(transfer);
         }
         return transfer;
     }
