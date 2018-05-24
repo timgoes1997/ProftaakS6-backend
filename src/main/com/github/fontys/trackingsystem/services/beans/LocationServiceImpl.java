@@ -133,11 +133,6 @@ public class LocationServiceImpl implements LocationService {
         trackedVehicle.setLastLocation(currentLocation);
 
         trackedVehicleDAO.edit(trackedVehicle);
-        // Backup in case above doesn't work:
-//        List<Location> currentLocations = trackedVehicle.getLocations();
-//        currentLocations.add(currentLocation);
-//        trackedVehicle.setLocations(currentLocations);
-//        locations = trackedVehicleDAO.findLocationsByRegisteredVehicleID(rv.getId());
     }
 
     public void setCurrentUser(ESUser currentUser) {

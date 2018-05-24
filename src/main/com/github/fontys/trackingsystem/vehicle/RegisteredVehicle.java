@@ -84,7 +84,6 @@ public class RegisteredVehicle implements Serializable {
     @Override
     public String toString() {
         return String.format("CV: id %s, licensePlate %s", id, licensePlate);
-//        return super.toString();
     }
 
     public Long getId() {
@@ -130,13 +129,4 @@ public class RegisteredVehicle implements Serializable {
     public void destroy() {
         this.destroyDate = Calendar.getInstance();
     }
-
-    /*
-    public List<Bill> getBills() {
-        return bills;
-    }
-
-    public void setBills(List<Bill> bills) {
-        this.bills = bills;
-    }*/
 }
