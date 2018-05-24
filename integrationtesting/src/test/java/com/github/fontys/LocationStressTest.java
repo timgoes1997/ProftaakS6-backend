@@ -15,7 +15,7 @@ public class LocationStressTest extends BasicLocationTrackerTest{
     private final int max = 9;
 
     @StressTest(
-            threads = 500,
+            threads = 250,
             duration = 50 * 1000,
             taskCooldownNs = 100,
             errorMargin = 0.05
