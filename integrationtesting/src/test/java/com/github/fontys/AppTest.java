@@ -31,9 +31,9 @@ public class AppTest {
 
     @BeforeClass
     public static void setup() {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 8080;
-        RestAssured.basePath = "/Rekeningrijden/api/";
+        RestAssured.baseURI = Globals.BASE_URL;
+        RestAssured.port = Globals.SERVER_PORT;
+        RestAssured.basePath = Globals.API_PATH;
         parser = new JsonParser();
     }
 
