@@ -30,31 +30,4 @@ public class SimulationTest extends BasicLocationTrackerTest {
 
         Response r = post(url, formBuilder.build());
     }
-
-    @StressTest(
-            threads = 10000,
-            duration = 50 * 1000,
-            errorMargin = 0.05
-    )
-    public void stressTest10000() throws IOException {
-        basicStress();
-    }
-
-    @StressTest(
-            threads = 1000,
-            duration = 50 * 1000,
-            errorMargin = 0.05
-    )
-    public void stressTest1000() throws IOException {
-        basicStress();
-    }
-
-    @StressTest(
-            threads = 100,
-            duration = 50 * 1000,
-            errorMargin = 0.05
-    )
-    public void stressTest100() throws IOException {
-        basicStress();
-    }
 }

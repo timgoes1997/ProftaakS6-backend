@@ -10,7 +10,7 @@ import java.io.IOException;
 public class LocationStressTest extends BasicLocationTrackerTest{
     @StressTest(
             threads = 1000,
-            duration = 1 * 1000,
+            duration = 50 * 1000,
             errorMargin = 0.05
     )
     public void stressTestHeavy() throws IOException {
@@ -28,7 +28,7 @@ public class LocationStressTest extends BasicLocationTrackerTest{
 
     @StressTest(
             threads = 25,
-            duration = 10 * 1000,
+            duration = 1 * 1000,
             errorMargin = 0.05
     )
     public void stressTestLow() throws IOException {
