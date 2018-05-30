@@ -110,7 +110,8 @@ public class DummyDataGenerator {
                     startdate,
                     endDate,
                     PaymentStatus.OPEN,
-                    1000
+                    1000,
+                    false
             );
 
             em.persist(b);

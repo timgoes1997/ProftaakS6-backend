@@ -8,6 +8,7 @@ import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.services.interfaces.BillService;
+import com.github.fontys.trackingsystem.tracking.Location;
 import com.github.fontys.trackingsystem.user.Account;
 import com.github.fontys.trackingsystem.user.Role;
 import com.github.fontys.trackingsystem.user.User;
@@ -19,9 +20,9 @@ import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class BillServiceImpl implements BillService {
 
@@ -119,6 +120,60 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    public List<Bill> getBillsBetweenDatesByVehicleId(long registeredVehicleId, String startDate, String endDate, boolean excludeTotalBill) {
+
+        List<Bill> bills;
+
+        // Parse the time
+        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
+        Date start;
+        Date end;
+
+        // can't parse? Our fault
+        try {
+            start = parse.parse(startDate);
+            end = parse.parse(endDate);
+        } catch (ParseException e) {
+            throw new BadRequestException();
+        }
+
+        bills = this.getBillsByVehicleId((int)registeredVehicleId);
+
+        // filter the map on date, if the map is not empty
+        if (!bills.isEmpty()) {
+            Iterator<Bill> locIter = bills.iterator();
+
+            // Remove bills that don't fall between start and enddate
+            while (locIter.hasNext()) {
+                Bill b = locIter.next();
+                Date billStartDate = b.getCalendarStartDate().getTime();
+                Date billEndDate = b.getCalendarEndDate().getTime();
+
+                // if the date of the Bill falls outside the specified dates, remove the Bill
+                if (billStartDate.before(start) ||
+                        billStartDate.after(end) ||
+                        billEndDate.before(start) ||
+                        billEndDate.after(end)) {
+                    locIter.remove();
+                }
+
+                // If the Bill is an endOfMonthBill while excludeTotalBill == true, remove the Bill
+                if (excludeTotalBill == true && b.isEndOfMonthBill() == true) {
+                    locIter.remove();
+                }
+            }
+
+            //Sort the list by dates
+            Collections.sort(bills, new Comparator<Bill>() {
+                public int compare(Bill o1, Bill o2) {
+                    return o1.getCalendarStartDate().compareTo(o2.getCalendarStartDate());
+                }
+            });
+        }
+        return bills;
+    }
+
+    @Override
     public List<Bill> getBillsByStatus(String status) {
         if (getPaymentStatusByString(status) != null) {
             throw new BadRequestException("Invalid payment status given");
@@ -193,7 +248,6 @@ public class BillServiceImpl implements BillService {
         }
 
     }
-
 
     @Override
     public List<Bill> getMaxAllowedBills() {

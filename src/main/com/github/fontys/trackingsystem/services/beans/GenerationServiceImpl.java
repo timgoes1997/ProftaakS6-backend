@@ -5,6 +5,7 @@ import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.TrackedVehicleDAO;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
+import com.github.fontys.trackingsystem.services.interfaces.BillService;
 import com.github.fontys.trackingsystem.services.interfaces.GenerationService;
 import com.github.fontys.trackingsystem.services.interfaces.LocationService;
 import com.github.fontys.trackingsystem.tracking.DistanceCalculator;
@@ -32,18 +33,26 @@ public class GenerationServiceImpl implements GenerationService {
     private LocationService locationService;
 
     @Inject
+    BillService billService;
+
+    @Inject
     private RegisteredVehicleDAO registeredVehicleDAO;
 
     @Inject
     private BillDAO billDAO;
 
-    RouteEngine routeEngine = new RouteEngine("DE");
+    RouteEngine routeEngine;
 
     DistanceCalculator distanceCalculator = new DistanceCalculator();
 
     // Returns void since this method will be called by an automated process
-    // Called when a Rekeningrijden has stopped driving
+    // Called when a Rekeningrijder has stopped driving
     public void generateBillForLastMonthsRoutes(long registeredVehicleId) throws IOException, TimeoutException {
+        String current = new java.io.File(".").getCanonicalPath();
+        System.out.println("Current dir:" + current);
+        String currentDir = System.getProperty("user.dir");
+        System.out.println("Current dir using System:" + currentDir);
+        routeEngine = new RouteEngine("DE");
 
         Calendar startDate = getFirstOfLastMonth();
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -61,7 +70,9 @@ public class GenerationServiceImpl implements GenerationService {
                 endDateString);
 
         // Convert routes to EULocations
-        List<EULocation> euLocations = convertLocationsToEULocations(lastMonthsLocations);
+        List<EULocation> euLocations = convertLocationsToEULocations(
+                registeredVehicle.getLicensePlate(),
+                lastMonthsLocations);
 
         // Foreign route //
         // Determine foreign routes and send them to the corresponding country
@@ -77,7 +88,7 @@ public class GenerationServiceImpl implements GenerationService {
         double distanceInKilometers = calculateDistance(euLocationsDomestic);
 
         // Calculate price for domestic route
-        // TODO: Recover rates per zone
+        // TODO: Recover rates per zone (CREATE METHOD List<Route> or smth generatePricePerRegion)
         double price = generatePriceWithSingleRate(distanceInKilometers, 0.20);
 
 
@@ -89,7 +100,8 @@ public class GenerationServiceImpl implements GenerationService {
                 startDate,
                 endDate,
                 PaymentStatus.OPEN,
-                distanceInKilometers);
+                distanceInKilometers,
+                true);
 
         // Persist Bill
         billDAO.create(domesticRouteBill);
@@ -97,7 +109,7 @@ public class GenerationServiceImpl implements GenerationService {
 
     // StartDate should be stored somewhere at the point when driving is started
     // EndDate should be the point this method is called (after driving)
-        public void generateBillsForLastRoute(String startDateString, String endDateString, long registeredVehicleId) throws IOException, TimeoutException {
+    public void generateBillsForLastRoute(String startDateString, String endDateString, long registeredVehicleId) throws IOException, TimeoutException {
         RegisteredVehicle registeredVehicle = registeredVehicleDAO.findByVehicle(registeredVehicleId);
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate;
@@ -117,7 +129,8 @@ public class GenerationServiceImpl implements GenerationService {
                 endDateString);
 
         // Convert last route from Location objects to EULocations objects
-        List<EULocation> euLocations = convertLocationsToEULocations(route);
+        List<EULocation> euLocations = convertLocationsToEULocations(registeredVehicle.getLicensePlate(),
+                route);
 
         // Foreign route //
         Map<String, Route> routeMap = routeEngine.determineForeignRoutes(euLocations);
@@ -133,6 +146,8 @@ public class GenerationServiceImpl implements GenerationService {
         // Calculate the price
         double price = generatePriceWithSingleRate(distanceInKilometers, 0.20);
 
+        // TODO: Calculate the price per region (CREATE METHOD List<Route> or smth generatePricePerRegion)
+
         // Create new Bill //
         Bill domesticRouteBill = new Bill(
                 registeredVehicle,
@@ -141,10 +156,55 @@ public class GenerationServiceImpl implements GenerationService {
                 toCalendar(startDate),
                 toCalendar(endDate),
                 PaymentStatus.OPEN,
-                distanceInKilometers);
+                distanceInKilometers,
+                false);
 
         billDAO.create(domesticRouteBill);
+    }
+
+    public void generateBillByLastMonthsRouteBills(long registeredVehicleId) throws IOException {
+        String current = new java.io.File(".").getCanonicalPath();
+        System.out.println("Current dir:" + current);
+        String currentDir = System.getProperty("user.dir");
+        System.out.println("Current dir using System:" + currentDir);
+        routeEngine = new RouteEngine("DE");
+
+        Calendar startDate = getFirstOfLastMonth();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String startDateString = format1.format(startDate.getTime());
+        Calendar endDate = getLastOfLastMonth();
+        String endDateString = format1.format(endDate.getTime());
+
+        // Get the RegisteredVehicle
+        RegisteredVehicle registeredVehicle = registeredVehicleDAO.findByVehicle(registeredVehicleId);
+
+        // Collect all Bills for this vehicle of last month, excluding a possible totalBill
+        List<Bill> lastMonthsBills = billService.getBillsBetweenDatesByVehicleId(registeredVehicleId, startDateString, endDateString, true);
+
+        // Create the totalbill and iterator to loop through the routebills of last month
+        Iterator<Bill> locIter = lastMonthsBills.iterator();
+        Bill totalBill = new Bill();
+        totalBill.setStartDate(startDate);
+        totalBill.setEndDate(endDate);
+        totalBill.setEndOfMonthBill(true);
+        totalBill.setStatus(PaymentStatus.OPEN);
+        totalBill.setAlreadyPaid(BigDecimal.ZERO);
+        totalBill.setMontlyBills(lastMonthsBills);
+
+        // Add the mileage and price of routebills to the totals
+        while (locIter.hasNext()) {
+            Bill b = locIter.next();
+            totalBill.setMileage(totalBill.getMileage() + b.getMileage());
+            totalBill.setPrice(totalBill.getPrice().add(b.getPrice()));
         }
+
+        // Set the associated vehicle
+        totalBill.setRegisteredVehicle(registeredVehicle);
+
+        // Persist into database
+        billDAO.create(totalBill);
+    }
+
 
     private double generatePriceWithSingleRate(double distance, double rate) {
         return (distance * rate);
@@ -182,12 +242,12 @@ public class GenerationServiceImpl implements GenerationService {
         return distanceInKilometers;
     }
 
-    private List<EULocation> convertLocationsToEULocations(List<Location> locations) {
+    private List<EULocation> convertLocationsToEULocations(String license, List<Location> locations) {
         List<EULocation> euLocations = new ArrayList<>();
         if (locations != null) {
             for (Location l : locations) {
                 long unixTime = l.getTime().getTimeInMillis() / 1000;
-                euLocations.add(new EULocation(l.getX(), l.getY(), unixTime));
+                euLocations.add(new EULocation(license, l.getX(), l.getY(), unixTime));
             }
         }
         // Sort the EULocations list
@@ -195,7 +255,7 @@ public class GenerationServiceImpl implements GenerationService {
         return euLocations;
     }
 
-    public static Calendar toCalendar(Date date){
+    public static Calendar toCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal;

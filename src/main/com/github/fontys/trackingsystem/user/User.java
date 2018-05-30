@@ -22,6 +22,7 @@ import java.util.List;
         @NamedQuery(name = User.FIND_VERIFICATION_LINK_AND_VERIFICATION,
                 query = "SELECT c FROM CUSTOMER c WHERE c.verifyLink = :link AND c.verified = :verified"),
 })
+
 public class User implements Serializable, ESUser {
 
     // ======================================

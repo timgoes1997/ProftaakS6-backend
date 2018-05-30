@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 @Entity(name = "BILL")
 @NamedQueries({
@@ -74,10 +75,24 @@ public class Bill implements Serializable {
     @Column(name = "MILEAGE")
     private double mileage;
 
+    @Column(name = "ISENDOFMONTHBILL")
+    private boolean isEndOfMonthBill;
+
+    @OneToMany
+    private List<Bill> montlyBills;
+
     public Bill() {
+
     }
 
-    public Bill(RegisteredVehicle registeredVehicle, BigDecimal price, BigDecimal alreadyPaid, Calendar startDate, Calendar endDate, PaymentStatus paymentStatus, double mileage) {
+    public Bill(RegisteredVehicle registeredVehicle,
+                BigDecimal price,
+                BigDecimal alreadyPaid,
+                Calendar startDate,
+                Calendar endDate,
+                PaymentStatus paymentStatus,
+                double mileage,
+                boolean isEndOfMonthBill) {
         this.registeredVehicle = registeredVehicle;
         this.price = price;
         this.alreadyPaid = alreadyPaid;
@@ -85,6 +100,7 @@ public class Bill implements Serializable {
         this.endDate = endDate;
         this.status = paymentStatus;
         this.mileage = mileage;
+        this.isEndOfMonthBill = isEndOfMonthBill;
     }
 
     @XmlTransient
@@ -173,5 +189,25 @@ public class Bill implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public boolean isEndOfMonthBill() {
+        return isEndOfMonthBill;
+    }
+
+    public void setEndOfMonthBill(boolean endOfMonthBill) {
+        isEndOfMonthBill = endOfMonthBill;
+    }
+
+    public void setMontlyBills(List<Bill> bills) {
+        this.montlyBills = bills;
+    }
+
+    public void addMonthlyBill(Bill bill) {
+        this.montlyBills.add(bill);
+    }
+
+    public List<Bill> getMontlyBills() {
+        return this.montlyBills;
     }
 }

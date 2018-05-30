@@ -42,7 +42,6 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<Location> getLocationsBetweenDatesByVehicleLicense(String license, String startdate, String enddate) {
-        // Not realtime
         // Parse the time
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
         Date start;

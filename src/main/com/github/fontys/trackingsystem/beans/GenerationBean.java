@@ -26,6 +26,15 @@ public class GenerationBean {
     }
 
     @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/monthlybillbyroutebills/{registeredvehicleid}")
+    public Response generateLastMonthsBillByRouteBillsForVehicle(@PathParam("registeredvehicleid") long registeredVehicleId) throws IOException
+    {
+        generationService.generateBillByLastMonthsRouteBills(registeredVehicleId);
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/routebill/{startdate}/{enddate}/{registeredvehicleid}")
     public Response generateLastRoutePriceForVehicle(@PathParam("startdate") String startDate,
                                                      @PathParam("enddate") String endDate,

@@ -11,6 +11,9 @@ public interface BillService {
     Bill setBillStatus(int id, String status);
     List<Bill> getBillsByOwnerId(int ownerId);
     List<Bill> getBillsByVehicleId(int vehicleId);
+
+    List<Bill> getBillsBetweenDatesByVehicleId(long registeredVehicleId, String startDate, String endDate, boolean excludeTotalBill);
+
     List<Bill> getBillsByStatus(String status);
     Bill getBillByID(int id);
     List<Bill> getCurrentUserBills();

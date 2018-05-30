@@ -3,13 +3,14 @@ package com.github.fontys.trackingsystem.dao;
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.payment.Bill;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@RequestScoped
+@Stateless
 public class BillDaoImpl implements BillDAO {
 
     @PersistenceContext(name = "Proftaak")
