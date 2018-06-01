@@ -49,4 +49,6 @@ public interface VehicleService {
     RegisteredVehicle destroyVehicle(String license);
 
     File getProofOfOwnership(String license);
+
+    RegisteredVehicle getRegisteredVehicle(String license);
 }

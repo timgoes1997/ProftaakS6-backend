@@ -109,6 +109,7 @@ public class GenerationServiceImpl implements GenerationService {
 
     // StartDate should be stored somewhere at the point when driving is started
     // EndDate should be the point this method is called (after driving)
+    // TODO: VehicleID to Licenseplate
     public void generateBillsForLastRoute(String startDateString, String endDateString, long registeredVehicleId) throws IOException, TimeoutException {
         RegisteredVehicle registeredVehicle = registeredVehicleDAO.findByVehicle(registeredVehicleId);
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
@@ -153,8 +154,8 @@ public class GenerationServiceImpl implements GenerationService {
                 registeredVehicle,
                 BigDecimal.valueOf(price),
                 BigDecimal.valueOf(0),
-                toCalendar(startDate),
-                toCalendar(endDate),
+                converDateToCalendar(startDate),
+                converDateToCalendar(endDate),
                 PaymentStatus.OPEN,
                 distanceInKilometers,
                 false);
@@ -206,7 +207,7 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
 
-    private double generatePriceWithSingleRate(double distance, double rate) {
+    public double generatePriceWithSingleRate(double distance, double rate) {
         return (distance * rate);
     }
 
@@ -228,7 +229,7 @@ public class GenerationServiceImpl implements GenerationService {
         return endDate;
     }
 
-    private double calculateDistance(List<EULocation> locations) {
+    public double calculateDistance(List<EULocation> locations) {
         double distanceInKilometers = 0;
 
         // Calculate distance
@@ -242,7 +243,7 @@ public class GenerationServiceImpl implements GenerationService {
         return distanceInKilometers;
     }
 
-    private List<EULocation> convertLocationsToEULocations(String license, List<Location> locations) {
+    public List<EULocation> convertLocationsToEULocations(String license, List<Location> locations) {
         List<EULocation> euLocations = new ArrayList<>();
         if (locations != null) {
             for (Location l : locations) {
@@ -255,7 +256,7 @@ public class GenerationServiceImpl implements GenerationService {
         return euLocations;
     }
 
-    public static Calendar toCalendar(Date date) {
+    public static Calendar converDateToCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal;

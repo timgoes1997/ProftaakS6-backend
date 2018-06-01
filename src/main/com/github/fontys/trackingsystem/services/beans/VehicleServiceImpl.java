@@ -233,7 +233,8 @@ public class VehicleServiceImpl implements VehicleService {
         return new File(registeredVehicle.getProofOfOwnership());
     }
 
-    private RegisteredVehicle getRegisteredVehicle(String license) {
+    @Override
+    public RegisteredVehicle getRegisteredVehicle(String license) {
         RegisteredVehicle registeredVehicle;
         try{
             registeredVehicle = registeredVehicleDAO.findByLicense(license);
