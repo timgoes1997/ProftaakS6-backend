@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface LocationService {
     List<Location> getLocationsBetweenDatesByVehicleLicense(String license, String startdate, String enddate);
+    List<Location> getLocationsBetweenTimesByVehicleLicense(String license, String startdate, String enddate);
+
     List<Location> getVehicleOnLocation(String license, String startdate, String enddate);
     List<Location> getVehicleOnLocation(String license);
     boolean isAuthorisedToTrack(String license);

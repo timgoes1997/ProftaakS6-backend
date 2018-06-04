@@ -115,7 +115,7 @@ public class GenerationServiceImpl implements GenerationService {
      */
     public void handleLastRoute(String startDateString, String endDateString, String license) throws IOException, TimeoutException {
         RegisteredVehicle registeredVehicle = registeredVehicleDAO.findByLicense(license);
-        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date startDate;
         Date endDate;
 
@@ -128,7 +128,7 @@ public class GenerationServiceImpl implements GenerationService {
         }
 
         // Get locations of last route
-        List<Location> route = locationService.getLocationsBetweenDatesByVehicleLicense(registeredVehicle.getLicensePlate(),
+        List<Location> route = locationService.getLocationsBetweenTimesByVehicleLicense(registeredVehicle.getLicensePlate(),
                 startDateString,
                 endDateString);
 

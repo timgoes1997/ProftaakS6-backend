@@ -46,12 +46,11 @@ public class ArrivalBean {
     @POST
 //    @EasySecurity(requiresUser = true)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{license}")
-    public Response handleRoute(@PathParam("license") String license,
-                                               @FormParam("startdate") String startdate,
-                                               @FormParam("enddate") String enddate) throws IOException, TimeoutException {
+    @Path("/")
+    public void handleRoute(@FormParam("license") String license,
+                                @FormParam("startdate") String startdate,
+                                @FormParam("enddate") String enddate) throws IOException, TimeoutException {
         // format (IMPORTANT): yyyy-MM-dd hh:mm:ss
         generationService.handleLastRoute(startdate, enddate, license);
-        return Response.ok().build();
     }
 }

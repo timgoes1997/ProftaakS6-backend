@@ -1,5 +1,8 @@
 package com.github.fontys;
 
+import static com.github.fontys.BasicLocationTrackerTest.ARRIVAL_URL;
+import static com.github.fontys.BasicLocationTrackerTest.LOCATION_URL;
+import static com.github.fontys.BasicLocationTrackerTest.post;
 import static com.jayway.restassured.RestAssured.given;
 
 import com.google.gson.JsonArray;
@@ -19,11 +22,18 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
+
+import com.biepbot.stress.StressRunner;
+import com.biepbot.stress.StressTest;
+import okhttp3.*;
+import org.junit.runner.RunWith;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AppTest {
 
@@ -43,6 +53,59 @@ public class AppTest {
 
     @After
     public void tearDown() throws Exception {
+    }
+
+    @Test
+    public void simulateForeignRoute() throws IOException, InterruptedException {
+        Date startDate = Calendar.getInstance().getTime();
+
+        String license = "XXX-001";
+
+        sendLocation(51.412513, 6.475905, license); // Germany
+        sendLocation(51.410221, 6.425278, license); // Germany
+        sendLocation(51.400221, 6.325278, license); // Germany
+        sendLocation(51.388004, 6.308915, license); // Germany
+
+        sendLocation(51.389580, 6.174433, license); // Netherlands
+        sendLocation(51.397853, 6.146652, license); // Netherlands
+        sendLocation(51.432899, 6.135287, license); // Netherlands
+        sendLocation(51.460444, 6.151072, license); // Netherlands
+        sendLocation(51.478929, 6.202844, license); // Netherlands
+
+        sendLocation(51.477356, 6.256511, license); // Germany
+        sendLocation(51.459657, 6.285554, license); // Germany
+        sendLocation(51.421483, 6.330382, license); // Germany
+        sendLocation(51.412513, 6.475905, license); // Germany
+
+        Date endDate = Calendar.getInstance().getTime();
+
+        sendArrival(startDate, endDate, license);
+    }
+
+    private void sendArrival(Date startDate, Date endDate, String license) throws IOException {
+        FormBody.Builder formBuilder = new FormBody.Builder();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.getDefault()).parse(dateString);
+
+        String startdateFormatted = df.format(startDate);
+
+        formBuilder.add("startdate", startdateFormatted);
+        formBuilder.add("enddate", df.format(endDate));
+        formBuilder.add("license", license);
+
+        post(ARRIVAL_URL, formBuilder.build());
+    }
+
+    private void sendLocation(double lat, double lon, String license) throws IOException, InterruptedException {
+        Thread.sleep(250);
+
+        FormBody.Builder formBuilder = new FormBody.Builder();
+
+        formBuilder.add("lon", String.valueOf(lon));
+        formBuilder.add("lat", String.valueOf(lat));
+        formBuilder.add("license", license);
+
+        post(LOCATION_URL, formBuilder.build());
     }
 
     /**

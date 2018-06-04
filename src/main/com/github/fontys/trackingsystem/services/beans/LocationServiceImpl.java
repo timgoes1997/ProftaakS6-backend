@@ -42,17 +42,14 @@ public class LocationServiceImpl implements LocationService {
         return getLocationsBetweenDatesByVehicleLicense(license, startdate, enddate);
     }
 
-    @Override
-    public List<Location> getLocationsBetweenDatesByVehicleLicense(String license, String startdate, String enddate) {
-        // Parse the time
-        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
+    private List<Location> getLocationsBetweenXXXByVehicleLicense(SimpleDateFormat format, String license, String startdate, String enddate) {
         Date start;
         Date end;
 
         // can't parse? Our fault
         try {
-            start = parse.parse(startdate);
-            end = parse.parse(enddate);
+            start = format.parse(startdate);
+            end = format.parse(enddate);
         } catch (ParseException e) {
             throw new BadRequestException();
         }
@@ -71,9 +68,11 @@ public class LocationServiceImpl implements LocationService {
             Iterator<Location> locIter = locations.iterator();
             while (locIter.hasNext()) {
                 Location l = locIter.next();
-                Date cl = l.getTime().getTime();
+                Date currentLocationDate = l.getTime().getTime();
                 // if the date of the location falls outside the specified dates, remove the location
-                if (l.getTime().getTime().before(start) || l.getTime().getTime().after(end)) {
+                if (currentLocationDate.before(start) || currentLocationDate.after(end)) {
+//                if ((cl.before(start) || cl.after(end)) && !(cl.equals(start) || cl.equals(end))) {
+//                    if (!(!cl.before(start) && !cl.after(end))) {
                     locIter.remove();
                 }
             }
@@ -87,6 +86,20 @@ public class LocationServiceImpl implements LocationService {
         });
 
         return locations;
+    }
+
+    @Override
+    public List<Location> getLocationsBetweenDatesByVehicleLicense(String license, String startdate, String enddate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return getLocationsBetweenXXXByVehicleLicense(format, license, startdate, enddate);
+
+    }
+
+    @Override
+    public List<Location> getLocationsBetweenTimesByVehicleLicense(String license, String startdate, String enddate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return getLocationsBetweenXXXByVehicleLicense(format, license, startdate, enddate);
+
     }
 
     @Override

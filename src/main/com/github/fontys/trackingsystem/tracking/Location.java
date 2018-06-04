@@ -17,7 +17,7 @@ public class Location {
     @Column(name="Y")
     private double y;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "TIME")
     private Calendar time;
 

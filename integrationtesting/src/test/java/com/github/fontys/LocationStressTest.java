@@ -53,6 +53,6 @@ public class LocationStressTest extends BasicLocationTrackerTest{
         formBuilder.add("lat", "50");
         formBuilder.add("license", "XXX-00" + license.get());
 
-        Response r = post(url, formBuilder.build());
+        Response r = post(LOCATION_URL, formBuilder.build());
     }
 }
