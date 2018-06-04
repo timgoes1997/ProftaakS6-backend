@@ -120,6 +120,12 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    public Bill createBill(Bill bill) {
+        billDAO.create(bill);
+        return bill;
+    }
+
+    @Override
     public List<Bill> getBillsBetweenDatesByVehicleId(long registeredVehicleId, String startDate, String endDate, boolean excludeTotalBill) {
 
         List<Bill> bills;
@@ -137,7 +143,7 @@ public class BillServiceImpl implements BillService {
             throw new BadRequestException();
         }
 
-        bills = this.getBillsByVehicleId((int)registeredVehicleId);
+        bills = this.getBillsByVehicleId((int) registeredVehicleId);
 
         // filter the map on date, if the map is not empty
         if (!bills.isEmpty()) {

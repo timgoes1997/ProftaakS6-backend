@@ -33,13 +33,4 @@ public class GenerationBean {
         generationService.generateBillByLastMonthsRouteBills(registeredVehicleId);
         return Response.ok().build();
     }
-
-    @POST
-    @Path("/routebill/{startdate}/{enddate}/{registeredvehicleid}")
-    public Response generateLastRoutePriceForVehicle(@PathParam("startdate") String startDate,
-                                                     @PathParam("enddate") String endDate,
-                                                     @PathParam("registeredvehicleid") long registeredVehicleId) throws IOException, TimeoutException {
-        generationService.generateBillsForLastRoute(startDate, endDate, registeredVehicleId);
-        return Response.ok().build();
-    }
 }

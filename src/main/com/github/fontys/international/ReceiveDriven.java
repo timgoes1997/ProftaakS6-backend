@@ -24,67 +24,7 @@ import java.util.concurrent.TimeoutException;
 
 public class ReceiveDriven {
 
-    private static RouteEngine engine = new RouteEngine("NL");
-    private static RouteTransformer routeTransformer;
-
     public static void main(String[] args) throws IOException, TimeoutException {
-        // region Listen for cars driven
-        routeTransformer = new RouteTransformerImpl();
 
-        // Define a handler for incoming routes
-        RouteHandler routeHandler = new RouteHandler() {
-            @Override
-            public void handleRoute(Route route) throws IOException, TimeoutException {
-                System.out.println(String.format("Got a new route from %s!", route.getOriginCountry()));
-
-                // Transform route into route with rates
-                RichRoute richRoute = routeTransformer.generateRichRoute(route);
-                engine.sendRichRouteToCountry(richRoute);
-            }
-        };
-
-        // Start listening for routes driven in my country
-        engine.listenForRoutesInMyCountry(routeHandler);
-        // endregion Listen for cars driven
-
-        // region Listen for new rich routes
-        RichRouteHandler richRouteHandler = new RichRouteHandler() {
-            @Override
-            public void handleRichRoute(RichRoute richRoute) {
-
-                // NON EJB Because of static context
-                VehicleServiceImpl vehicleService = new VehicleServiceImpl();
-                LocationServiceImpl locationService = new LocationServiceImpl();
-                BillDAO billDAO = new BillDaoImpl();
-
-                //Generate Bill
-                Bill bill = new Bill();
-
-                //TODO: Get last route for vehicle (?)
-
-                RegisteredVehicle registeredVehicle = vehicleService.getRegisteredVehicle(richRoute.getLicense());
-
-
-                bill.setStartDate(null); //TODO: Get the startdate from the first location in the route -.-
-                bill.setEndDate(null); //TODO: Get the enddate from the last location in the route ---___---
-                bill.setEndOfMonthBill(false);
-                bill.setStatus(PaymentStatus.OPEN);
-                bill.setAlreadyPaid(BigDecimal.ZERO);
-
-                bill.setMileage(richRoute.getDistance());
-                bill.setPrice(BigDecimal.valueOf(richRoute.getPrice()));
-                bill.setRegisteredVehicle(vehicleService.getRegisteredVehicle(richRoute.getLicense()));
-
-                billDAO.create(bill);
-
-                System.out.println(String.format("Received rich route from '%s'. We should be '%s'",
-                        richRoute.getDrivenInCountry(),
-                        richRoute.getOriginCountry()));
-
-            }
-        };
-
-        engine.listenForRichRoutes(richRouteHandler);
-        // endregion Listen for new payment requests
     }
 }

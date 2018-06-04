@@ -11,16 +11,16 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RouteTransformerImpl extends RouteTransformer {
+public class RouteTransformerGermany extends RouteTransformer {
 
     @Inject
-    GenerationServiceImpl generationService;
+    private GenerationServiceImpl generationService;
 
     @Override
     public RichRoute generateRichRoute(Route route) {
         List<Rate> rates = new ArrayList<>();
         List<EULocation> locations = route.getLocationList();
-        int distance = (int)generationService.calculateDistance(locations);
+        int distance = (int) generationService.calculateDistance(locations);
 
         // Rate in cents per kilometer
         // TODO: Calculate price per region, create Rate objects, calculate totalprice
@@ -29,7 +29,7 @@ public class RouteTransformerImpl extends RouteTransformer {
         rates.add(rateObject);
 
         // Price in cents
-        int price = (int)generationService.generatePriceWithSingleRate(distance, rate);
+        int price = (int) generationService.generatePriceWithSingleRate(distance, rate);
 
         // Vats in percentages
         int vats = 21;

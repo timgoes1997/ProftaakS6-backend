@@ -33,7 +33,7 @@ public class GenerationServiceImpl implements GenerationService {
     private LocationService locationService;
 
     @Inject
-    BillService billService;
+    private BillService billService;
 
     @Inject
     private RegisteredVehicleDAO registeredVehicleDAO;
@@ -41,9 +41,9 @@ public class GenerationServiceImpl implements GenerationService {
     @Inject
     private BillDAO billDAO;
 
-    RouteEngine routeEngine;
+    private RouteEngine routeEngine = new RouteEngine("DE");
 
-    DistanceCalculator distanceCalculator = new DistanceCalculator();
+    private DistanceCalculator distanceCalculator = new DistanceCalculator();
 
     // Returns void since this method will be called by an automated process
     // Called when a Rekeningrijder has stopped driving
@@ -52,7 +52,6 @@ public class GenerationServiceImpl implements GenerationService {
         System.out.println("Current dir:" + current);
         String currentDir = System.getProperty("user.dir");
         System.out.println("Current dir using System:" + currentDir);
-        routeEngine = new RouteEngine("DE");
 
         Calendar startDate = getFirstOfLastMonth();
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -110,9 +109,13 @@ public class GenerationServiceImpl implements GenerationService {
     // StartDate should be stored somewhere at the point when driving is started
     // EndDate should be the point this method is called (after driving)
     // TODO: VehicleID to Licenseplate
-    public void generateBillsForLastRoute(String startDateString, String endDateString, long registeredVehicleId) throws IOException, TimeoutException {
-        RegisteredVehicle registeredVehicle = registeredVehicleDAO.findByVehicle(registeredVehicleId);
-        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
+
+    /**
+     * Generates a bill, sends information to their respective country
+     */
+    public void handleLastRoute(String startDateString, String endDateString, String license) throws IOException, TimeoutException {
+        RegisteredVehicle registeredVehicle = registeredVehicleDAO.findByLicense(license);
+        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date startDate;
         Date endDate;
 
@@ -168,7 +171,6 @@ public class GenerationServiceImpl implements GenerationService {
         System.out.println("Current dir:" + current);
         String currentDir = System.getProperty("user.dir");
         System.out.println("Current dir using System:" + currentDir);
-        routeEngine = new RouteEngine("DE");
 
         Calendar startDate = getFirstOfLastMonth();
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -233,7 +235,7 @@ public class GenerationServiceImpl implements GenerationService {
         double distanceInKilometers = 0;
 
         // Calculate distance
-        for (int i = 0; i < (locations.size() - 1); i++) {
+        for (int i = 0; i < locations.size() - 1; i++) {
             distanceInKilometers = distanceCalculator.getDistance(locations.get(i).getLat(),
                     locations.get(i).getLon(),
                     locations.get(i + 1).getLat(),
