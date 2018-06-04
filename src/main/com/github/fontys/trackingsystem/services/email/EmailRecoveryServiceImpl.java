@@ -11,6 +11,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -55,7 +56,7 @@ public class EmailRecoveryServiceImpl implements EmailRecoveryService{
             messageBody.setText(System.lineSeparator()
                     + "You have requested a password recovery, please click on the following link to enter your new password:"
                     + System.lineSeparator()
-                    + "http://localhost/recovery.html?token=" + acc.getRecoveryLink());
+                    + "http://" + InetAddress.getLocalHost().getHostAddress() + "/recovery.html?token=" + acc.getRecoveryLink());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()
