@@ -154,8 +154,8 @@ public class GenerationServiceImpl implements GenerationService {
                 registeredVehicle,
                 BigDecimal.valueOf(price),
                 BigDecimal.valueOf(0),
-                converDateToCalendar(startDate),
-                converDateToCalendar(endDate),
+                convertDateToCalendar(startDate),
+                convertDateToCalendar(endDate),
                 PaymentStatus.OPEN,
                 distanceInKilometers,
                 false);
@@ -256,7 +256,7 @@ public class GenerationServiceImpl implements GenerationService {
         return euLocations;
     }
 
-    public static Calendar converDateToCalendar(Date date) {
+    public static Calendar convertDateToCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal;

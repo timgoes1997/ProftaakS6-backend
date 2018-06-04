@@ -4,7 +4,10 @@ import com.github.fontys.trackingsystem.dao.BillDaoImpl;
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.payment.PaymentStatus;
+import com.github.fontys.trackingsystem.services.beans.LocationServiceImpl;
 import com.github.fontys.trackingsystem.services.beans.VehicleServiceImpl;
+import com.github.fontys.trackingsystem.tracking.Location;
+import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import com.nonexistentcompany.RouteEngine;
 import com.nonexistentcompany.RouteTransformer;
 import com.nonexistentcompany.domain.RichRoute;
@@ -15,6 +18,7 @@ import com.nonexistentcompany.queue.RouteHandler;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 
@@ -48,13 +52,19 @@ public class ReceiveDriven {
             @Override
             public void handleRichRoute(RichRoute richRoute) {
 
+                // NON EJB Because of static context
                 VehicleServiceImpl vehicleService = new VehicleServiceImpl();
+                LocationServiceImpl locationService = new LocationServiceImpl();
                 BillDAO billDAO = new BillDaoImpl();
 
                 //Generate Bill
                 Bill bill = new Bill();
 
                 //TODO: Get last route for vehicle (?)
+
+                RegisteredVehicle registeredVehicle = vehicleService.getRegisteredVehicle(richRoute.getLicense());
+
+
                 bill.setStartDate(null); //TODO: Get the startdate from the first location in the route -.-
                 bill.setEndDate(null); //TODO: Get the enddate from the last location in the route ---___---
                 bill.setEndOfMonthBill(false);

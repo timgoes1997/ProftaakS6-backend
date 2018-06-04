@@ -9,5 +9,4 @@ public interface AuthService {
     Account logon(String email, String password, HttpServletRequest req);
     void isLoggedIn();
     void logout(HttpServletRequest req);
-
 }
