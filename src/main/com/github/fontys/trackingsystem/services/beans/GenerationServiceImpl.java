@@ -27,16 +27,13 @@ import java.util.concurrent.TimeoutException;
 public class GenerationServiceImpl implements GenerationService {
 
     @Inject
-    private TrackedVehicleDAO trackedVehicleDAO;
+    private RegisteredVehicleDAO registeredVehicleDAO;
 
     @Inject
     private LocationService locationService;
 
     @Inject
     private BillService billService;
-
-    @Inject
-    private RegisteredVehicleDAO registeredVehicleDAO;
 
     @Inject
     private BillDAO billDAO;
@@ -102,8 +99,11 @@ public class GenerationServiceImpl implements GenerationService {
                 distanceInKilometers,
                 true);
 
-        // Persist Bill
-        billDAO.create(domesticRouteBill);
+        // add bill
+        registeredVehicle.getBills().add(domesticRouteBill);
+
+        // persist bill
+        registeredVehicleDAO.edit(registeredVehicle);
     }
 
     // StartDate should be stored somewhere at the point when driving is started
@@ -138,7 +138,9 @@ public class GenerationServiceImpl implements GenerationService {
 
         // Foreign route //
         Map<String, Route> routeMap = routeEngine.determineForeignRoutes(euLocations);
-        routeEngine.sendRoutesToTheirCountry(routeMap);
+        try {
+            routeEngine.sendRoutesToTheirCountry(routeMap);
+        } catch (Exception e){}
 
         // Domestic route //
         List<EULocation> euLocationsDomestic = routeEngine.determineHomeRoute(euLocations);
@@ -162,6 +164,7 @@ public class GenerationServiceImpl implements GenerationService {
                 PaymentStatus.OPEN,
                 distanceInKilometers,
                 false);
+
 
         billDAO.create(domesticRouteBill);
     }

@@ -6,6 +6,8 @@ import javax.ws.rs.PathParam;
 import java.util.List;
 
 public interface LocationService {
+    List<Location> getVehicleOnLocationPrecise(String license, String startdate, String enddate);
+
     List<Location> getLocationsBetweenDatesByVehicleLicense(String license, String startdate, String enddate);
     List<Location> getLocationsBetweenTimesByVehicleLicense(String license, String startdate, String enddate);
 

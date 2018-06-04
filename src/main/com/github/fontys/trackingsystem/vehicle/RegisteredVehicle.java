@@ -6,6 +6,7 @@ import com.github.fontys.trackingsystem.user.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class RegisteredVehicle implements Serializable {
     private List<Bill> bills;
 
     public RegisteredVehicle(Long id, User customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
+        this.bills = new ArrayList<>();
         this.id = id;
         this.customer = customer;
         this.licensePlate = licensePlate;
@@ -73,17 +75,23 @@ public class RegisteredVehicle implements Serializable {
     }
 
     public RegisteredVehicle(User customer, String licensePlate, Vehicle vehicle, String proofOfOwnership) {
+        this.bills = new ArrayList<>();
         this.customer = customer;
         this.licensePlate = licensePlate;
         this.vehicle = vehicle;
         this.proofOfOwnership = proofOfOwnership;
     }
 
+    @Deprecated
     public RegisteredVehicle(){}
 
     @Override
     public String toString() {
         return String.format("CV: id %s, licensePlate %s", id, licensePlate);
+    }
+
+    public List<Bill> getBills() {
+        return bills;
     }
 
     public Long getId() {
