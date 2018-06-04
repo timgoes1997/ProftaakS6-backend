@@ -42,7 +42,7 @@ public class EmailTradeServiceImpl implements EmailTradeService{
                     + System.lineSeparator()
                     + "If that was you please click on the following link:"
                     + System.lineSeparator()
-                    + "linkje " + transfer.getTransferToken());
+                    + "http://localhost/trade.html?token=" + transfer.getTransferToken());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()
