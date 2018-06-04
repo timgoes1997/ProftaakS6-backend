@@ -55,7 +55,7 @@ public class EmailRecoveryServiceImpl implements EmailRecoveryService{
             messageBody.setText(System.lineSeparator()
                     + "You have requested a password recovery, please click on the following link to enter your new password:"
                     + System.lineSeparator()
-                    + "http://localhost:8080/Rekeningrijden/api/users/verify/" + acc.getRecoveryLink());
+                    + "http://localhost/recovery.html?token=" + acc.getRecoveryLink());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()

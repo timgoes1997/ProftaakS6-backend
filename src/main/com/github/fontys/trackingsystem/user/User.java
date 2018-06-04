@@ -155,7 +155,8 @@ public class User implements Serializable, ESUser {
         this.registeredVehicles = registeredVehicles;
     }
 
-    public Long getId() {
+    @XmlAttribute
+    public long getId() {
         return id;
     }
 

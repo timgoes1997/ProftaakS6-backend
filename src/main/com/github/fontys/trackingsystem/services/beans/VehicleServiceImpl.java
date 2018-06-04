@@ -177,7 +177,7 @@ public class VehicleServiceImpl implements VehicleService {
         EnergyLabel energyLabel = EnergyLabel.valueOf(energyLabelString);
 
         Date inDate = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Vehicle v = null;
         try {
             inDate = sdf.parse(date);
@@ -210,8 +210,7 @@ public class VehicleServiceImpl implements VehicleService {
     public RegisteredVehicle destroyVehicle(String license) {
         RegisteredVehicle registeredVehicle = getRegisteredVehicle(license);
 
-        //TODO: Permissions for Bill Administrators etc to destroy vehicles. For now only the owner can do it.
-        if(!Objects.equals(registeredVehicle.getCustomer().getId(), ((User) currentUser).getId())){
+        if (!(currentUser.getPrivilege() == Role.GOVERNMENT_EMPLOYEE || currentUser.getPrivilege() == Role.BILL_ADMINISTRATOR)) {
             throw new NotAuthorizedException("You are not authorized to destroy this vehicle");
         }
 

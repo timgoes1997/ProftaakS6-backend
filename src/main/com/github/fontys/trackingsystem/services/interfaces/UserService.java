@@ -11,7 +11,6 @@ public interface UserService {
     User confirmRegistration(String token);
     User createCustomer(String name, String address, String residency, String email, String username, String password);
     boolean recoverPassword(String email);
-    boolean hasRecoveryLink(String email, String recoveryLink);
-    User resetPassword(String email, String newPassword, String recoveryLink);
+    User resetPassword(String newPassword, String recoveryLink);
     User edit(String email);
 }

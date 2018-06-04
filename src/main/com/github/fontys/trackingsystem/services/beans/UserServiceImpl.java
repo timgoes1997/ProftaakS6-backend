@@ -15,6 +15,7 @@ import com.github.fontys.trackingsystem.user.User;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAcceptableException;
@@ -80,27 +81,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User confirmRegistration(String token) {
-        try {
-            if (!userDAO.verificationLinkExists(token)) {
-                throw new NotAcceptableException("Verification link doesn't exist");
-            }
-
-            if (userDAO.hasBeenVerified(token)) {
-                throw new NotAcceptableException("You have already verified your account");
-            }
-
-            User user = userDAO.findByVerificationLink(token);
-            if (user == null) {
-                throw new InternalServerErrorException("Couldn't find a user with the given verification link");
-            }
-            user.setVerified(true);
-            userDAO.edit(user);
-
-            return user;
-
-        } catch (Exception e) {
-            throw new InternalServerErrorException("Something went wrong while trying to verify user!");
+        if (!userDAO.verificationLinkExists(token)) {
+            throw new BadRequestException("Verification link doesn't exist");
         }
+
+        if (userDAO.hasBeenVerified(token)) {
+            throw new NotAcceptableException("You have already verified your account");
+        }
+
+        User user = userDAO.findByVerificationLink(token);
+        if (user == null) {
+            throw new InternalServerErrorException("Couldn't find a user with the given verification link");
+        }
+        user.setVerified(true);
+        userDAO.edit(user);
+
+        return user;
     }
 
     @Override
@@ -149,22 +145,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean hasRecoveryLink(String email, String recoveryLink) {
-        Account acc = accountDAO.findByEmail(email);
-        if (acc == null) {
-            throw new ForbiddenException("User for given email doesn't exist");
-        }
-
-        return acc.getRecoveryLink().equals(recoveryLink);
-    }
-
-    @Override
-    public User resetPassword(String email, String newPassword, String recoveryLink) {
-        Account acc = accountDAO.findByEmail(email);
+    public User resetPassword(String newPassword, String recoveryLink) {
+        Account acc = accountDAO.findByRecoveryLink(recoveryLink);
         if (acc == null && acc.getRecoveryLink().equals(recoveryLink)) {
             throw new ForbiddenException("User or recovery link doesn't exist");
         }
-
         acc.setPassword(newPassword);
         acc.setRecoveryLink(null);
         accountDAO.edit(acc);

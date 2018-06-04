@@ -3,6 +3,7 @@ package com.github.fontys.trackingsystem.beans;
 import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.trackingsystem.services.interfaces.TradeService;
 import com.github.fontys.trackingsystem.transfer.Transfer;
+import com.github.fontys.trackingsystem.user.Account;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -156,24 +157,24 @@ public class TradeBean {
     @Produces(MediaType.APPLICATION_JSON)
     @EasySecurity(requiresUser = true)
     @Path("/token")
-    public Transfer acceptTokenAlreadyLoggedIn(@FormParam("token") String token) {
+    public Account acceptTokenAlreadyLoggedIn(@FormParam("token") String token) {
         return tradeService.acceptTokenAlreadyLoggedIn(token);
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/login")
-    public Transfer acceptTokenLogin(@FormParam("token") String token,
-                                     @FormParam("email") String email,
-                                     @FormParam("password") String password,
-                                     @Context HttpServletRequest req) {
+    public Account acceptTokenLogin(@FormParam("token") String token,
+                                    @FormParam("email") String email,
+                                    @FormParam("password") String password,
+                                    @Context HttpServletRequest req) {
         return tradeService.acceptTokenLogin(token, email, password, req);
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/register")
-    public Transfer acceptTokenRegister(@FormParam("token") String token,
+    public Account acceptTokenRegister(@FormParam("token") String token,
                                         @FormParam("name") String name,
                                         @FormParam("address") String address,
                                         @FormParam("residency") String residency,
