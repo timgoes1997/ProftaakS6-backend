@@ -15,6 +15,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.Random;
@@ -62,7 +63,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
             messageBody.setText(System.lineSeparator()
                     + "Please use this verification link to verify your account:"
                     + System.lineSeparator()
-                    + "http://localhost/verify.html?token=" + acc.getUser().getVerifyLink());
+                    + "http://" + InetAddress.getLocalHost().getHostAddress() + "/verify.html?token=" + acc.getUser().getVerifyLink());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()
