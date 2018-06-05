@@ -61,7 +61,7 @@ public class DummyDataGenerator {
 
         Date date = new Date();
         User admin = new User("admin", "straat", "GERMANY", Role.BILL_ADMINISTRATOR);
-        Account adminAcc = new Account("admin@admin.com", "admin", "admin");
+        Account adminAcc = new Account("admin@admin.com", "password", "admin");
         admin.setVerified(true);
         adminAcc.setUser(admin);
         accountDAO.create(adminAcc);
@@ -86,7 +86,7 @@ public class DummyDataGenerator {
             u.setVerified(true);
 
 
-            Account account = new Account(String.format("email%s@gmail.com", i), name, String.format("password %s", i));
+            Account account = new Account(String.format("email%s@gmail.com", i), name, "password");
             account.setUser(u);
             u.setAccount(account);
 
