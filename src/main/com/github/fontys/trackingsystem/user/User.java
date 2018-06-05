@@ -1,5 +1,7 @@
 package com.github.fontys.trackingsystem.user;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
@@ -97,6 +99,7 @@ public class User implements Serializable, ESUser {
         this.name = name;
     }
 
+    @JsonIgnore
     @XmlTransient
     public String getAddress() {
         return address;
@@ -106,6 +109,7 @@ public class User implements Serializable, ESUser {
         this.lastSeen = Calendar.getInstance();
     }
 
+    @JsonGetter
     @XmlAttribute
     public boolean isAppUser() {
         return lastSeen != null;
@@ -127,6 +131,7 @@ public class User implements Serializable, ESUser {
         return role;
     }
 
+    @JsonGetter
     @XmlAttribute
     public String getEmail() {
         if (account == null)
@@ -140,6 +145,7 @@ public class User implements Serializable, ESUser {
         this.role = role;
     }
 
+    @JsonIgnore
     @XmlTransient
     public Account getAccount() {
         return account;

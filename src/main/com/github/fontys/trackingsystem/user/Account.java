@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.mail.imap.ACL;
 
 import javax.persistence.*;
@@ -78,6 +79,7 @@ public class Account {
         this.username = username;
     }
 
+    @JsonIgnore
     @XmlTransient
     public String getPassword() {
         return password;

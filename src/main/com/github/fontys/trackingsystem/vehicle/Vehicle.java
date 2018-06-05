@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.vehicle;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.github.fontys.trackingsystem.EnergyLabel;
 
 import javax.persistence.*;
@@ -148,6 +149,7 @@ public class Vehicle implements Serializable{
         return buildDate;
     }
 
+    @JsonGetter
     @XmlAttribute
     public Long getBuildDateLong() {return buildDate.getTime() * 1000;}
 

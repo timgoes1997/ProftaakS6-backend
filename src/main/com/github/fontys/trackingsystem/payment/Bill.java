@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.payment;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.persistence.*;
@@ -156,6 +157,7 @@ public class Bill implements Serializable {
         this.endDate = endDate;
     }
 
+    @JsonGetter
     @XmlAttribute
     public String getLicense() {
         return registeredVehicle.getLicensePlate();
@@ -177,11 +179,13 @@ public class Bill implements Serializable {
         this.mileage = mileage;
     }
 
+    @JsonGetter
     @XmlAttribute
     public String getMonth() {
         return new SimpleDateFormat("MMM").format(startDate.getTime());
     }
 
+    @JsonGetter
     @XmlAttribute
     public Long getBillnr() {
         return id;
