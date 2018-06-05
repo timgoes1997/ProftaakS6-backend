@@ -41,7 +41,7 @@ public class Account {
     @Column(name="EMAIL", unique = true)
     private String email;
 
-    @Column(name="USERNAME", unique = true)
+    @Column(name="USERNAME")
     private String username;
 
     @Column(name="PASSWORD")

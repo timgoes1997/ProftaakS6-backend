@@ -28,6 +28,10 @@ import java.util.*;
 @Startup
 public class DummyDataGenerator {
 
+    private String[] names = {"Piet", "Henk", "Barry", "Jansen", "Jans", "Henry", "Mikal",
+            "Michael", "Tim", "Bart", "Edwin", "Goos", "Sara", "Mina", "Merel", "Daniel", "Ella",
+            "Els", "Karel", "Ari", "Arie", "Hanz"};
+
     @PersistenceContext(name = "Proftaak")
     private EntityManager em;
 
@@ -56,15 +60,16 @@ public class DummyDataGenerator {
     public void init() {
 
         Date date = new Date();
-        User admin = new User("admin", "straat", "berlijn", Role.BILL_ADMINISTRATOR);
+        User admin = new User("admin", "straat", "GERMANY", Role.BILL_ADMINISTRATOR);
         Account adminAcc = new Account("admin@admin.com", "admin", "admin");
         admin.setVerified(true);
         adminAcc.setUser(admin);
         accountDAO.create(adminAcc);
 
-        generateSimpleTransfer();
 
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
+
+            String name = getRandom(names);
 
             Vehicle v = new Vehicle(
                     String.format("Brand '%s", i),
@@ -74,14 +79,16 @@ public class DummyDataGenerator {
                     FuelType.ELECTRIC,
                     EnergyLabel.A);
             User u = new User(
-                    String.format("Name %s", i),
+                    String.format(name, i),
                     String.format("Address %s", i),
-                    String.format("Residency %s", i),
+                    String.format("GERMANY", i),
                     Role.CUSTOMER);
             u.setVerified(true);
 
-            Account account = new Account(String.format("email %s", i), String.format("user %s", i), String.format("password %s", i));
+
+            Account account = new Account(String.format("email%s@gmail.com", i), name, String.format("password %s", i));
             account.setUser(u);
+            u.setAccount(account);
 
             RegisteredVehicle rv = new RegisteredVehicle(
                     (long) i,
@@ -119,6 +126,11 @@ public class DummyDataGenerator {
             em.persist(tv);
             em.persist(u);
         }
+    }
+
+    public static String getRandom(String[] array) {
+        int rnd = new Random().nextInt(array.length);
+        return array[rnd];
     }
 
     private void generateSimpleTransfer() {

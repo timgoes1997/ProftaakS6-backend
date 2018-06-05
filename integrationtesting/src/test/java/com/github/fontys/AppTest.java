@@ -143,7 +143,7 @@ public class AppTest {
     }
 
     private void sendLocation(double lat, double lon, String license) throws IOException, InterruptedException {
-        Thread.sleep(250);
+        Thread.sleep(2000);
 
         FormBody.Builder formBuilder = new FormBody.Builder();
 

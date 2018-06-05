@@ -63,7 +63,7 @@ public class User implements Serializable, ESUser {
     @Column(name = "ROLE")
     private Role role;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
     private Account account;
 
     @Temporal(TemporalType.DATE)
@@ -127,10 +127,20 @@ public class User implements Serializable, ESUser {
         return role;
     }
 
+    @XmlAttribute
+    public String getEmail() {
+        if (account == null)
+        {
+            return "";
+        }
+        return account.getEmail();
+    }
+
     public void setRole(Role role) {
         this.role = role;
     }
 
+    @XmlTransient
     public Account getAccount() {
         return account;
     }
