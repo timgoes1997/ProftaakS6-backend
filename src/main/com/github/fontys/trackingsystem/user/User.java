@@ -163,6 +163,8 @@ public class User implements Serializable, ESUser {
         this.department = department;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<RegisteredVehicle> getRegisteredVehicles() {
         return registeredVehicles;
     }

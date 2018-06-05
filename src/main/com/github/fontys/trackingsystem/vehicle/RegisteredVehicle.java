@@ -1,10 +1,12 @@
 package com.github.fontys.trackingsystem.vehicle;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.user.User;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -90,6 +92,8 @@ public class RegisteredVehicle implements Serializable {
         return String.format("CV: id %s, licensePlate %s", id, licensePlate);
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<Bill> getBills() {
         return bills;
     }
