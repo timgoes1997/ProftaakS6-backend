@@ -119,10 +119,6 @@ public class LocationServiceImpl implements LocationService {
         if (rv == null) {
             return locations;
         }
-
-        TrackedVehicle tv = trackedVehicleDAO.findByRegisteredVehicleID(rv.getId());
-
-        locations.add(tv.getLastLocation()); // Add last known location
         return locations;
     }
 
