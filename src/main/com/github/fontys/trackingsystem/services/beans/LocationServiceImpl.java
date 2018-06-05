@@ -42,6 +42,15 @@ public class LocationServiceImpl implements LocationService {
         return getLocationsBetweenDatesByVehicleLicense(license, startdate, enddate);
     }
 
+    @Override
+    public List<Location> getVehicleOnLocationPrecise(String license, String startdate, String enddate) {
+        // only admins are allowed to backtrack all
+        if (!isAuthorisedToTrack(license)) {
+            throw new NotAuthorizedException("Not allowed to track unowned vehicle");
+        }
+        return getLocationsBetweenTimesByVehicleLicense(license, startdate, enddate);
+    }
+
     private List<Location> getLocationsBetweenXXXByVehicleLicense(SimpleDateFormat format, String license, String startdate, String enddate) {
         Date start;
         Date end;
@@ -71,19 +80,13 @@ public class LocationServiceImpl implements LocationService {
                 Date currentLocationDate = l.getTime().getTime();
                 // if the date of the location falls outside the specified dates, remove the location
                 if (currentLocationDate.before(start) || currentLocationDate.after(end)) {
-//                if ((cl.before(start) || cl.after(end)) && !(cl.equals(start) || cl.equals(end))) {
-//                    if (!(!cl.before(start) && !cl.after(end))) {
                     locIter.remove();
                 }
             }
         }
 
         //Sort the list by dates
-        Collections.sort(locations, new Comparator<Location>() {
-            public int compare(Location o1, Location o2) {
-                return o1.getTime().compareTo(o2.getTime());
-            }
-        });
+        Collections.sort(locations, Comparator.comparing(Location::getTime));
 
         return locations;
     }

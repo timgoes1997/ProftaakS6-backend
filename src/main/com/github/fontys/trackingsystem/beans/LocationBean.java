@@ -8,6 +8,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RequestScoped
@@ -25,6 +26,22 @@ public class LocationBean {
                                                @FormParam("startdate") String startdate,
                                                @FormParam("enddate") String enddate) {
         return locationService.getVehicleOnLocation(license, startdate, enddate);
+    }
+
+    @POST
+    @EasySecurity(requiresUser = true)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{license}/precise")
+    public List<Location> getVehicleOnLocationInt(@PathParam("license") String license,
+                                               @FormParam("startdate") Long startdate,
+                                               @FormParam("enddate") Long enddate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // int to dates
+        Date start = new Date(startdate);
+        Date end = new Date(enddate);
+
+        // todo: migrate to function to make faster
+        return locationService.getVehicleOnLocationPrecise(license, format.format(start), format.format(end));
     }
 
     @POST
