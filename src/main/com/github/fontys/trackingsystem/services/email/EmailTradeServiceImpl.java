@@ -88,10 +88,11 @@ public class EmailTradeServiceImpl implements EmailTradeService{
                     + transfer.getStatus().toString());
 
             BodyPart transferBody = new MimeBodyPart();
+
             transferBody.setText(System.lineSeparator()
                     + "To view the update go to your transfer tab in the RekeningRijden app or click on the following link:"
                     + System.lineSeparator()
-                    + "http://" + InetAddress.getLocalHost().getHostAddress() + "/trade.html?token=" + transfer.getTransferToken());
+                    + "http://" + Localhost.getLocalHostLANAddress().getHostAddress() + "/trade.html?token=" + transfer.getTransferToken());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()

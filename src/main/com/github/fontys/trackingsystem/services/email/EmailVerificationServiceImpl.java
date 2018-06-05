@@ -63,7 +63,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
             messageBody.setText(System.lineSeparator()
                     + "Please use this verification link to verify your account:"
                     + System.lineSeparator()
-                    + "http://" + InetAddress.getLocalHost().getHostAddress() + "/verify.html?token=" + acc.getUser().getVerifyLink());
+                    + "http://" + Localhost.getLocalHostLANAddress().getHostAddress() + "/verify.html?token=" + acc.getUser().getVerifyLink());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()
