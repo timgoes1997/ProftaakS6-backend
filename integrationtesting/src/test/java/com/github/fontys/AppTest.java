@@ -56,7 +56,7 @@ public class AppTest {
     }
 
     @Test
-    public void simulateForeignRoute() throws IOException, InterruptedException {
+    public void simulateForeignRoute1() throws IOException, InterruptedException {
         Date startDate = Calendar.getInstance().getTime();
 
         String license = "XXX-001";
@@ -76,6 +76,52 @@ public class AppTest {
         sendLocation(51.459657, 6.285554, license); // Germany
         sendLocation(51.421483, 6.330382, license); // Germany
         sendLocation(51.412513, 6.475905, license); // Germany
+
+        Date endDate = Calendar.getInstance().getTime();
+
+        sendArrival(startDate, endDate, license);
+    }
+
+    @Test
+    public void simulateDomesticRoute() throws IOException, InterruptedException {
+        Date startDate = Calendar.getInstance().getTime();
+
+        String license = "XXX-001";
+
+        sendLocation(51.506457, 7.404453, license); // Germany
+        sendLocation(51.506457, 7.294590, license); // Germany
+        sendLocation(51.511585, 7.242405, license); // Germany
+        sendLocation(51.547468, 7.209446, license); // Germany
+        sendLocation(51.600168, 7.180321, license); // Germany
+        sendLocation(51.686056, 7.157029, license); // Germany
+        sendLocation(51.719976, 7.150062, license); // Germany
+        sendLocation(51.734154, 7.161009, license); // Germany
+        sendLocation(51.740933, 7.232661, license); // Germany
+        sendLocation(51.734154, 7.311280, license); // Germany
+        sendLocation(51.760648, 7.383927, license); // Germany
+        sendLocation(51.729223, 7.401840, license); // Germany
+        sendLocation(51.694692, 7.373976, license); // Germany
+        sendLocation(51.656431, 7.347106, license); // Germany
+        sendLocation(51.605778, 7.318246, license); // Germany
+        sendLocation(51.562367, 7.379491, license); // Germany
+        sendLocation(51.525325, 7.396324, license); // Germany
+
+        Date endDate = Calendar.getInstance().getTime();
+
+        sendArrival(startDate, endDate, license);
+    }
+
+    @Test
+    public void simulateForeignRoute3() throws IOException, InterruptedException {
+        Date startDate = Calendar.getInstance().getTime();
+
+        String license = "XXX-001";
+
+        sendLocation(51.412513, 6.475905, license); // Germany
+
+        sendLocation(51.389580, 6.174433, license); // Netherlands
+
+        sendLocation(51.477356, 6.256511, license); // Germany
 
         Date endDate = Calendar.getInstance().getTime();
 
