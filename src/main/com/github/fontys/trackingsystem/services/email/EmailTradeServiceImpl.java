@@ -11,6 +11,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.ws.rs.NotFoundException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +43,7 @@ public class EmailTradeServiceImpl implements EmailTradeService{
                     + System.lineSeparator()
                     + "If that was you please click on the following link:"
                     + System.lineSeparator()
-                    + "http://localhost/trade.html?token=" + transfer.getTransferToken());
+                    + "http://" + InetAddress.getLocalHost().getHostAddress() + "/trade.html?token=" + transfer.getTransferToken());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()
@@ -90,7 +91,7 @@ public class EmailTradeServiceImpl implements EmailTradeService{
             transferBody.setText(System.lineSeparator()
                     + "To view the update go to your transfer tab in the RekeningRijden app or click on the following link:"
                     + System.lineSeparator()
-                    + "Linkie");
+                    + "http://" + InetAddress.getLocalHost().getHostAddress() + "/trade.html?token=" + transfer.getTransferToken());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()
