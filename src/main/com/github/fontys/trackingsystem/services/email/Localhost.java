@@ -43,7 +43,11 @@ public class Localhost {
 
                         if (inetAddr.isSiteLocalAddress()) {
                             // Found non-loopback site-local address. Return it immediately...
-                            return inetAddr;
+                            if( inetAddr.getHostAddress().indexOf("192.168") == 0 ||
+                                    inetAddr.getHostAddress().indexOf("10.") == 0 ||
+                                    inetAddr.getHostAddress().indexOf("172.16") == 0 ){
+                                return inetAddr;
+                            }
                         } else if (candidateAddress == null) {
                             // Found non-loopback address, but not necessarily site-local.
                             // Store it as a candidate to be returned if site-local address is not subsequently found...
