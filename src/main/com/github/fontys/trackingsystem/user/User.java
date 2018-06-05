@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.security.base.ESUser;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
+import javax.json.bind.annotation.JsonbProperty;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -100,6 +102,7 @@ public class User implements Serializable, ESUser {
     }
 
     @JsonIgnore
+    @JsonbTransient
     @XmlTransient
     public String getAddress() {
         return address;
@@ -110,6 +113,7 @@ public class User implements Serializable, ESUser {
     }
 
     @JsonGetter
+    @JsonbProperty
     @XmlAttribute
     public boolean isAppUser() {
         return lastSeen != null;
@@ -132,6 +136,7 @@ public class User implements Serializable, ESUser {
     }
 
     @JsonGetter
+    @JsonbProperty
     @XmlAttribute
     public String getEmail() {
         if (account == null)
@@ -146,6 +151,7 @@ public class User implements Serializable, ESUser {
     }
 
     @JsonIgnore
+    @JsonbTransient
     @XmlTransient
     public Account getAccount() {
         return account;
@@ -164,6 +170,7 @@ public class User implements Serializable, ESUser {
     }
 
     @JsonIgnore
+    @JsonbTransient
     @XmlTransient
     public List<RegisteredVehicle> getRegisteredVehicles() {
         return registeredVehicles;
@@ -174,6 +181,7 @@ public class User implements Serializable, ESUser {
     }
 
     @JsonGetter
+    @JsonbProperty
     @XmlAttribute
     public long getId() {
         return id;

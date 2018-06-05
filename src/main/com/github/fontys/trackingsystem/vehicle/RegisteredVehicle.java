@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.trackingsystem.payment.Bill;
 import com.github.fontys.trackingsystem.user.User;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
@@ -93,6 +94,7 @@ public class RegisteredVehicle implements Serializable {
     }
 
     @JsonIgnore
+    @JsonbTransient
     @XmlTransient
     public List<Bill> getBills() {
         return bills;

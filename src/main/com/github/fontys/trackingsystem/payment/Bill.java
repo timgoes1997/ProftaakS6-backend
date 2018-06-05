@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
+import javax.json.bind.annotation.JsonbProperty;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
@@ -107,6 +109,7 @@ public class Bill implements Serializable {
 
     @JsonIgnore
     @XmlTransient
+    @JsonbTransient
     public RegisteredVehicle getRegisteredVehicle() {
         return registeredVehicle;
     }
@@ -116,12 +119,14 @@ public class Bill implements Serializable {
     }
 
     @JsonGetter
+    @JsonbProperty
     @XmlAttribute
     public long getNumberStartDate() {
         return startDate.getTimeInMillis() / 1000;
     }
 
     @JsonGetter
+    @JsonbProperty
     @XmlAttribute
     public long getNumberEndDate() {
         return endDate.getTimeInMillis() / 1000;
@@ -162,6 +167,7 @@ public class Bill implements Serializable {
     }
 
     @JsonGetter
+    @JsonbProperty
     @XmlAttribute
     public String getLicense() {
         return registeredVehicle.getLicensePlate();
@@ -184,12 +190,14 @@ public class Bill implements Serializable {
     }
 
     @JsonGetter
+    @JsonbProperty
     @XmlAttribute
     public String getMonth() {
         return new SimpleDateFormat("MMM").format(startDate.getTime());
     }
 
     @JsonGetter
+    @JsonbProperty
     @XmlAttribute
     public Long getBillnr() {
         return id;

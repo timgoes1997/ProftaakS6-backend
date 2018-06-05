@@ -3,6 +3,7 @@ package com.github.fontys.trackingsystem.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.mail.imap.ACL;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
@@ -80,6 +81,7 @@ public class Account {
     }
 
     @JsonIgnore
+    @JsonbTransient
     @XmlTransient
     public String getPassword() {
         return password;
