@@ -23,8 +23,8 @@ public class TradeServiceImplTest {
 
     private EntityManager em;
 
-    private String transferFrom = "email 9";
-    private String transferTo = "email 1";
+    private String transferFrom = "email9@gmail.com";
+    private String transferTo = "email1@gmail.com";
 
     @Before
     public void setUp() throws Exception {
