@@ -1,18 +1,19 @@
 package com.github.fontys.trackingsystem;
 
+import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.*;
-import com.github.fontys.trackingsystem.payment.Bill;
-import com.github.fontys.trackingsystem.payment.PaymentStatus;
-import com.github.fontys.trackingsystem.tracking.Hardware;
-import com.github.fontys.trackingsystem.tracking.Location;
-import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
-import com.github.fontys.trackingsystem.transfer.Transfer;
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.Role;
-import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
-import com.github.fontys.trackingsystem.vehicle.FuelType;
-import com.github.fontys.trackingsystem.vehicle.Vehicle;
+import com.github.fontys.entities.payment.Bill;
+import com.github.fontys.entities.payment.PaymentStatus;
+import com.github.fontys.entities.tracking.Hardware;
+import com.github.fontys.entities.tracking.Location;
+import com.github.fontys.entities.tracking.TrackedVehicle;
+import com.github.fontys.entities.transfer.Transfer;
+import com.github.fontys.entities.user.Account;
+import com.github.fontys.entities.user.Role;
+import com.github.fontys.entities.user.User;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.vehicle.FuelType;
+import com.github.fontys.entities.vehicle.Vehicle;
 
 import javax.annotation.PostConstruct;
 

@@ -1,8 +1,8 @@
 package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
+import com.github.fontys.entities.user.Account;
+import com.github.fontys.entities.user.User;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

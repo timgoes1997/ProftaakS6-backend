@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

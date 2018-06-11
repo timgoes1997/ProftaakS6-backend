@@ -1,14 +1,12 @@
 package com.github.fontys.trackingsystem.dao;
 
-import com.github.fontys.trackingsystem.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
-import com.github.fontys.trackingsystem.vehicle.FuelType;
-import com.github.fontys.trackingsystem.vehicle.Vehicle;
+import com.github.fontys.entities.vehicle.FuelType;
+import com.github.fontys.entities.vehicle.Vehicle;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;

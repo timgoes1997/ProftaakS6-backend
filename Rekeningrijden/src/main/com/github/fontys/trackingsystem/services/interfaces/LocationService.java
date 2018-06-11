@@ -1,8 +1,7 @@
 package com.github.fontys.trackingsystem.services.interfaces;
 
-import com.github.fontys.trackingsystem.tracking.Location;
+import com.github.fontys.entities.tracking.Location;
 
-import javax.ws.rs.PathParam;
 import java.util.List;
 
 public interface LocationService {

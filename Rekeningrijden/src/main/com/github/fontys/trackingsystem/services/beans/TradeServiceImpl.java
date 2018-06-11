@@ -10,11 +10,11 @@ import com.github.fontys.trackingsystem.services.interfaces.AuthService;
 import com.github.fontys.trackingsystem.services.interfaces.FileService;
 import com.github.fontys.trackingsystem.services.interfaces.TradeService;
 import com.github.fontys.trackingsystem.services.interfaces.UserService;
-import com.github.fontys.trackingsystem.transfer.Transfer;
-import com.github.fontys.trackingsystem.transfer.TransferStatus;
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.transfer.Transfer;
+import com.github.fontys.entities.transfer.TransferStatus;
+import com.github.fontys.entities.user.Account;
+import com.github.fontys.entities.user.User;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.inject.Inject;

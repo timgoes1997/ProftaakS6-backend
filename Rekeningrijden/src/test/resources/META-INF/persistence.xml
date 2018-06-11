@@ -6,30 +6,30 @@
     <persistence-unit name="ProftaakTest" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
-        <class>com.github.fontys.trackingsystem.user.User</class>
-        <class>com.github.fontys.trackingsystem.user.Account</class>
-        <class>com.github.fontys.trackingsystem.user.Department</class>
-        <class>com.github.fontys.trackingsystem.user.Role</class>
+        <class>com.github.fontys.entities.user.User</class>
+        <class>com.github.fontys.entities.user.Account</class>
+        <class>com.github.fontys.entities.user.Department</class>
+        <class>com.github.fontys.entities.user.Role</class>
 
-        <class>com.github.fontys.trackingsystem.payment.Bill</class>
+        <class>com.github.fontys.entities.payment.Bill</class>
         <class>com.github.fontys.trackingsystem.payment.Currency</class>
-        <class>com.github.fontys.trackingsystem.payment.PaymentStatus</class>
+        <class>com.github.fontys.entities.payment.PaymentStatus</class>
 
-        <class>com.github.fontys.trackingsystem.region.Region</class>
-        <class>com.github.fontys.trackingsystem.region.BorderLocation</class>
+        <class>com.github.fontys.entities.region</class>
+        <class>com.github.fontys.entities.region.BorderLocation</class>
 
-        <class>com.github.fontys.trackingsystem.tracking.Hardware</class>
-        <class>com.github.fontys.trackingsystem.tracking.Location</class>
-        <class>com.github.fontys.trackingsystem.tracking.TrackedVehicle</class>
+        <class>com.github.fontys.entities.tracking.Hardware</class>
+        <class>com.github.fontys.entities.tracking.Location</class>
+        <class>com.github.fontys.entities.tracking.TrackedVehicle</class>
 
-        <class>com.github.fontys.trackingsystem.transfer.Transfer</class>
-        <class>com.github.fontys.trackingsystem.transfer.TransferStatus</class>
+        <class>com.github.fontys.entities.transfer.Transfer</class>
+        <class>com.github.fontys.entities.transfer.TransferStatus</class>
 
-        <class>com.github.fontys.trackingsystem.vehicle.RegisteredVehicle</class>
-        <class>com.github.fontys.trackingsystem.vehicle.FuelType</class>
-        <class>com.github.fontys.trackingsystem.vehicle.Vehicle</class>
+        <class>com.github.fontys.entities.vehicle.RegisteredVehicle</class>
+        <class>com.github.fontys.entities.vehicle.FuelType</class>
+        <class>com.github.fontys.entities.vehicle.Vehicle</class>
         <class>com.github.fontys.trackingsystem.EnergyLabel</class>
-        <class>com.github.fontys.trackingsystem.Rate</class>
+        <class>com.github.fontys.entities.payment.Rate</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>

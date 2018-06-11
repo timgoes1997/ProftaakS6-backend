@@ -1,9 +1,8 @@
 package com.github.fontys.trackingsystem.services.interfaces;
 
-import com.github.fontys.trackingsystem.transfer.Transfer;
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.transfer.Transfer;
+import com.github.fontys.entities.user.Account;
+import com.github.fontys.entities.user.User;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.servlet.http.HttpServletRequest;

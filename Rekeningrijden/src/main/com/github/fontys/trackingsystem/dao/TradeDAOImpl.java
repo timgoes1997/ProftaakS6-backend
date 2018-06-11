@@ -1,9 +1,9 @@
 package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.dao.interfaces.TradeDAO;
-import com.github.fontys.trackingsystem.transfer.Transfer;
-import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.transfer.Transfer;
+import com.github.fontys.entities.user.User;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

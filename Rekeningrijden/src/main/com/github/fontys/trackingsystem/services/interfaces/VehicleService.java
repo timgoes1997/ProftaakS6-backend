@@ -1,13 +1,10 @@
 package com.github.fontys.trackingsystem.services.interfaces;
 
-import com.github.fontys.trackingsystem.vehicle.FuelType;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
-import com.github.fontys.trackingsystem.vehicle.Vehicle;
+import com.github.fontys.entities.vehicle.FuelType;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.vehicle.Vehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.GenericEntity;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;

@@ -2,16 +2,15 @@ package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.trackingsystem.services.interfaces.VehicleService;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
-import com.github.fontys.trackingsystem.vehicle.FuelType;
-import com.github.fontys.trackingsystem.vehicle.Vehicle;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.vehicle.FuelType;
+import com.github.fontys.entities.vehicle.Vehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;

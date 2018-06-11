@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.services.interfaces;
 
-import com.github.fontys.trackingsystem.payment.Bill;
-import com.github.fontys.trackingsystem.payment.PaymentStatus;
+import com.github.fontys.entities.payment.Bill;
+import com.github.fontys.entities.payment.PaymentStatus;
 
 import java.util.List;
 

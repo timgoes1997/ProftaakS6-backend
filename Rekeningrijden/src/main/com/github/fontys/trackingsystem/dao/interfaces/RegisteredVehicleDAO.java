@@ -1,6 +1,6 @@
 package com.github.fontys.trackingsystem.dao.interfaces;
 
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
 
 import java.util.List;
 

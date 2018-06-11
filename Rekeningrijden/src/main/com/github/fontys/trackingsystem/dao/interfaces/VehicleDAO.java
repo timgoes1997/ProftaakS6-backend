@@ -1,8 +1,7 @@
 package com.github.fontys.trackingsystem.dao.interfaces;
 
-import com.github.fontys.trackingsystem.EnergyLabel;
-import com.github.fontys.trackingsystem.vehicle.FuelType;
-import com.github.fontys.trackingsystem.vehicle.Vehicle;
+import com.github.fontys.entities.vehicle.FuelType;
+import com.github.fontys.entities.vehicle.Vehicle;
 
 import java.util.Date;
 import java.util.List;

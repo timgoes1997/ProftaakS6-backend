@@ -1,6 +1,6 @@
 package com.github.fontys.trackingsystem.dao.interfaces;
 
-import com.github.fontys.trackingsystem.payment.Bill;
+import com.github.fontys.entities.payment.Bill;
 
 import java.util.List;
 

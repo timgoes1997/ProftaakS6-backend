@@ -1,10 +1,9 @@
 package com.github.fontys.trackingsystem.services.email;
 
-import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailVerificationService;
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
+import com.github.fontys.entities.user.Account;
+import com.github.fontys.entities.user.User;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -14,11 +13,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.math.BigInteger;
-import java.net.InetAddress;
-import java.security.SecureRandom;
 import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
 import java.util.logging.Logger;
 

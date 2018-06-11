@@ -6,8 +6,8 @@ import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.services.interfaces.AuthService;
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
+import com.github.fontys.entities.user.Account;
+import com.github.fontys.entities.user.User;
 
 import javax.ejb.EJBException;
 import javax.inject.Inject;

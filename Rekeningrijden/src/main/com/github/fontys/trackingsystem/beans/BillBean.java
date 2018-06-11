@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.security.annotations.interceptors.EasySecurity;
-import com.github.fontys.trackingsystem.payment.Bill;
+import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.trackingsystem.services.interfaces.BillService;
 
 import javax.enterprise.context.RequestScoped;

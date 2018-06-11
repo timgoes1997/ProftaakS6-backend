@@ -1,14 +1,12 @@
 package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
-import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.entities.user.Account;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.logging.Logger;
 
 @Stateless
 public class AccountDAOImpl implements AccountDAO {

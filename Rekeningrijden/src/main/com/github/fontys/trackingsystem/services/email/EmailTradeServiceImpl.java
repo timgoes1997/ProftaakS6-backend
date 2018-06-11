@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.services.email;
 
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailTradeService;
-import com.github.fontys.trackingsystem.transfer.Transfer;
+import com.github.fontys.entities.transfer.Transfer;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;

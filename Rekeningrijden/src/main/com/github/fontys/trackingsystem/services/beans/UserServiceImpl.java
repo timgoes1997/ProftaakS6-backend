@@ -7,9 +7,9 @@ import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailRecoveryService;
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailVerificationService;
 import com.github.fontys.trackingsystem.services.interfaces.UserService;
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.Role;
-import com.github.fontys.trackingsystem.user.User;
+import com.github.fontys.entities.user.Account;
+import com.github.fontys.entities.user.Role;
+import com.github.fontys.entities.user.User;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

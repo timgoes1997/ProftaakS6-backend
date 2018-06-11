@@ -2,7 +2,7 @@ package com.github.fontys.trackingsystem.services.email;
 
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailRecoveryService;
-import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.entities.user.Account;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -11,7 +11,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.net.InetAddress;
 import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Logger;

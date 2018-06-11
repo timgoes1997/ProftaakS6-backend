@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.dao.interfaces;
 
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
+import com.github.fontys.entities.user.Account;
+import com.github.fontys.entities.user.User;
 
 public interface UserDAO {
     void create(User user);

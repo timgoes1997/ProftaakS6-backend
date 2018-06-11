@@ -5,7 +5,7 @@ import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.services.beans.AuthServiceImpl;
-import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.entities.user.Account;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;

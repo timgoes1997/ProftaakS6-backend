@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.services.interfaces;
 
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.User;
+import com.github.fontys.entities.user.Account;
+import com.github.fontys.entities.user.User;
 
 public interface UserService {
     Account getAccount(int id);

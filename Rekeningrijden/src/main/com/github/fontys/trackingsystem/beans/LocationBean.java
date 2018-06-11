@@ -2,7 +2,7 @@ package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.trackingsystem.services.interfaces.LocationService;
-import com.github.fontys.trackingsystem.tracking.Location;
+import com.github.fontys.entities.tracking.Location;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;

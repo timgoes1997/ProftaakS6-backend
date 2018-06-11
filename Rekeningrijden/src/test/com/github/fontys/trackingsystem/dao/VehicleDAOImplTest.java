@@ -4,8 +4,8 @@
 //import com.github.fontys.trackingsystem.EnergyLabel;
 //import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 //import com.github.fontys.trackingsystem.dao.interfaces.VehicleModelDAO;
-//import com.github.fontys.trackingsystem.vehicle.FuelType;
-//import com.github.fontys.trackingsystem.vehicle.Vehicle;
+//import FuelType;
+//import Vehicle;
 //import com.github.fontys.trackingsystem.vehicle.VehicleModel;
 //import org.junit.After;
 //import org.junit.Before;

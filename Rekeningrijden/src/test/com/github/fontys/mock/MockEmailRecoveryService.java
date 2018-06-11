@@ -2,7 +2,7 @@ package com.github.fontys.mock;
 
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailRecoveryService;
-import com.github.fontys.trackingsystem.user.Account;
+import com.github.fontys.entities.user.Account;
 
 import java.util.UUID;
 

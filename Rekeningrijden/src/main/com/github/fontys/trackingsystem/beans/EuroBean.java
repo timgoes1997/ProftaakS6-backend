@@ -9,7 +9,6 @@ import com.nonexistentcompany.RouteEngine;
 import com.nonexistentcompany.RouteTransformer;
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -17,29 +16,15 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-import com.github.fontys.international.RouteTransformerGermany;
-import com.github.fontys.trackingsystem.payment.Bill;
-import com.github.fontys.trackingsystem.payment.PaymentStatus;
-import com.github.fontys.trackingsystem.services.interfaces.BillService;
-import com.github.fontys.trackingsystem.services.interfaces.GenerationService;
-import com.github.fontys.trackingsystem.services.interfaces.LocationService;
-import com.github.fontys.trackingsystem.services.interfaces.VehicleService;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
-import com.nonexistentcompany.RouteEngine;
-import com.nonexistentcompany.RouteTransformer;
+import com.github.fontys.entities.payment.Bill;
+import com.github.fontys.entities.payment.PaymentStatus;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
 import com.nonexistentcompany.domain.RichRoute;
 import com.nonexistentcompany.domain.Route;
 import com.nonexistentcompany.queue.RichRouteHandler;
 import com.nonexistentcompany.queue.RouteHandler;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.concurrent.TimeoutException;
 
 @Stateless
 public class EuroBean {

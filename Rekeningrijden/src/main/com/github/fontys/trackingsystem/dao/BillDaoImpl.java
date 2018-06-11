@@ -1,10 +1,9 @@
 package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
-import com.github.fontys.trackingsystem.payment.Bill;
+import com.github.fontys.entities.payment.Bill;
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

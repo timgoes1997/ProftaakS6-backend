@@ -1,7 +1,7 @@
 package com.github.fontys.mock;
 
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailTradeService;
-import com.github.fontys.trackingsystem.transfer.Transfer;
+import com.github.fontys.entities.transfer.Transfer;
 
 public class MockEmailTradeService implements EmailTradeService {
 

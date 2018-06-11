@@ -5,11 +5,11 @@ import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.TrackedVehicleDAO;
 import com.github.fontys.trackingsystem.services.interfaces.LocationService;
-import com.github.fontys.trackingsystem.tracking.Location;
-import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
-import com.github.fontys.trackingsystem.user.Role;
-import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.tracking.Location;
+import com.github.fontys.entities.tracking.TrackedVehicle;
+import com.github.fontys.entities.user.Role;
+import com.github.fontys.entities.user.User;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
 
 //import com.nonexistentcompany.queue.RouteHandler;
 

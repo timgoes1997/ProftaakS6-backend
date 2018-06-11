@@ -2,17 +2,16 @@ package com.github.fontys.trackingsystem.services.beans;
 
 import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.entities.security.base.ESUser;
-import com.github.fontys.trackingsystem.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.trackingsystem.services.interfaces.FileService;
 import com.github.fontys.trackingsystem.services.interfaces.VehicleService;
-import com.github.fontys.trackingsystem.user.Role;
-import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.FuelType;
-import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
-import com.github.fontys.trackingsystem.vehicle.Vehicle;
+import com.github.fontys.entities.user.Role;
+import com.github.fontys.entities.user.User;
+import com.github.fontys.entities.vehicle.FuelType;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
+import com.github.fontys.entities.vehicle.Vehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.ejb.EJBException;

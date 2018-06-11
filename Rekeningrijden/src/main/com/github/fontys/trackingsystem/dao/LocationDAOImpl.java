@@ -1,15 +1,11 @@
 package com.github.fontys.trackingsystem.dao;
 
 import com.github.fontys.trackingsystem.dao.interfaces.LocationDAO;
-import com.github.fontys.trackingsystem.dao.interfaces.TrackedVehicleDAO;
-import com.github.fontys.trackingsystem.tracking.Location;
-import com.github.fontys.trackingsystem.tracking.TrackedVehicle;
+import com.github.fontys.entities.tracking.Location;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.List;
 
 @Stateless
 public class LocationDAOImpl implements LocationDAO {
