@@ -7,6 +7,30 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <jta-data-source>java:comp/DefaultDataSource</jta-data-source>
 
+        <class>com.github.fontys.entities.user.User</class>
+        <class>com.github.fontys.entities.user.Account</class>
+        <class>com.github.fontys.entities.user.Department</class>
+        <class>com.github.fontys.entities.user.Role</class>
+
+        <class>com.github.fontys.entities.payment.Bill</class>
+        <class>com.github.fontys.entities.payment.PaymentStatus</class>
+        <class>com.github.fontys.entities.payment.Rate</class>
+
+        <class>com.github.fontys.entities.region.Region</class>
+        <class>com.github.fontys.entities.region.BorderLocation</class>
+
+        <class>com.github.fontys.entities.tracking.Hardware</class>
+        <class>com.github.fontys.entities.tracking.Location</class>
+        <class>com.github.fontys.entities.tracking.TrackedVehicle</class>
+
+        <class>com.github.fontys.entities.transfer.Transfer</class>
+        <class>com.github.fontys.entities.transfer.TransferStatus</class>
+
+        <class>com.github.fontys.entities.vehicle.RegisteredVehicle</class>
+        <class>com.github.fontys.entities.vehicle.FuelType</class>
+        <class>com.github.fontys.entities.vehicle.Vehicle</class>
+        <class>com.github.fontys.entities.vehicle.EnergyLabel</class>
+
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>

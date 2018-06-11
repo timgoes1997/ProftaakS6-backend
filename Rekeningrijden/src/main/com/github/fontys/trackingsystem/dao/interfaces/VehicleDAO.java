@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.dao.interfaces;
 
+import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.entities.vehicle.FuelType;
 import com.github.fontys.entities.vehicle.Vehicle;
 
