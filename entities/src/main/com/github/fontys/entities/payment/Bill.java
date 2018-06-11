@@ -1,5 +1,7 @@
 package com.github.fontys.entities.payment;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
 
 import javax.json.bind.annotation.JsonbProperty;
@@ -105,7 +107,7 @@ public class Bill implements Serializable {
         this.isEndOfMonthBill = isEndOfMonthBill;
     }
 
-    //@JsonIgnore
+    @JsonIgnore
     @XmlTransient
     @JsonbTransient
     public RegisteredVehicle getRegisteredVehicle() {
@@ -116,14 +118,14 @@ public class Bill implements Serializable {
         this.registeredVehicle = registeredVehicle;
     }
 
-    //@JsonGetter
+    @JsonGetter
     @JsonbProperty
     @XmlAttribute
     public long getNumberStartDate() {
         return startDate.getTimeInMillis() / 1000;
     }
 
-    //@JsonGetter
+    @JsonGetter
     @JsonbProperty
     @XmlAttribute
     public long getNumberEndDate() {
@@ -164,7 +166,7 @@ public class Bill implements Serializable {
         this.endDate = endDate;
     }
 
-    //@JsonGetter
+    @JsonGetter
     @JsonbProperty
     @XmlAttribute
     public String getLicense() {
@@ -187,14 +189,14 @@ public class Bill implements Serializable {
         this.mileage = mileage;
     }
 
-    //@JsonGetter
+    @JsonGetter
     @JsonbProperty
     @XmlAttribute
     public String getMonth() {
         return new SimpleDateFormat("MMM").format(startDate.getTime());
     }
 
-    //@JsonGetter
+    @JsonGetter
     @JsonbProperty
     @XmlAttribute
     public Long getBillnr() {

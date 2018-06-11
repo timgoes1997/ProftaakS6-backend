@@ -1,5 +1,7 @@
 package com.github.fontys.entities.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
@@ -75,7 +77,7 @@ public class Account {
         this.username = username;
     }
 
-    //@JsonIgnore
+    @JsonIgnore
     @JsonbTransient
     @XmlTransient
     public String getPassword() {

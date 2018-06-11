@@ -1,5 +1,7 @@
 package com.github.fontys.entities.vehicle;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import java.io.Serializable;
@@ -146,7 +148,7 @@ public class Vehicle implements Serializable{
         return buildDate;
     }
 
-    //@JsonGetter
+    @JsonGetter
     @XmlAttribute
     public Long getBuildDateLong() {return buildDate.getTime() * 1000;}
 

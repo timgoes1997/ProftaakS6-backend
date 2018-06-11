@@ -1,5 +1,7 @@
 package com.github.fontys.entities.user;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
 
@@ -99,7 +101,7 @@ public class User implements Serializable, ESUser {
         this.name = name;
     }
 
-    //@JsonIgnore
+    @JsonIgnore
     @JsonbTransient
     @XmlTransient
     public String getAddress() {
@@ -110,7 +112,7 @@ public class User implements Serializable, ESUser {
         this.lastSeen = Calendar.getInstance();
     }
 
-    //@JsonGetter
+    @JsonGetter
     @JsonbProperty
     @XmlAttribute
     public boolean isAppUser() {
@@ -133,7 +135,7 @@ public class User implements Serializable, ESUser {
         return role;
     }
 
-    //@JsonGetter
+    @JsonGetter
     @JsonbProperty
     @XmlAttribute
     public String getEmail() {
@@ -148,7 +150,7 @@ public class User implements Serializable, ESUser {
         this.role = role;
     }
 
-    //@JsonIgnore
+    @JsonIgnore
     @JsonbTransient
     @XmlTransient
     public Account getAccount() {
@@ -167,7 +169,7 @@ public class User implements Serializable, ESUser {
         this.department = department;
     }
 
-    //@JsonIgnore
+    @JsonIgnore
     @JsonbTransient
     @XmlTransient
     public List<RegisteredVehicle> getRegisteredVehicles() {
@@ -178,7 +180,7 @@ public class User implements Serializable, ESUser {
         this.registeredVehicles = registeredVehicles;
     }
 
-    //@JsonGetter
+    @JsonGetter
     @JsonbProperty
     @XmlAttribute
     public long getId() {

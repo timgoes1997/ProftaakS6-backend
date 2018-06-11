@@ -1,5 +1,6 @@
 package com.github.fontys.entities.vehicle;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.entities.user.User;
 
@@ -91,7 +92,7 @@ public class RegisteredVehicle implements Serializable {
         return String.format("CV: id %s, licensePlate %s", id, licensePlate);
     }
 
-    //@JsonIgnore
+    @JsonIgnore
     @JsonbTransient
     @XmlTransient
     public List<Bill> getBills() {
