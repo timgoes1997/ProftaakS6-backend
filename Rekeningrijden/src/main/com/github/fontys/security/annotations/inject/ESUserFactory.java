@@ -5,11 +5,10 @@
  */
 package com.github.fontys.security.annotations.inject;
 
-import com.github.fontys.security.base.ESUser;
+import com.github.fontys.entities.security.base.ESUser;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
-import javax.enterprise.util.Nonbinding;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 

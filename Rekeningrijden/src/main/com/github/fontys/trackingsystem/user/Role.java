@@ -1,6 +1,6 @@
 package com.github.fontys.trackingsystem.user;
 
-import com.github.fontys.security.base.ESRole;
+import com.github.fontys.entities.security.base.ESRole;
 
 public enum Role implements ESRole{
     CUSTOMER("CUSTOMER"),

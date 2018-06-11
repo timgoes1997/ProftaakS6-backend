@@ -1,7 +1,7 @@
 package com.github.fontys.trackingsystem.services.beans;
 
 import com.github.fontys.security.annotations.inject.CurrentESUser;
-import com.github.fontys.security.base.ESUser;
+import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
@@ -13,23 +13,17 @@ import com.github.fontys.trackingsystem.user.User;
 import com.github.fontys.trackingsystem.vehicle.FuelType;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 import com.github.fontys.trackingsystem.vehicle.Vehicle;
-import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.ejb.EJBException;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.Response;
 import java.io.*;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 public class VehicleServiceImpl implements VehicleService {
 

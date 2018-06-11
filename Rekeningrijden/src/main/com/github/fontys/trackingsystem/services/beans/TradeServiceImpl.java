@@ -1,11 +1,10 @@
 package com.github.fontys.trackingsystem.services.beans;
 
 import com.github.fontys.security.annotations.inject.CurrentESUser;
-import com.github.fontys.security.base.ESUser;
+import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.TradeDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
-import com.github.fontys.trackingsystem.services.email.EmailTradeServiceImpl;
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailTradeService;
 import com.github.fontys.trackingsystem.services.interfaces.AuthService;
 import com.github.fontys.trackingsystem.services.interfaces.FileService;
@@ -20,7 +19,6 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.io.File;
 import java.io.InputStream;

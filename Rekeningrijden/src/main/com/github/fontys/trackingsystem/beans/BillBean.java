@@ -1,29 +1,13 @@
 package com.github.fontys.trackingsystem.beans;
 
-import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.security.annotations.interceptors.EasySecurity;
-import com.github.fontys.security.base.ESRole;
-import com.github.fontys.security.base.ESUser;
-import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
-import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
-import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
-import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.payment.Bill;
-import com.github.fontys.trackingsystem.payment.PaymentStatus;
 import com.github.fontys.trackingsystem.services.interfaces.BillService;
-import com.github.fontys.trackingsystem.user.Account;
-import com.github.fontys.trackingsystem.user.Role;
-import com.github.fontys.trackingsystem.user.User;
-import com.github.fontys.trackingsystem.vehicle.Vehicle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 //end points

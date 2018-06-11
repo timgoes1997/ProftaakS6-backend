@@ -30,6 +30,8 @@ dependencies {
     compile group: 'com.rabbitmq', name: 'amqp-client', version: '4.2.0'
     compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.1'
 
+    compile project(":entities")
+
     compile files('libs/queue-library.jar')
 
     compile files('libs/gson-2.8.1.jar')

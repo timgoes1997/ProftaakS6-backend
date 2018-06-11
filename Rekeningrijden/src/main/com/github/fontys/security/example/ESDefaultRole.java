@@ -5,7 +5,7 @@
  */
 package com.github.fontys.security.example;
 
-import com.github.fontys.security.base.ESRole;
+import com.github.fontys.entities.security.base.ESRole;
 
 /**
  *

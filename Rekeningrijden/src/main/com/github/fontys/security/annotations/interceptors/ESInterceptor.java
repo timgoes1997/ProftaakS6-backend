@@ -6,7 +6,7 @@
 package com.github.fontys.security.annotations.interceptors;
 
 import com.github.fontys.security.annotations.inject.CurrentESUser;
-import com.github.fontys.security.base.ESUser;
+import com.github.fontys.entities.security.base.ESUser;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;

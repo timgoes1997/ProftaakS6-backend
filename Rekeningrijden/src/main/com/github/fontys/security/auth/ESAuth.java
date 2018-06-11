@@ -5,7 +5,7 @@
  */
 package com.github.fontys.security.auth;
 
-import com.github.fontys.security.base.ESUser;
+import com.github.fontys.entities.security.base.ESUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

@@ -2,7 +2,7 @@ package com.github.fontys.trackingsystem.user;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.fontys.security.base.ESUser;
+import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.vehicle.RegisteredVehicle;
 
 import javax.json.bind.annotation.JsonbProperty;
