@@ -84,8 +84,12 @@ public class UserBean {
     @Produces(MediaType.APPLICATION_JSON)
     @EasySecurity(requiresUser = true)
     @Path("/edit")
-    public User edit(@FormParam("email") String email) {
-        return userService.edit(email);
+    public User edit(
+            @FormParam("email") String email,
+            @FormParam("address") String address,
+            @FormParam("residency") String residency,
+            @FormParam("department") String department) {
+        return userService.edit(email, address, residency, department);
     }
 
 }

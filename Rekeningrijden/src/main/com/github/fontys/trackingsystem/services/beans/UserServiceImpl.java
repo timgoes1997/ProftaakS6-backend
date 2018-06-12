@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.services.beans;
 
+import com.github.fontys.entities.user.Department;
 import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
@@ -155,15 +156,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User edit(String email) {
+    public User edit(String email, String address, String residency, String department) {
         User user = (User) currentUser;
         Account acc = user.getAccount();
-        acc.setEmail(email);
+
+        boolean mailHasBeenChanged = false;
+        if (email != null && !email.isEmpty()) {
+            acc.setEmail(email);
+            mailHasBeenChanged = true;
+        }
+        if (address != null && !address.isEmpty()) {
+            user.setAddress(address);
+        }
+        if (residency != null && !residency.isEmpty()) {
+            user.setResidency(residency);
+        }
+        if (department != null && !department.isEmpty()) {
+            for (Department d : Department.values()) {
+                if (d.toString().equals(department)) {
+                    user.setDepartment(d);
+                }
+            }
+        }
+
         accountDAO.edit(acc);
         user.setVerified(false);
+        if (mailHasBeenChanged == true) {
+            user.setVerifyLink(emailVerificationService.generateVerificationLink(user));
+        }
         userDAO.edit(user);
+        if (mailHasBeenChanged == true) {
+            emailVerificationService.sendVerificationMail(user.getAccount());
+        }
         return user;
     }
+
 
     public void setAccountDAO(AccountDAO accountDAO) {
         this.accountDAO = accountDAO;
