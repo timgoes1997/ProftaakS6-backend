@@ -1,15 +1,44 @@
 package com.github.fontys.entities.payment;
 
 import com.github.fontys.entities.region.Region;
+import com.github.fontys.entities.user.User;
 import com.github.fontys.entities.vehicle.EnergyLabel;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity(name = "RATE")
+@NamedQueries({
+        @NamedQuery(
+                name = Rate.FIND_ALL,
+                query = "SELECT r FROM RATE r ORDER BY r.addedDate ASC"
+        ),
+        @NamedQuery(
+                name = Rate.FIND_ID,
+                query = "SELECT r FROM RATE r WHERE r.id = :id"
+        ),
+        @NamedQuery(
+                name = Rate.FIND_BY_REGION,
+                query = "SELECT r FROM RATE r WHERE r.region.id = :id ORDER BY r.addedDate ASC"
+        )
+})
 public class Rate {
+
+    //======================
+    //==    Constansts    ==
+    //======================
+
+    public static final String FIND_ALL = "RegionRate.findAll";
+    public static final String FIND_ID = "RegionRate.findByID";
+    public static final String FIND_BY_REGION = "RegionRate.findByRegion";
+
+
+    //======================
+    //==      Fields      ==
+    //======================
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,20 +59,31 @@ public class Rate {
     @Column(name = "ENERGYLABEL")
     private EnergyLabel energyLabel;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "START_TIME")
-    private Date startTime;
+    private Calendar startTime;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "END_TIME")
-    private Date endTime;
+    private Calendar endTime;
 
-    public Rate(Region region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Date startTime, Date endTime) {
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "ADDED_DATE")
+    private Calendar addedDate;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="USER_ID")
+    private User authorizer;
+
+
+    public Rate(Region region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Calendar addedDate, User authorizer) {
         this.region = region;
         this.kilometerPrice = kilometerPrice;
         this.energyLabel = energyLabel;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.addedDate = addedDate;
+        this.authorizer = authorizer;
     }
 
     public Rate() {
@@ -73,20 +113,36 @@ public class Rate {
         this.energyLabel = energyLabel;
     }
 
-    public Date getStartTime() {
+    public Calendar getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Calendar startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public Calendar getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Calendar endTime) {
         this.endTime = endTime;
+    }
+
+    public Calendar getAddedDate() {
+        return addedDate;
+    }
+
+    public void setAddedDate(Calendar addedDate) {
+        this.addedDate = addedDate;
+    }
+
+    public User getAuthorizer() {
+        return authorizer;
+    }
+
+    public void setAuthorizer(User authorizer) {
+        this.authorizer = authorizer;
     }
 
     public Long getId() {

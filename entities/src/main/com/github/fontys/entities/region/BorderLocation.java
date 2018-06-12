@@ -10,6 +10,9 @@ public class BorderLocation {
     @Column(name = "ID")
     private Long id;
 
+    @Column(name = "VERTICES_ID")
+    private Long verticeId;
+
     @Column(name="X")
     private double x;
 
@@ -20,9 +23,18 @@ public class BorderLocation {
 
     }
 
-    public BorderLocation(double x, double y){
+    public BorderLocation(double x, double y, Long verticeId){
         this.x = x;
         this.y = y;
+        this.verticeId = verticeId;
+    }
+
+    public Long getVerticeId() {
+        return verticeId;
+    }
+
+    public void setVerticeId(Long verticeId) {
+        this.verticeId = verticeId;
     }
 
     public double getX() {
