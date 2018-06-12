@@ -61,12 +61,14 @@ public class DummyDataGenerator {
     public void init() {
 
         Date date = new Date();
-        User admin = new User("admin", "straat", "GERMANY", Role.BILL_ADMINISTRATOR);
-        Account adminAcc = new Account("admin@admin.com", "admin", "password");
-        admin.setVerified(true);
-        adminAcc.setUser(admin);
-        accountDAO.create(adminAcc);
 
+        // Accounts made for special roles
+        // email is xxx@admin.com, password is password
+        createSpecialAccount("bills", Role.BILL_ADMINISTRATOR);
+        createSpecialAccount("government", Role.GOVERNMENT_EMPLOYEE);
+        createSpecialAccount("police", Role.POLICE_EMPLOYEE);
+        createSpecialAccount("kilometer", Role.KILOMETER_TRACKER);
+        createSpecialAccount("admin", Role.SYSTEM_ADMINISTRATOR);
 
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
 
@@ -126,6 +128,15 @@ public class DummyDataGenerator {
             accountDAO.create(account);
             em.persist(tv);
         }
+    }
+
+    private void createSpecialAccount(String emailsuffix, Role role)
+    {
+        User admin = new User("A. D'min", "Rekeningrijderstraat 241a", "GERMANY", role);
+        Account adminAcc = new Account(emailsuffix + "@admin.com", "admin", "password");
+        admin.setVerified(true);
+        adminAcc.setUser(admin);
+        accountDAO.create(adminAcc);
     }
 
     public static String getRandom(String[] array) {
