@@ -7,6 +7,7 @@ import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.entities.payment.PaymentStatus;
+import com.github.fontys.trackingsystem.services.beans.basic.RestrictedServiceImpl;
 import com.github.fontys.trackingsystem.services.interfaces.BillService;
 import com.github.fontys.entities.user.Account;
 import com.github.fontys.entities.user.Role;
@@ -22,7 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class BillServiceImpl implements BillService {
+public class BillServiceImpl extends RestrictedServiceImpl implements BillService {
 
     @Inject
     @CurrentESUser
@@ -272,15 +273,14 @@ public class BillServiceImpl implements BillService {
                 ((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId();
     }
 
+
+    @Override
+    public Role getCurrentPrivilege() {
+        return (Role) currentUser.getPrivilege();
+    }
+
     private boolean accessAllBillsAllowed(){
-        Role priv = (Role) currentUser.getPrivilege();
-        switch (priv) {
-            case BILL_ADMINISTRATOR:
-            case GOVERNMENT_EMPLOYEE:
-                return true;
-            default:
-                return false;
-        }
+        return getDefaultAccessPrivileges();
     }
 
     public void setCurrentUser(ESUser currentUser) {
