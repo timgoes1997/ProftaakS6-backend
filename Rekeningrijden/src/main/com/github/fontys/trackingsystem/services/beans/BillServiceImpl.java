@@ -256,12 +256,9 @@ public class BillServiceImpl implements BillService {
     @Override
     public List<Bill> getMaxAllowedBills() {
         List<Bill> b;
-        // RETURN OWN BILLS FOR;
-        // CUSTOMERS
-        if (currentUser.getPrivilege() == Role.CUSTOMER) {
+        if (!accessAllBillsAllowed()) {
             b = billDAO.findByOwnerId(((User) currentUser).getId());
         } else {
-            // FOR ANY OTHER ROLE, RETURN ALL
             b = billDAO.getAll();
         }
         return b;
@@ -269,22 +266,21 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public boolean hasBillRights(Bill b) {
+        return // Can access all bills
+                accessAllBillsAllowed() || // OR
+                        // Owns this bill
+                ((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId();
+    }
+
+    private boolean accessAllBillsAllowed(){
         Role priv = (Role) currentUser.getPrivilege();
         switch (priv) {
-            case CUSTOMER:
-                // check if you're the owner
-                if (((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId()) {
-                    // not the owner
-                    return false;
-                }
-                break;
             case BILL_ADMINISTRATOR:
-                // allowed. proceed.
-                break;
+            case GOVERNMENT_EMPLOYEE:
+                return true;
             default:
                 return false;
         }
-        return true;
     }
 
     public void setCurrentUser(ESUser currentUser) {
