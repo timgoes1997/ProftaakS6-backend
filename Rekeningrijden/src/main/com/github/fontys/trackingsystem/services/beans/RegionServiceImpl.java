@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class RegionServiceImpl implements RegionService {
@@ -90,7 +91,7 @@ public class RegionServiceImpl implements RegionService {
     }
 
     @Override
-    public Rate createRate(Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Calendar addedDate, Long authorizer) {
+    public Rate createRate(Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Long authorizer) {
         if (!regionDAO.exists(region)) {
             throw new NotFoundException("Region with given id doesn't exist");
         }
@@ -99,34 +100,46 @@ public class RegionServiceImpl implements RegionService {
             throw new NotFoundException("given user doesn't exist");
         }
 
+        if(startTime == null || endTime == null){
+            throw new NotAcceptableException("Start and enddate can't be null for a rate");
+        }
 
+        Region foundRegion = regionDAO.find(region);
+        User foundAuthorizer = userDAO.find(authorizer);
 
-        return null;
+        Rate rate = new Rate(foundRegion, kilometerPrice, energyLabel, startTime, endTime, GregorianCalendar.getInstance(), foundAuthorizer);
+        rateDAO.create(rate);
+
+        return rate;
     }
 
     @Override
     public Rate createRate(Rate rate) {
-        return null;
-    }
 
-    @Override
-    public Rate editRate(Long id, Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Calendar addedDate, Long authorizer) {
-        return null;
-    }
+        if(rate == null || rate.getAuthorizer() == null || rate.getRegion() == null){
+            throw new NotAcceptableException("Rate, Authorizer and Region can't be null while creating a rate!");
+        }
 
-    @Override
-    public Rate editRate(Long id, Rate rate) {
-        return null;
+        return createRate(rate.getRegion().getId(), rate.getKilometerPrice(), rate.getEnergyLabel(), rate.getStartTime(), rate.getEndTime(), rate.getAuthorizer().getId());
     }
 
     @Override
     public Rate removeRate(Rate rate) {
-        return null;
+        if(rate == null){
+            throw new NotAcceptableException("Can't remove a null Rate!");
+        }
+        return removeRate(rate.getId());
     }
 
     @Override
     public Rate removeRate(Long id) {
-        return null;
+        if(!rateDAO.exists(id)){
+            throw new NotFoundException("Rate couldn't be found!");
+        }
+
+        Rate toRemove = rateDAO.find(id);
+        rateDAO.remove(toRemove);
+        return toRemove;
     }
 
     @Override

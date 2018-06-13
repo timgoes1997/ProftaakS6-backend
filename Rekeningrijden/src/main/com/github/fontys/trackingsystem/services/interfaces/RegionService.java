@@ -21,11 +21,8 @@ public interface RegionService {
     Region remove(Long id);
     Region remove(Region region);
 
-    Rate createRate(Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Calendar addedDate, Long authorizer);
+    Rate createRate(Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Long authorizer);
     Rate createRate(Rate rate);
-
-    Rate editRate(Long id, Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Calendar addedDate, Long authorizer);
-    Rate editRate(Long id, Rate rate);
 
     Rate removeRate(Rate rate);
     Rate removeRate(Long id);
