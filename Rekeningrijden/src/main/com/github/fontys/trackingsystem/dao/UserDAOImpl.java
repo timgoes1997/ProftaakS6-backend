@@ -66,6 +66,13 @@ public class UserDAOImpl implements UserDAO{
                 .getResultList().size() > 0;
     }
 
+    @Override
+    public boolean exists(Long authorizer) {
+        TypedQuery<User> query =
+                em.createNamedQuery(User.FIND_BYID, User.class);
+        return query.setParameter("id", authorizer).getResultList().size() > 0;
+    }
+
     public void setEntityManager(EntityManager em){
         this.em = em;
     }

@@ -1,0 +1,180 @@
+package com.github.fontys.trackingsystem.services.beans;
+
+import com.github.fontys.entities.payment.Rate;
+import com.github.fontys.entities.region.BorderLocation;
+import com.github.fontys.entities.region.Region;
+import com.github.fontys.entities.tracking.Location;
+import com.github.fontys.entities.user.User;
+import com.github.fontys.entities.vehicle.EnergyLabel;
+import com.github.fontys.trackingsystem.dao.interfaces.RateDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.RegionDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
+import com.github.fontys.trackingsystem.services.interfaces.RegionService;
+
+import javax.inject.Inject;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.NotAcceptableException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Response;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class RegionServiceImpl implements RegionService {
+
+    @Inject
+    private RegionDAO regionDAO;
+
+    @Inject
+    private RateDAO rateDAO;
+
+    @Inject
+    private UserDAO userDAO;
+
+    @Override
+    public Region create(String name, List<BorderLocation> borderPoints) {
+        return create(new Region(name, borderPoints));
+    }
+
+    @Override
+    public Region create(Region region) {
+        if (regionDAO.exists(region.getName())) {
+            throw new ClientErrorException(Response.Status.CONFLICT);
+        }
+
+        regionDAO.create(region);
+        return region;
+    }
+
+    @Override
+    public Region edit(Long id, String name, List<BorderLocation> borderPoints) {
+        return edit(id, new Region(name, borderPoints));
+    }
+
+    @Override
+    public Region edit(Long id, Region region) {
+        if (!regionDAO.exists(id)) {
+            throw new NotFoundException("Region with given id doesn't exist");
+        }
+        if (regionDAO.exists(region.getName())) {
+            throw new ClientErrorException(Response.Status.CONFLICT);
+        }
+
+        Region toMerge = regionDAO.find(id);
+        toMerge.setName(region.getName());
+        toMerge.setBorderPoints(region.getBorderPoints());
+
+        regionDAO.edit(region);
+        return region;
+    }
+
+    @Override
+    public Region remove(Long id) {
+        if (!regionDAO.exists(id)) {
+            throw new NotFoundException("Region with given id doesn't exist");
+        }
+
+        Region region = regionDAO.find(id);
+        regionDAO.remove(region);
+        return region;
+    }
+
+    @Override
+    public Region remove(Region region) {
+        if(region == null){
+            throw new NotAcceptableException("Region is null");
+        }
+
+        return remove(region.getId());
+    }
+
+    @Override
+    public Rate createRate(Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Calendar addedDate, Long authorizer) {
+        if (!regionDAO.exists(region)) {
+            throw new NotFoundException("Region with given id doesn't exist");
+        }
+
+        if(!userDAO.exists(authorizer)){
+            throw new NotFoundException("given user doesn't exist");
+        }
+
+
+
+        return null;
+    }
+
+    @Override
+    public Rate createRate(Rate rate) {
+        return null;
+    }
+
+    @Override
+    public Rate editRate(Long id, Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Calendar addedDate, Long authorizer) {
+        return null;
+    }
+
+    @Override
+    public Rate editRate(Long id, Rate rate) {
+        return null;
+    }
+
+    @Override
+    public Rate removeRate(Rate rate) {
+        return null;
+    }
+
+    @Override
+    public Rate removeRate(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Rate> getRegionRates(Region region) {
+        return rateDAO.findRates(region);
+    }
+
+    @Override
+    public Rate getRate(Location location) {
+        return null;
+    }
+
+    @Override
+    public List<Region> getWithinRegions(Location location) {
+        return getWithinRegions(location.getX(), location.getY());
+    }
+
+    @Override
+    public List<Region> getWithinRegions(double x, double y) {
+        List<Region> regions = regionDAO.getAllRegions();
+        List<Region> inRegions = new ArrayList<>();
+        for (Region r : regions) {
+            if (r.isWithinRegion(x, y)) {
+                inRegions.add(r);
+            }
+        }
+        return inRegions;
+    }
+
+    @Override
+    public Region getWithinRegion(Location location) {
+        return getWithinRegion(location.getX(), location.getY());
+    }
+
+    @Override
+    public Region getWithinRegion(double x, double y) {
+        List<Region> within = getWithinRegions(x, y);
+        if (within.size() <= 0) {
+            return null;
+        }
+        Region mostRecentlyAdded = within.get(0);
+        for (Region region : within) {
+            if (!region.getId().equals(mostRecentlyAdded.getId())) {
+                if (region.getAddedDate().after(mostRecentlyAdded.getAddedDate())) {
+                    mostRecentlyAdded = region;
+                }
+            }
+        }
+        return mostRecentlyAdded;
+    }
+}

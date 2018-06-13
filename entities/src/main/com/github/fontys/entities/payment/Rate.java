@@ -7,8 +7,10 @@ import com.github.fontys.entities.vehicle.EnergyLabel;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Entity(name = "RATE")
 @NamedQueries({
@@ -45,12 +47,12 @@ public class Rate {
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="REGION_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REGION_ID")
     private Region region;
 
-    @Digits(integer = 12, fraction = 2)
-    @Column(name = "KILOMETER_PRICE")
+    @Digits(integer = 12, fraction = 4)
+    @Column(name = "KILOMETER_PRICE", precision = 16, scale = 4)
     private BigDecimal kilometerPrice;
 
     // possible extension; add employee who assigned this rate
@@ -71,8 +73,8 @@ public class Rate {
     @Column(name = "ADDED_DATE")
     private Calendar addedDate;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="USER_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
     private User authorizer;
 
 
@@ -147,5 +149,24 @@ public class Rate {
 
     public Long getId() {
         return id;
+    }
+
+    public boolean isInRate(EnergyLabel energyLabel) {
+        //check labels
+        if (energyLabel != this.energyLabel) return false;
+
+        //check day
+        Calendar currentTime = GregorianCalendar.getInstance();
+        currentTime = getTime(currentTime.get(Calendar.DAY_OF_WEEK), currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE));
+        Calendar start = getTime(startTime.get(Calendar.DAY_OF_WEEK), startTime.get(Calendar.HOUR_OF_DAY),startTime.get(Calendar.MINUTE));
+        Calendar end = getTime(endTime.get(Calendar.DAY_OF_WEEK), endTime.get(Calendar.HOUR_OF_DAY), endTime.get(Calendar.MINUTE));
+
+        return start.before(currentTime) && end.after(currentTime);
+    }
+
+    private Calendar getTime(int currentDay, int currentHour, int currentMinute) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, currentDay, currentHour, currentMinute, 0);
+        return calendar;
     }
 }

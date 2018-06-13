@@ -19,4 +19,6 @@ public interface UserDAO {
     boolean verificationLinkExists(String link);
 
     boolean hasBeenVerified(String link);
+
+    boolean exists(Long authorizer);
 }
