@@ -10,9 +10,9 @@ import com.github.fontys.trackingsystem.services.interfaces.LocationService;
 import com.github.fontys.entities.tracking.DistanceCalculator;
 import com.github.fontys.entities.tracking.Location;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
-import com.nonexistentcompany.RouteEngine;
-import com.nonexistentcompany.domain.EULocation;
-import com.nonexistentcompany.domain.Route;
+import com.nonexistentcompany.lib.RouteEngine;
+import com.nonexistentcompany.lib.domain.EULocation;
+import com.nonexistentcompany.lib.domain.ForeignRoute;
 
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -66,12 +66,12 @@ public class GenerationServiceImpl implements GenerationService {
 
         // Convert routes to EULocations
         List<EULocation> euLocations = convertLocationsToEULocations(
-                registeredVehicle.getLicensePlate(),
                 lastMonthsLocations);
 
         // Foreign route //
         // Determine foreign routes and send them to the corresponding country
-        Map<String, Route> routeMap = routeEngine.determineForeignRoutes(euLocations);
+        Map<String, ForeignRoute> routeMap = routeEngine.determineForeignRoutes(euLocations, registeredVehicle.getLicensePlate());
+
         routeEngine.sendRoutesToTheirCountry(routeMap);
 
         // Domestic route //
@@ -132,14 +132,11 @@ public class GenerationServiceImpl implements GenerationService {
                 endDateString);
 
         // Convert last route from Location objects to EULocations objects
-        List<EULocation> euLocations = convertLocationsToEULocations(registeredVehicle.getLicensePlate(),
-                route);
+        List<EULocation> euLocations = convertLocationsToEULocations(route);
 
         // Foreign route //
-        Map<String, Route> routeMap = routeEngine.determineForeignRoutes(euLocations);
-        try {
-            routeEngine.sendRoutesToTheirCountry(routeMap);
-        } catch (Exception e){}
+        Map<String, ForeignRoute> routeMap = routeEngine.determineForeignRoutes(euLocations, registeredVehicle.getLicensePlate());
+        routeEngine.sendRoutesToTheirCountry(routeMap);
 
         // Domestic route //
         List<EULocation> euLocationsDomestic = routeEngine.determineHomeRoute(euLocations);
@@ -239,20 +236,20 @@ public class GenerationServiceImpl implements GenerationService {
         // Calculate distance
         for (int i = 0; i < locations.size() - 1; i++) {
             distanceInKilometers = distanceCalculator.getDistance(locations.get(i).getLat(),
-                    locations.get(i).getLon(),
+                    locations.get(i).getLng(),
                     locations.get(i + 1).getLat(),
-                    locations.get(i + 1).getLon());
+                    locations.get(i + 1).getLng());
         }
 
         return distanceInKilometers;
     }
 
-    public List<EULocation> convertLocationsToEULocations(String license, List<Location> locations) {
+    public List<EULocation> convertLocationsToEULocations(List<Location> locations) {
         List<EULocation> euLocations = new ArrayList<>();
         if (locations != null) {
             for (Location l : locations) {
                 long unixTime = l.getTime().getTimeInMillis() / 1000;
-                euLocations.add(new EULocation(license, l.getX(), l.getY(), unixTime));
+                euLocations.add(new EULocation(l.getX(), l.getY(), unixTime));
             }
         }
         // Sort the EULocations list

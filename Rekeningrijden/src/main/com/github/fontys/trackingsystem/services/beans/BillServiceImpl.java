@@ -1,9 +1,11 @@
 package com.github.fontys.trackingsystem.services.beans;
 
+import com.github.fontys.entities.payment.ForeignBill;
 import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
+import com.github.fontys.trackingsystem.dao.interfaces.ForeignBillDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.entities.payment.PaymentStatus;
@@ -31,6 +33,9 @@ public class BillServiceImpl extends RestrictedServiceImpl implements BillServic
 
     @Inject
     private BillDAO billDAO;
+
+    @Inject
+    private ForeignBillDAO foreignBillDAO;
 
     @Inject
     private AccountDAO accountDAO;
@@ -270,7 +275,13 @@ public class BillServiceImpl extends RestrictedServiceImpl implements BillServic
         return // Can access all bills
                 accessAllBillsAllowed() || // OR
                         // Owns this bill
-                ((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId();
+                        ((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId();
+    }
+
+    @Override
+    public ForeignBill createForeignBill(ForeignBill foreignBill) {
+        foreignBillDAO.create(foreignBill);
+        return foreignBill;
     }
 
 
@@ -279,7 +290,7 @@ public class BillServiceImpl extends RestrictedServiceImpl implements BillServic
         return (Role) currentUser.getPrivilege();
     }
 
-    private boolean accessAllBillsAllowed(){
+    private boolean accessAllBillsAllowed() {
         return getDefaultAccessPrivileges();
     }
 

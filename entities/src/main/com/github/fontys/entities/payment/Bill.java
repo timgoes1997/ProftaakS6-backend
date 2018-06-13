@@ -52,38 +52,38 @@ public class Bill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long id;
+    protected Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CUSTOMER_VEHICLE_ID")
-    private RegisteredVehicle registeredVehicle;
+    protected RegisteredVehicle registeredVehicle;
 
     @Column(name = "PRICE")
-    private BigDecimal price;
+    protected BigDecimal price;
 
     @Column(name = "ALREADY_PAID")
-    private BigDecimal alreadyPaid;
+    protected BigDecimal alreadyPaid;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE")
-    private Calendar startDate;
+    protected Calendar startDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE")
-    private Calendar endDate;
+    protected Calendar endDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "PAYMENT_STATUS")
-    private PaymentStatus status;
+    protected PaymentStatus status;
 
     @Column(name = "MILEAGE")
-    private double mileage;
+    protected double mileage;
 
     @Column(name = "ISENDOFMONTHBILL")
-    private boolean isEndOfMonthBill;
+    protected boolean isEndOfMonthBill;
 
     @OneToMany
-    private List<Bill> montlyBills;
+    protected List<Bill> montlyBills;
 
     public Bill() {
 

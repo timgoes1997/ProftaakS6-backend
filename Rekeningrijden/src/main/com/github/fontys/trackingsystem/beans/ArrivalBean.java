@@ -5,8 +5,8 @@ import com.github.fontys.trackingsystem.services.interfaces.BillService;
 import com.github.fontys.trackingsystem.services.interfaces.GenerationService;
 import com.github.fontys.trackingsystem.services.interfaces.LocationService;
 import com.github.fontys.trackingsystem.services.interfaces.VehicleService;
-import com.nonexistentcompany.RouteEngine;
-import com.nonexistentcompany.RouteTransformer;
+import com.nonexistentcompany.lib.RouteEngine;
+import com.nonexistentcompany.lib.RouteTransformer;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
