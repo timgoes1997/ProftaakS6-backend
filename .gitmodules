@@ -1,0 +1,3 @@
+[submodule "queue-library"]
+	path = queue-library
+	url = https://github.com/EdwinVanRooij/queue-library.git

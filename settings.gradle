@@ -11,3 +11,4 @@ rootProject.name = 'ProftaakS6-backend'
 include ':Rekeningrijden'
 include ":integrationtesting"
 include ":entities"
+include ":queue-library"

@@ -31,8 +31,7 @@ dependencies {
     compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.1'
 
     compile project(":entities")
-
-    compile files('libs/queue-library.jar')
+    compile project(":queue-library")
 
     compile files('libs/gson-2.8.1.jar')
 
