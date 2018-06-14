@@ -57,6 +57,7 @@ public class DummyDataGenerator {
     private static int AMOUNT_TO_GENERATE = 20;
 
     private static int AMOUNT_LOCATIONS_TO_GENERATE = 20;
+
     @PostConstruct
     public void init() {
 

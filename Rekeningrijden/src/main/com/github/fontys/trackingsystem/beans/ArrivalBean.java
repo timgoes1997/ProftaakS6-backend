@@ -8,6 +8,7 @@ import com.github.fontys.trackingsystem.services.interfaces.VehicleService;
 import com.nonexistentcompany.lib.RouteEngine;
 import com.nonexistentcompany.lib.RouteTransformer;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -15,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-@RequestScoped
+@Stateless
 @Path("/arrival")
 public class ArrivalBean {
 

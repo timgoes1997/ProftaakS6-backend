@@ -5,12 +5,13 @@ import com.github.fontys.trackingsystem.services.interfaces.UserService;
 import com.github.fontys.entities.user.Account;
 import com.github.fontys.entities.user.User;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@RequestScoped
+@Stateless
 @Path("/users")
 public class UserBean {
 

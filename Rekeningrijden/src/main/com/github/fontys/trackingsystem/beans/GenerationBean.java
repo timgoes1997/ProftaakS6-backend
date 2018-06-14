@@ -2,6 +2,7 @@ package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.trackingsystem.services.interfaces.GenerationService;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -10,7 +11,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-@RequestScoped
+@Stateless
 @Path("/generate")
 public class GenerationBean {
 

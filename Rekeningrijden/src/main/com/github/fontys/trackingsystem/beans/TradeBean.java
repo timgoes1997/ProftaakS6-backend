@@ -7,6 +7,7 @@ import com.github.fontys.entities.user.Account;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
-@RequestScoped
+@Stateless
 @Path("trade")
 public class TradeBean {
 
