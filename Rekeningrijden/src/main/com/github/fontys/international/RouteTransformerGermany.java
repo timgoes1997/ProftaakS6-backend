@@ -19,23 +19,29 @@ public class RouteTransformerGermany extends RouteTransformer {
     @Override
     public RichRoute generateRichRoute(ForeignRoute route, String ownCountry) {
         List<Rate> rates = new ArrayList<>();
-//        List<EULocation> locations = route.getLocationList();
-//        int distance = (int) generationService.calculateDistance(locations);
-//
-//        // Rate in cents per kilometer
-//        // TODO: Calculate price per region, create Rate objects, calculate totalprice
-//        int rate = 20;
+        List<List<EULocation>> tripLocations = route.getTrips();
+
+        for(List<EULocation> locations: tripLocations) {
+            locations.sort(EULocation::compareTo);
+        }
+
+        // Calculate distance of domestic route
+        int distance = 0;
+        for(List<EULocation> locations:  tripLocations){
+            distance += (int) generationService.calculateDistance(locations);
+        }
+
+        // Rate in cents per kilometer
+        // TODO: Calculate price per region, create Rate objects, calculate totalprice
+        int rate = 20;
 //        Rate rateObject = new Rate(0, rate, distance);
 //        rates.add(rateObject);
-//
-//        // Price in cents
-//        int price = (int) generationService.generatePriceWithSingleRate(distance, rate);
-//
-//        // Vats in percentages
-//        int vats = 21;
-//        return new RichRoute(route.getOriginCountry(), route.getDrivenInCountry(), distance, price, vats, route.getLicensePlate(), "DE", rates)
-//
 
-        return null;
+        // Price in cents
+        double price = generationService.generatePriceWithSingleRate(distance, rate);
+
+        // Vats in percentages
+        int vats = 21;
+        return new RichRoute(route.getId(), route.getOrigin(), price, distance, vats, null);
     }
 }
