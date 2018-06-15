@@ -27,6 +27,7 @@ public interface RegionService {
     Rate createRate(Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Long authorizer);
     Rate createRate(Rate rate);
     List<Rate> createRate(String regionName, List<Rate> rates, User authorizer);
+    List<BorderLocation> updateBorders(String regionName, List<BorderLocation> borderLocations);
 
     Rate removeRate(Rate rate);
     Rate removeRate(Long id);

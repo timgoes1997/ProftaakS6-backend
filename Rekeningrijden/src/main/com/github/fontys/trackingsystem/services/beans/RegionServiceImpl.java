@@ -6,6 +6,7 @@ import com.github.fontys.entities.region.Region;
 import com.github.fontys.entities.tracking.Location;
 import com.github.fontys.entities.user.User;
 import com.github.fontys.entities.vehicle.EnergyLabel;
+import com.github.fontys.trackingsystem.dao.interfaces.BorderLocationDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.RateDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.RegionDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
@@ -33,6 +34,9 @@ public class RegionServiceImpl implements RegionService {
 
     @Inject
     private UserDAO userDAO;
+
+    @Inject
+    private BorderLocationDAO borderLocationDAO;
 
     @Inject
     private Logger logger;
@@ -141,7 +145,6 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Rate createRate(Rate rate) {
-
         if (rate == null || rate.getAuthorizer() == null) {
             throw new NotAcceptableException("Rate and Authorizer can't be null while creating a rate!");
         }
@@ -156,6 +159,20 @@ public class RegionServiceImpl implements RegionService {
 
         rateDAO.create(rate);
         return rate;
+    }
+
+    @Override
+    public List<BorderLocation> updateBorders(String regionName, List<BorderLocation> borderLocations) {
+        if (!regionDAO.exists(regionName)) {
+            throw new NotFoundException("Region with given name doesn't exist");
+        }
+
+        Region region = regionDAO.find(regionName);
+        region.getBorderPoints().forEach(borderLocationDAO::remove);
+        borderLocations.forEach(borderLocationDAO::create);
+        region.setBorderPoints(borderLocations);
+        regionDAO.edit(region);
+        return borderLocations;
     }
 
     @Override

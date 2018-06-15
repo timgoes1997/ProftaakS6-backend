@@ -1,6 +1,7 @@
 package com.github.fontys.trackingsystem.beans;
 
 import com.github.fontys.entities.payment.Rate;
+import com.github.fontys.entities.region.BorderLocation;
 import com.github.fontys.entities.region.Region;
 import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.entities.user.Role;
@@ -65,9 +66,16 @@ public class RegionBean {
     @POST
     //@EasySecurity(requiresUser = true, grantedRoles = {"KILOMETER_TRACKER"})
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/create/rate/{name}")
+    @Path("/create/rates/{name}")
     public List<Rate> createRegionRates(@PathParam("name") String regionName, List<Rate> rates){
         return regionService.createRate(regionName, rates, (User)user);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/update/borders/{name}")
+    public List<BorderLocation> updateBorders(@PathParam("name") String regionName, List<BorderLocation> locations){
+        return regionService.updateBorders(regionName, locations);
     }
 
     @DELETE
