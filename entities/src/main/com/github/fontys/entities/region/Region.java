@@ -1,9 +1,12 @@
 package com.github.fontys.entities.region;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.entities.payment.Rate;
 import com.github.fontys.entities.tracking.Location;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Collection;
@@ -120,6 +123,9 @@ public class Region implements Serializable{
         this.addedDate = addedDate;
     }
 
+    @JsonIgnore
+    @JsonbTransient
+    @XmlTransient
     public boolean isWithinRegion(Location location){
         return isWithinRegion(location.getLat(), location.getLon());
     }
@@ -133,6 +139,9 @@ public class Region implements Serializable{
      * @param lon lon location
      * @return if it's withing the current region.
      */
+    @JsonIgnore
+    @JsonbTransient
+    @XmlTransient
     public boolean isWithinRegion(double lat, double lon) {
         List<BorderLocation> regionBorders = getBorderPoints();
 

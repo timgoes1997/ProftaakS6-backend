@@ -146,7 +146,7 @@ public class DummyDataGenerator {
 
     private void createRegions() {
         Region berlin = new Region("berlin", getBorderBerlin());
-        Region ruhr = new Region("rührgebied", getBorderRuhr());
+        Region ruhr = new Region("ruhrgebied", getBorderRuhr());
         List<Rate> rates = new ArrayList<>();
         rates.addAll(generateRatesPrice(berlin, new BigDecimal(0.05d), new BigDecimal(0.04d)));
         rates.addAll(generateRatesPrice(ruhr, new BigDecimal(0.04d), new BigDecimal(0.03d)));

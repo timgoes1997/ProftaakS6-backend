@@ -21,8 +21,12 @@ public interface RegionService {
     Region remove(Long id);
     Region remove(Region region);
 
+    Region getRegion(String name);
+    Region getRegion(Long id);
+
     Rate createRate(Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Long authorizer);
     Rate createRate(Rate rate);
+    List<Rate> createRate(String regionName, List<Rate> rates, User authorizer);
 
     Rate removeRate(Rate rate);
     Rate removeRate(Long id);

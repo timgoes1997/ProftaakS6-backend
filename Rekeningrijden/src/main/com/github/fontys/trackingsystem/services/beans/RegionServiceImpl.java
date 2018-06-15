@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class RegionServiceImpl implements RegionService {
 
@@ -32,6 +33,9 @@ public class RegionServiceImpl implements RegionService {
 
     @Inject
     private UserDAO userDAO;
+
+    @Inject
+    private Logger logger;
 
     @Override
     public Region create(String name, List<BorderLocation> borderPoints) {
@@ -113,6 +117,28 @@ public class RegionServiceImpl implements RegionService {
         return rate;
     }
 
+
+    @Override
+    public List<Rate> createRate(String regionName, List<Rate> rates, User authorizer) {
+        Region foundRegion = null;
+        if (regionDAO.exists(regionName)) {
+            foundRegion = regionDAO.find(regionName);
+        }
+
+        if(authorizer == null || !userDAO.exists(authorizer.getId())){
+            logger.warning("This needs to be checked and throw an error, for now ignore for testing purposes");
+        }
+
+        for(Rate rate : rates){
+            rate.setAddedDate(Calendar.getInstance());
+            rate.setRegion(foundRegion);
+            rate.setAuthorizer(authorizer);
+            rateDAO.create(rate);
+        }
+
+        return rates;
+    }
+
     @Override
     public Rate createRate(Rate rate) {
 
@@ -120,7 +146,16 @@ public class RegionServiceImpl implements RegionService {
             throw new NotAcceptableException("Rate and Authorizer can't be null while creating a rate!");
         }
 
-        return createRate(rate.getRegion().getId(), rate.getKilometerPrice(), rate.getEnergyLabel(), rate.getStartTime(), rate.getEndTime(), rate.getAuthorizer().getId());
+        if (!userDAO.exists(rate.getAuthorizer().getId())) {
+            throw new NotFoundException("given user doesn't exist");
+        }
+
+        if (rate.getStartTime() == null || rate.getEndTime() == null) {
+            throw new NotAcceptableException("Start and enddate can't be null for a rate");
+        }
+
+        rateDAO.create(rate);
+        return rate;
     }
 
     @Override
@@ -156,6 +191,20 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public List<Rate> getRegionRates(Region region) {
         return rateDAO.findRates(region);
+    }
+
+    @Override
+    public Region getRegion(String name) {
+        if (!regionDAO.exists(name)) {
+            throw new NotFoundException("Given region doesn't exist!");
+        }
+
+        return regionDAO.find(name);
+    }
+
+    @Override
+    public Region getRegion(Long id) {
+        return regionDAO.find(id);
     }
 
     @Override
