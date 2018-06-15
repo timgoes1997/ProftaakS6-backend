@@ -28,6 +28,7 @@ public class PersistenceHelper {
     private static TradeDAO tradeDAO;
     private static UserDAO userDAO;
     private static VehicleDAO vehicleDAO;
+    private static RegionDAO regionDAO;
 
     //Services
     private static TradeServiceImpl tradeServiceImpl;
@@ -77,6 +78,7 @@ public class PersistenceHelper {
         dataGenerator.setUserDAO(getUserDAO());
         dataGenerator.setVehicleDAO(getVehicleDAO());
         dataGenerator.setTradeDAO(getTradeDAO());
+        dataGenerator.setRegionDAO(getRegionDAO());
         dataGenerator.setEm(entityManager);
         dataGenerator.init();
         entityManager.getTransaction().commit();
@@ -96,6 +98,14 @@ public class PersistenceHelper {
         billDAOImpl.setEntityManager(entityManager);
         billDAO = billDAOImpl;
         return billDAO;
+    }
+
+    public static RegionDAO getRegionDAO() {
+        if(regionDAO != null) return regionDAO;
+        RegionDAOImpl regionDAOImpl = new RegionDAOImpl();
+        regionDAOImpl.setEntityManager(entityManager);
+        regionDAO = regionDAOImpl;
+        return regionDAO;
     }
 
     public static LocationDAO getLocationDAO() {

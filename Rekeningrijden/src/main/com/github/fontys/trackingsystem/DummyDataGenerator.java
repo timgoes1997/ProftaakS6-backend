@@ -1,5 +1,7 @@
 package com.github.fontys.trackingsystem;
 
+import com.github.fontys.entities.region.BorderLocation;
+import com.github.fontys.entities.region.Region;
 import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.*;
 import com.github.fontys.entities.payment.Bill;
@@ -49,6 +51,9 @@ public class DummyDataGenerator {
     private TradeDAO tradeDAO;
 
     @Inject
+    private RegionDAO regionDAO;
+
+    @Inject
     private RegisteredVehicleDAO registeredVehicleDAO;
 
     @Inject
@@ -70,6 +75,8 @@ public class DummyDataGenerator {
         createSpecialAccount("police", Role.POLICE_EMPLOYEE);
         createSpecialAccount("kilometer", Role.KILOMETER_TRACKER);
         createSpecialAccount("admin", Role.SYSTEM_ADMINISTRATOR);
+
+        createRegions(); //berlijn en ruhr gebied.
 
         for (int i = 0; i < AMOUNT_TO_GENERATE; i++) {
 
@@ -129,6 +136,41 @@ public class DummyDataGenerator {
             accountDAO.create(account);
             em.persist(tv);
         }
+    }
+
+
+    private void createRegions(){
+        Region berlin = new Region("berlin", getBorderBerlin());
+        Region ruhr = new Region("rührgebied", getBorderRuhr());
+
+        regionDAO.create(berlin);
+        regionDAO.create(ruhr);
+    }
+
+    private List<BorderLocation> getBorderBerlin(){
+        BorderLocation r1 = new BorderLocation(13.25d, 52.6d, 1L);
+        BorderLocation r2 = new BorderLocation(13.25d, 52.4d, 2L);
+        BorderLocation r3 = new BorderLocation(13.6d, 52.4d, 3L);
+        BorderLocation r4 = new BorderLocation(13.6d, 52.6d, 4L);
+        List<BorderLocation> squareBorderBerlin = new ArrayList<BorderLocation>();
+        squareBorderBerlin.add(r1);
+        squareBorderBerlin.add(r2);
+        squareBorderBerlin.add(r3);
+        squareBorderBerlin.add(r4);
+        return squareBorderBerlin;
+    }
+
+    private List<BorderLocation> getBorderRuhr(){
+        BorderLocation r1 = new BorderLocation(6.5d, 51.7d, 1L);
+        BorderLocation r2 = new BorderLocation(6.5d, 50.4d, 2L);
+        BorderLocation r3 = new BorderLocation(7.8d, 50.4d, 3L);
+        BorderLocation r4 = new BorderLocation(7.8d, 52.5d, 4L);
+        List<BorderLocation> squareBorderBerlin = new ArrayList<BorderLocation>();
+        squareBorderBerlin.add(r1);
+        squareBorderBerlin.add(r2);
+        squareBorderBerlin.add(r3);
+        squareBorderBerlin.add(r4);
+        return squareBorderBerlin;
     }
 
     private void createSpecialAccount(String emailsuffix, Role role)
@@ -207,5 +249,9 @@ public class DummyDataGenerator {
 
     public void setTradeDAO(TradeDAO tradeDAO) {
         this.tradeDAO = tradeDAO;
+    }
+
+    public void setRegionDAO(RegionDAO regionDAO) {
+        this.regionDAO = regionDAO;
     }
 }
