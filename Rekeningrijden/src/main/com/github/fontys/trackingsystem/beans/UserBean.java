@@ -5,12 +5,13 @@ import com.github.fontys.trackingsystem.services.interfaces.UserService;
 import com.github.fontys.entities.user.Account;
 import com.github.fontys.entities.user.User;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@RequestScoped
+@Stateless
 @Path("/users")
 public class UserBean {
 
@@ -84,8 +85,12 @@ public class UserBean {
     @Produces(MediaType.APPLICATION_JSON)
     @EasySecurity(requiresUser = true)
     @Path("/edit")
-    public User edit(@FormParam("email") String email) {
-        return userService.edit(email);
+    public User edit(
+            @FormParam("email") String email,
+            @FormParam("address") String address,
+            @FormParam("residency") String residency,
+            @FormParam("department") String department) {
+        return userService.edit(email, address, residency, department);
     }
 
 }

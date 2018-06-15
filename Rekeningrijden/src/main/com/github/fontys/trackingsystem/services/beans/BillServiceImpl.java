@@ -7,6 +7,7 @@ import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
 import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.entities.payment.PaymentStatus;
+import com.github.fontys.trackingsystem.services.beans.basic.RestrictedServiceImpl;
 import com.github.fontys.trackingsystem.services.interfaces.BillService;
 import com.github.fontys.entities.user.Account;
 import com.github.fontys.entities.user.Role;
@@ -22,7 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class BillServiceImpl implements BillService {
+public class BillServiceImpl extends RestrictedServiceImpl implements BillService {
 
     @Inject
     @CurrentESUser
@@ -256,12 +257,9 @@ public class BillServiceImpl implements BillService {
     @Override
     public List<Bill> getMaxAllowedBills() {
         List<Bill> b;
-        // RETURN OWN BILLS FOR;
-        // CUSTOMERS
-        if (currentUser.getPrivilege() == Role.CUSTOMER) {
+        if (!accessAllBillsAllowed()) {
             b = billDAO.findByOwnerId(((User) currentUser).getId());
         } else {
-            // FOR ANY OTHER ROLE, RETURN ALL
             b = billDAO.getAll();
         }
         return b;
@@ -269,22 +267,20 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public boolean hasBillRights(Bill b) {
-        Role priv = (Role) currentUser.getPrivilege();
-        switch (priv) {
-            case CUSTOMER:
-                // check if you're the owner
-                if (((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId()) {
-                    // not the owner
-                    return false;
-                }
-                break;
-            case BILL_ADMINISTRATOR:
-                // allowed. proceed.
-                break;
-            default:
-                return false;
-        }
-        return true;
+        return // Can access all bills
+                accessAllBillsAllowed() || // OR
+                        // Owns this bill
+                ((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId();
+    }
+
+
+    @Override
+    public Role getCurrentPrivilege() {
+        return (Role) currentUser.getPrivilege();
+    }
+
+    private boolean accessAllBillsAllowed(){
+        return getDefaultAccessPrivileges();
     }
 
     public void setCurrentUser(ESUser currentUser) {

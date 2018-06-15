@@ -5,8 +5,6 @@ import com.github.fontys.trackingsystem.services.interfaces.BillService;
 import com.github.fontys.trackingsystem.services.interfaces.GenerationService;
 import com.github.fontys.trackingsystem.services.interfaces.LocationService;
 import com.github.fontys.trackingsystem.services.interfaces.VehicleService;
-import com.nonexistentcompany.RouteEngine;
-import com.nonexistentcompany.RouteTransformer;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,10 +17,12 @@ import java.util.concurrent.TimeoutException;
 import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.entities.payment.PaymentStatus;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
-import com.nonexistentcompany.domain.RichRoute;
-import com.nonexistentcompany.domain.Route;
-import com.nonexistentcompany.queue.RichRouteHandler;
-import com.nonexistentcompany.queue.RouteHandler;
+import com.nonexistentcompany.lib.RouteEngine;
+import com.nonexistentcompany.lib.RouteTransformer;
+import com.nonexistentcompany.lib.domain.ForeignRoute;
+import com.nonexistentcompany.lib.domain.RichRoute;
+import com.nonexistentcompany.lib.queue.RichRouteHandler;
+import com.nonexistentcompany.lib.queue.RouteHandler;
 
 import java.math.BigDecimal;
 
@@ -57,12 +57,13 @@ public class EuroBean {
         // Define a handler for incoming routes
         RouteHandler routeHandler = new RouteHandler() {
             @Override
-            public void handleRoute(Route route) throws IOException, TimeoutException {
-                System.out.println(String.format("Got a new route from %s!", route.getOriginCountry()));
+            public void handleRoute(ForeignRoute route) throws IOException, TimeoutException {
+                System.out.println(String.format("Got a new route from %s!", route.getOrigin()));
 
                 // Transform route into route with rates
-                RichRoute richRoute = routeTransformer.generateRichRoute(route);
-                engine.sendRichRouteToCountry(richRoute);
+                RichRoute richRoute = routeTransformer.generateRichRoute(route, "NL");
+                //Nog implementeren naar welke landen.
+//                engine.sendRichRouteToCountry(richRoute);
             }
         };
 
@@ -78,7 +79,7 @@ public class EuroBean {
 
                 //TODO: Get last route for vehicle (?)
 
-                RegisteredVehicle registeredVehicle = vehicleService.getRegisteredVehicle(richRoute.getLicense());
+                RegisteredVehicle registeredVehicle = vehicleService.getRegisteredVehicle(richRoute.getId());
 
                 bill.setStartDate(null); //TODO: Get the startdate from the first location in the route -.-
                 bill.setEndDate(null); //TODO: Get the enddate from the last location in the route ---___---
@@ -88,15 +89,14 @@ public class EuroBean {
 
                 bill.setMileage(richRoute.getDistance());
                 bill.setPrice(BigDecimal.valueOf(richRoute.getPrice()));
-                bill.setRegisteredVehicle(vehicleService.getRegisteredVehicle(richRoute.getLicense()));
+                bill.setRegisteredVehicle(vehicleService.getRegisteredVehicle(richRoute.getId()));
 
                 Bill b = billService.createBill(bill);
 
                 System.out.println(String.format("Created bill: %s", b));
 
                 System.out.println(String.format("Received rich route from '%s'. We should be '%s'",
-                        richRoute.getDrivenInCountry(),
-                        richRoute.getOriginCountry()));
+                        richRoute.getOrigin()));
 
             }
         };

@@ -12,5 +12,5 @@ public interface UserService {
     User createCustomer(String name, String address, String residency, String email, String username, String password);
     boolean recoverPassword(String email);
     User resetPassword(String newPassword, String recoveryLink);
-    User edit(String email);
+    User edit(String email, String address, String residency, String department);
 }

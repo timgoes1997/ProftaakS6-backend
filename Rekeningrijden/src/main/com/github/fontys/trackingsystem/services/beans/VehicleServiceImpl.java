@@ -6,6 +6,7 @@ import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.VehicleDAO;
+import com.github.fontys.trackingsystem.services.beans.basic.RestrictedServiceImpl;
 import com.github.fontys.trackingsystem.services.interfaces.FileService;
 import com.github.fontys.trackingsystem.services.interfaces.VehicleService;
 import com.github.fontys.entities.user.Role;
@@ -25,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class VehicleServiceImpl implements VehicleService {
+public class VehicleServiceImpl extends RestrictedServiceImpl implements VehicleService {
 
     @Inject
     @CurrentESUser
@@ -103,16 +104,22 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public List<RegisteredVehicle> getVehicles() {
         List<RegisteredVehicle> vehicles;
-
-        // RETURN OWN VEHICLES FOR;
-        // CUSTOMERS
-        if (currentUser.getPrivilege() == Role.CUSTOMER) {
+        if (!accessAllVehiclesAllowed()) {
             vehicles = registeredVehicleDAO.findByUser(((User) currentUser).getId());
         } else {
             // FOR ANY OTHER ROLE, RETURN ALL
             vehicles = registeredVehicleDAO.getAll();
         }
         return vehicles;
+    }
+
+    @Override
+    public Role getCurrentPrivilege() {
+        return (Role) currentUser.getPrivilege();
+    }
+
+    private boolean accessAllVehiclesAllowed(){
+        return getDefaultAccessPrivileges();
     }
 
     @Override
