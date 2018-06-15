@@ -13,19 +13,19 @@ public class BorderLocation {
     @Column(name = "VERTICES_ID")
     private Long verticeId;
 
-    @Column(name="X")
-    private double x;
+    @Column(name="LAT")
+    private double lat;
 
-    @Column(name="Y")
-    private double y;
+    @Column(name="LON")
+    private double lon;
 
     public BorderLocation(){
 
     }
 
-    public BorderLocation(double x, double y, Long verticeId){
-        this.x = x;
-        this.y = y;
+    public BorderLocation(double lat, double lon, Long verticeId){
+        this.lat = lat;
+        this.lon = lon;
         this.verticeId = verticeId;
     }
 
@@ -37,20 +37,20 @@ public class BorderLocation {
         this.verticeId = verticeId;
     }
 
-    public double getX() {
-        return x;
+    public double getLat() {
+        return lat;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public double getY() {
-        return y;
+    public double getLon() {
+        return lon;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
     public Long getId() {

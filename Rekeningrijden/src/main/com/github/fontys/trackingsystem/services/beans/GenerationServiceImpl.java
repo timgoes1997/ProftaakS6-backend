@@ -265,7 +265,7 @@ public class GenerationServiceImpl implements GenerationService {
         if (locations != null) {
             for (Location l : locations) {
                 long unixTime = l.getTime().getTimeInMillis() / 1000;
-                euLocations.add(new EULocation(l.getX(), l.getY(), unixTime));
+                euLocations.add(new EULocation(l.getLat(), l.getLon(), unixTime));
             }
         }
         // Sort the EULocations list

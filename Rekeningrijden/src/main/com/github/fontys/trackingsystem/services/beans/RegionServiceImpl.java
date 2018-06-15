@@ -92,8 +92,9 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Rate createRate(Long region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Long authorizer) {
-        if (!regionDAO.exists(region)) {
-            throw new NotFoundException("Region with given id doesn't exist");
+        Region foundRegion = null;
+        if (regionDAO.exists(region)) {
+             foundRegion = regionDAO.find(region);
         }
 
         if(!userDAO.exists(authorizer)){
@@ -104,7 +105,6 @@ public class RegionServiceImpl implements RegionService {
             throw new NotAcceptableException("Start and enddate can't be null for a rate");
         }
 
-        Region foundRegion = regionDAO.find(region);
         User foundAuthorizer = userDAO.find(authorizer);
 
         Rate rate = new Rate(foundRegion, kilometerPrice, energyLabel, startTime, endTime, GregorianCalendar.getInstance(), foundAuthorizer);
@@ -116,8 +116,8 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public Rate createRate(Rate rate) {
 
-        if(rate == null || rate.getAuthorizer() == null || rate.getRegion() == null){
-            throw new NotAcceptableException("Rate, Authorizer and Region can't be null while creating a rate!");
+        if(rate == null || rate.getAuthorizer() == null){
+            throw new NotAcceptableException("Rate and Authorizer can't be null while creating a rate!");
         }
 
         return createRate(rate.getRegion().getId(), rate.getKilometerPrice(), rate.getEnergyLabel(), rate.getStartTime(), rate.getEndTime(), rate.getAuthorizer().getId());
@@ -154,15 +154,15 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public List<Region> getWithinRegions(Location location) {
-        return getWithinRegions(location.getX(), location.getY());
+        return getWithinRegions(location.getLat(), location.getLon());
     }
 
     @Override
-    public List<Region> getWithinRegions(double x, double y) {
+    public List<Region> getWithinRegions(double lat, double lon) {
         List<Region> regions = regionDAO.getAllRegions();
         List<Region> inRegions = new ArrayList<>();
         for (Region r : regions) {
-            if (r.isWithinRegion(x, y)) {
+            if (r.isWithinRegion(lat, lon)) {
                 inRegions.add(r);
             }
         }
@@ -171,12 +171,12 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Region getWithinRegion(Location location) {
-        return getWithinRegion(location.getX(), location.getY());
+        return getWithinRegion(location.getLat(), location.getLon());
     }
 
     @Override
-    public Region getWithinRegion(double x, double y) {
-        List<Region> within = getWithinRegions(x, y);
+    public Region getWithinRegion(double lat, double lon) {
+        List<Region> within = getWithinRegions(lat, lon);
         if (within.size() <= 0) {
             return null;
         }

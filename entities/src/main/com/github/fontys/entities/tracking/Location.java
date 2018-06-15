@@ -11,11 +11,11 @@ public class Location {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name="X")
-    private double x;
+    @Column(name="LAT")
+    private double lat;
 
-    @Column(name="Y")
-    private double y;
+    @Column(name="LON")
+    private double lon;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "TIME")
@@ -23,26 +23,26 @@ public class Location {
 
     public Location() {}
 
-    public Location(double lastLocationX, double lastLocationY, Calendar time) {
-        this.x = lastLocationX;
-        this.y = lastLocationY;
+    public Location(double lastLat, double lastLon, Calendar time) {
+        this.lat = lastLat;
+        this.lon = lastLon;
         this.time = time;
     }
 
-    public double getX() {
-        return x;
+    public double getLat() {
+        return lat;
     }
 
-    public void setX(double lastLocationX) {
-        this.x = lastLocationX;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public double getY() {
-        return y;
+    public double getLon() {
+        return lon;
     }
 
-    public void setY(double lastLocationY) {
-        this.y = lastLocationY;
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
     public Calendar getTime() {

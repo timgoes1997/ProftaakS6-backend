@@ -113,7 +113,7 @@ public class Region implements Serializable{
     }
 
     public boolean isWithinRegion(Location location){
-        return isWithinRegion(location.getX(), location.getY());
+        return isWithinRegion(location.getLat(), location.getLon());
     }
 
 
@@ -121,42 +121,42 @@ public class Region implements Serializable{
      * Kijkt of een locatie zich binnen een bepaalde regio bevind.
      * Gaat er vanuit dat de punten zich in een juiste volgorde bevinden, anders gaat het mis.
      *
-     * @param locX x location
-     * @param locY y location
+     * @param lat lat location
+     * @param lon lon location
      * @return if it's withing the current region.
      */
-    public boolean isWithinRegion(double locX, double locY) {
+    public boolean isWithinRegion(double lat, double lon) {
         List<BorderLocation> regionBorders = getBorderPoints();
 
         if (regionBorders.size() <= 0) {
             return false;
         }
 
-        double minX = regionBorders.get(0).getX();
-        double maxX = regionBorders.get(0).getX();
-        double minY = regionBorders.get(0).getY();
-        double maxY = regionBorders.get(0).getY();
+        double minX = regionBorders.get(0).getLat();
+        double maxX = regionBorders.get(0).getLat();
+        double minY = regionBorders.get(0).getLon();
+        double maxY = regionBorders.get(0).getLon();
 
         for (BorderLocation r : regionBorders) {
-            minX = Math.min(r.getX(), minX);
-            maxX = Math.max(r.getX(), maxX);
-            minY = Math.min(r.getY(), minY);
-            maxY = Math.max(r.getY(), maxY);
+            minX = Math.min(r.getLat(), minX);
+            maxX = Math.max(r.getLat(), maxX);
+            minY = Math.min(r.getLon(), minY);
+            maxY = Math.max(r.getLon(), maxY);
         }
 
         //check if the location is outside of the boundries of all points.
-        if (locX < minX
-                || locX > maxX
-                || locY < minY
-                || locY > maxY) {
+        if (lat < minX
+                || lat > maxX
+                || lon < minY
+                || lon > maxY) {
             return false;
         }
 
         // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
         boolean inside = false;
         for (int i = 0, j = regionBorders.size() - 1; i < regionBorders.size(); j = i++) {
-            if ((regionBorders.get(i).getY() > locY) != (regionBorders.get(j).getY() > locY) &&
-                    locX < (regionBorders.get(j).getX() - regionBorders.get(i).getX()) * (locY - regionBorders.get(i).getY()) / (regionBorders.get(j).getY() - regionBorders.get(i).getY()) + regionBorders.get(i).getX()) {
+            if ((regionBorders.get(i).getLon() > lon) != (regionBorders.get(j).getLon() > lon) &&
+                    lat < (regionBorders.get(j).getLat() - regionBorders.get(i).getLat()) * (lon - regionBorders.get(i).getLon()) / (regionBorders.get(j).getLon() - regionBorders.get(i).getLon()) + regionBorders.get(i).getLat()) {
                 inside = !inside;
             }
         }
