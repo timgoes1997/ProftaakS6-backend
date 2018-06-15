@@ -50,6 +50,13 @@ public class RateDAOImpl implements RateDAO {
         return query.setParameter("id", region.getId()).getResultList();
     }
 
+    @Override
+    public List<Rate> findDefaultRates() {
+          TypedQuery<Rate> query =
+                em.createNamedQuery(Rate.FIND_DEFAULT, Rate.class);
+            return query.getResultList();
+    }
+
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }

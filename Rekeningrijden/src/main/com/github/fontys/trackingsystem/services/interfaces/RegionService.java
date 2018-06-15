@@ -27,7 +27,9 @@ public interface RegionService {
     Rate removeRate(Rate rate);
     Rate removeRate(Long id);
 
+    List<Rate> getRegionRates(String regionName);
     List<Rate> getRegionRates(Region region);
+    List<Rate> getDefaultRates();
     Rate getRate(Location location);
 
     List<Region> getWithinRegions(Location location);

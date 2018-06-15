@@ -1,12 +1,16 @@
 package com.github.fontys.entities.payment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.fontys.entities.region.Region;
 import com.github.fontys.entities.user.User;
 import com.github.fontys.entities.vehicle.EnergyLabel;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.ws.rs.NotAcceptableException;
+import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.util.Calendar;
@@ -26,9 +30,13 @@ import java.util.GregorianCalendar;
         @NamedQuery(
                 name = Rate.FIND_BY_REGION,
                 query = "SELECT r FROM RATE r WHERE r.region.id = :id ORDER BY r.addedDate ASC"
+        ),
+        @NamedQuery(
+                name = Rate.FIND_DEFAULT,
+                query = "SELECT r FROM RATE r WHERE r.region IS NULL"
         )
 })
-public class Rate {
+public class Rate implements Serializable {
 
     //======================
     //==    Constansts    ==
@@ -37,7 +45,7 @@ public class Rate {
     public static final String FIND_ALL = "RegionRate.findAll";
     public static final String FIND_ID = "RegionRate.findByID";
     public static final String FIND_BY_REGION = "RegionRate.findByRegion";
-
+    public static final String FIND_DEFAULT = "RegionRate.findDefaultRate";
 
     //======================
     //==      Fields      ==
@@ -124,6 +132,9 @@ public class Rate {
     public Rate() {
     }
 
+    @JsonIgnore
+    @JsonbTransient
+    @XmlTransient
     public Region getRegion() {
         return region;
     }
@@ -172,6 +183,9 @@ public class Rate {
         this.addedDate = addedDate;
     }
 
+    @JsonIgnore
+    @JsonbTransient
+    @XmlTransient
     public User getAuthorizer() {
         return authorizer;
     }
@@ -184,6 +198,9 @@ public class Rate {
         return id;
     }
 
+    @JsonIgnore
+    @JsonbTransient
+    @XmlTransient
     public boolean isInRate(EnergyLabel energyLabel) {
         //check labels
         if (energyLabel != this.energyLabel) return false;
@@ -197,6 +214,9 @@ public class Rate {
         return start.before(currentTime) && end.after(currentTime);
     }
 
+    @JsonIgnore
+    @JsonbTransient
+    @XmlTransient
     private Calendar getTime(int currentDay, int currentHour, int currentMinute) {
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.set(2000, Calendar.JANUARY, currentDay, currentHour, currentMinute, 0);

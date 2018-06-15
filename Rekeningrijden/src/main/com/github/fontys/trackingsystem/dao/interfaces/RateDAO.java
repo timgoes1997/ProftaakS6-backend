@@ -13,4 +13,5 @@ public interface RateDAO {
     boolean exists(long id);
     Rate find(long id);
     List<Rate> findRates(Region region);
+    List<Rate> findDefaultRates();
 }
