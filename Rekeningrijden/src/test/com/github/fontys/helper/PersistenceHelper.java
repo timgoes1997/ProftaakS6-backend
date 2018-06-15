@@ -29,6 +29,7 @@ public class PersistenceHelper {
     private static UserDAO userDAO;
     private static VehicleDAO vehicleDAO;
     private static RegionDAO regionDAO;
+    private static RateDAO rateDAO;
 
     //Services
     private static TradeServiceImpl tradeServiceImpl;
@@ -59,12 +60,12 @@ public class PersistenceHelper {
         entityManager.createQuery("DELETE FROM REGISTERED_VEHICLE").executeUpdate();
         entityManager.createQuery("DELETE FROM TRACKED_VEHICLE").executeUpdate();
         //entityManager.createQuery("DELETE FROM TRACKEDVEHICLE_LOCATIONS");
+        entityManager.createQuery("DELETE FROM RATE").executeUpdate();
         entityManager.createQuery("DELETE FROM CUSTOMER").executeUpdate();
         entityManager.createQuery("DELETE FROM HARDWARE").executeUpdate();
         entityManager.createQuery("DELETE FROM VEHICLE").executeUpdate();
         entityManager.createQuery("DELETE FROM TRACKING_LOCATION").executeUpdate();
         entityManager.createQuery("DELETE FROM TRANSFER").executeUpdate();
-        entityManager.createQuery("DELETE FROM RATE").executeUpdate();
         entityManager.createQuery("DELETE FROM REGION").executeUpdate();
         entityManager.getTransaction().commit();
     }
@@ -79,6 +80,7 @@ public class PersistenceHelper {
         dataGenerator.setVehicleDAO(getVehicleDAO());
         dataGenerator.setTradeDAO(getTradeDAO());
         dataGenerator.setRegionDAO(getRegionDAO());
+        dataGenerator.setRateDAO(getRateDAO());
         dataGenerator.setEm(entityManager);
         dataGenerator.init();
         entityManager.getTransaction().commit();
@@ -98,6 +100,14 @@ public class PersistenceHelper {
         billDAOImpl.setEntityManager(entityManager);
         billDAO = billDAOImpl;
         return billDAO;
+    }
+
+    public static RateDAO getRateDAO() {
+        if(rateDAO != null) return rateDAO;
+        RateDAOImpl rateDAOImpl = new RateDAOImpl();
+        rateDAOImpl.setEntityManager(entityManager);
+        rateDAO = rateDAOImpl;
+        return rateDAO;
     }
 
     public static RegionDAO getRegionDAO() {

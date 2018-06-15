@@ -107,7 +107,7 @@ public class RegionServiceImpl implements RegionService {
 
         User foundAuthorizer = userDAO.find(authorizer);
 
-        Rate rate = new Rate(foundRegion, kilometerPrice, energyLabel, startTime, endTime, GregorianCalendar.getInstance(), foundAuthorizer);
+        Rate rate = new Rate(foundRegion, kilometerPrice, energyLabel, startTime, endTime, foundAuthorizer);
         rateDAO.create(rate);
 
         return rate;

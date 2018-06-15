@@ -6,6 +6,7 @@ import com.github.fontys.entities.vehicle.EnergyLabel;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.ws.rs.NotAcceptableException;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.util.Calendar;
@@ -78,13 +79,45 @@ public class Rate {
     private User authorizer;
 
 
-    public Rate(Region region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, Calendar addedDate, User authorizer) {
+    public Rate(Region region, BigDecimal kilometerPrice, EnergyLabel energyLabel, int startDay, int startHour, int startMinute, int endDay, int endHour, int endMinute, User authorizer){
+        if(startDay <= 0 || startDay > 7 || startDay > endDay || endDay > 7 || endDay < startDay){
+            throw new NotAcceptableException("Given day is limited from 1-7 make use of Calender.DAY_OF_WEEK, see Calender.SUNDAY etc. Startday also can't be greater than endDay");
+        }
+
+        if(startHour < 0 || startHour > 23 || endHour < 0 || endHour > 23){
+            throw new NotAcceptableException("Hours need a vlaue of 0-23");
+        }
+
+        if(startMinute < 0 || startMinute > 59 || endMinute < 0 || endMinute > 59){
+            throw new NotAcceptableException("Minutes need a value between 0-59");
+        }
+
+        this.region = region;
+        this.kilometerPrice = kilometerPrice;
+        this.energyLabel = energyLabel;
+        this.startTime = getTime(startDay, startHour, startMinute);
+        this.endTime = getTime(endDay, endHour, endMinute);
+        this.addedDate = Calendar.getInstance();
+        this.authorizer = authorizer;
+
+        if(startTime.after(endTime)){
+            throw new NotAcceptableException("Startime needs to be before endtime!");
+        }
+    }
+
+    public Rate(Region region, BigDecimal kilometerPrice, EnergyLabel energyLabel, Calendar startTime, Calendar endTime, User authorizer) {
+        if(endTime.before(startTime)){
+            throw new NotAcceptableException("Endtime needs to be after the starttime");
+        }
+        if(endTime.get(Calendar.DAY_OF_WEEK) < startTime.get(Calendar.DAY_OF_WEEK) || startTime.get(Calendar.WEEK_OF_YEAR) != endTime.get(Calendar.WEEK_OF_YEAR)){
+            throw new NotAcceptableException("Setting up a rate is limited to a week, per day is preferred!");
+        }
         this.region = region;
         this.kilometerPrice = kilometerPrice;
         this.energyLabel = energyLabel;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.addedDate = addedDate;
+        this.addedDate = Calendar.getInstance();
         this.authorizer = authorizer;
     }
 

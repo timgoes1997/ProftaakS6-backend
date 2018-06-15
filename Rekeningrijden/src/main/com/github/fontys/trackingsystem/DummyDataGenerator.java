@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem;
 
+import com.github.fontys.entities.payment.Rate;
 import com.github.fontys.entities.region.BorderLocation;
 import com.github.fontys.entities.region.Region;
 import com.github.fontys.entities.vehicle.EnergyLabel;
@@ -25,6 +26,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.time.DayOfWeek;
 import java.util.*;
 
 @Singleton
@@ -52,6 +55,9 @@ public class DummyDataGenerator {
 
     @Inject
     private RegionDAO regionDAO;
+
+    @Inject
+    private RateDAO rateDAO;
 
     @Inject
     private RegisteredVehicleDAO registeredVehicleDAO;
@@ -138,16 +144,44 @@ public class DummyDataGenerator {
         }
     }
 
-
-    private void createRegions(){
+    private void createRegions() {
         Region berlin = new Region("berlin", getBorderBerlin());
         Region ruhr = new Region("rührgebied", getBorderRuhr());
+        List<Rate> rates = new ArrayList<>();
+        rates.addAll(generateRatesPrice(berlin, new BigDecimal(0.05d), new BigDecimal(0.04d)));
+        rates.addAll(generateRatesPrice(ruhr, new BigDecimal(0.04d), new BigDecimal(0.03d)));
+        rates.addAll(generateRatesPrice(null, new BigDecimal(0.04d), new BigDecimal(0.04d)));
+        rates.forEach(rateDAO::create);
 
         regionDAO.create(berlin);
         regionDAO.create(ruhr);
     }
 
-    private List<BorderLocation> getBorderBerlin(){
+    private List<Rate> generateRatesPrice(Region region, BigDecimal startPrice, BigDecimal steps) {
+        User authorizer = accountDAO.findByEmail("kilometer@admin.com").getUser();
+        return generateRateDaysLabels(region, startPrice, steps, authorizer);
+    }
+
+    private List<Rate> generateRateDaysLabels(Region region, BigDecimal startPrice, BigDecimal steps, User authorizer) {
+        List<Rate> rates = new ArrayList<>();
+        BigDecimal currentPrice = startPrice.round(new MathContext(1));
+        currentPrice = currentPrice.setScale(3, BigDecimal.ROUND_HALF_UP);
+        for (EnergyLabel label : EnergyLabel.values()) {
+            rates.addAll(generateRatesDays(region, currentPrice, label, authorizer));
+            currentPrice = currentPrice.add(steps).setScale(3, BigDecimal.ROUND_HALF_UP);
+        }
+        return rates;
+    }
+
+    private List<Rate> generateRatesDays(Region region, BigDecimal price, EnergyLabel label, User authorizer) {
+        List<Rate> rates = new ArrayList<>();
+        for (DayOfWeek day : DayOfWeek.values()) {
+            rates.add(new Rate(region, price, label, day.getValue(), 0, 0, day.getValue(), 23, 59, authorizer));
+        }
+        return rates;
+    }
+
+    private List<BorderLocation> getBorderBerlin() {
         BorderLocation r1 = new BorderLocation(13.25d, 52.6d, 1L);
         BorderLocation r2 = new BorderLocation(13.25d, 52.4d, 2L);
         BorderLocation r3 = new BorderLocation(13.6d, 52.4d, 3L);
@@ -160,7 +194,7 @@ public class DummyDataGenerator {
         return squareBorderBerlin;
     }
 
-    private List<BorderLocation> getBorderRuhr(){
+    private List<BorderLocation> getBorderRuhr() {
         BorderLocation r1 = new BorderLocation(6.5d, 51.7d, 1L);
         BorderLocation r2 = new BorderLocation(6.5d, 50.4d, 2L);
         BorderLocation r3 = new BorderLocation(7.8d, 50.4d, 3L);
@@ -173,8 +207,7 @@ public class DummyDataGenerator {
         return squareBorderBerlin;
     }
 
-    private void createSpecialAccount(String emailsuffix, Role role)
-    {
+    private void createSpecialAccount(String emailsuffix, Role role) {
         User admin = new User("A. D'min", "Rekeningrijderstraat 241a", "GERMANY", role);
         Account adminAcc = new Account(emailsuffix + "@admin.com", "admin", "password");
         admin.setVerified(true);
@@ -253,5 +286,9 @@ public class DummyDataGenerator {
 
     public void setRegionDAO(RegionDAO regionDAO) {
         this.regionDAO = regionDAO;
+    }
+
+    public void setRateDAO(RateDAO rateDAO) {
+        this.rateDAO = rateDAO;
     }
 }

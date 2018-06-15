@@ -49,4 +49,8 @@ public class RateDAOImpl implements RateDAO {
                 em.createNamedQuery(Rate.FIND_BY_REGION, Rate.class);
         return query.setParameter("id", region.getId()).getResultList();
     }
+
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
+    }
 }
