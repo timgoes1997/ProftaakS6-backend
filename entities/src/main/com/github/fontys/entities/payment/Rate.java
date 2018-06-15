@@ -85,7 +85,7 @@ public class Rate {
         }
 
         if(startHour < 0 || startHour > 23 || endHour < 0 || endHour > 23){
-            throw new NotAcceptableException("Hours need a vlaue of 0-23");
+            throw new NotAcceptableException("Hours need a value of 0-23");
         }
 
         if(startMinute < 0 || startMinute > 59 || endMinute < 0 || endMinute > 59){
