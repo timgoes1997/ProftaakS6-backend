@@ -6,6 +6,8 @@ import com.github.fontys.entities.tracking.Location;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity(name = "REGION")
@@ -73,6 +75,10 @@ public class Region implements Serializable{
         this.borderPoints = borderPoints;
     }
 
+    public Region(String name){
+        this.name = name;
+    }
+
     public Region() {
     }
 
@@ -85,7 +91,9 @@ public class Region implements Serializable{
     }
 
     public List<BorderLocation> getBorderPoints() {
-        return borderPoints;
+        List<BorderLocation> borders = borderPoints;
+        Collections.sort(borders);
+        return borders;
     }
 
     public void setBorderPoints(List<BorderLocation> borderPoints) {

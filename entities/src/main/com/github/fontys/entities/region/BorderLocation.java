@@ -3,7 +3,7 @@ package com.github.fontys.entities.region;
 import javax.persistence.*;
 
 @Entity(name = "BORDER_LOCATION")
-public class BorderLocation {
+public class BorderLocation implements Comparable<BorderLocation>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,5 +55,16 @@ public class BorderLocation {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public int compareTo(BorderLocation o) {
+        if(this.getVerticeId() > o.getVerticeId()){
+            return 1;
+        }else if(this.getVerticeId() < o.getVerticeId()){
+            return -1;
+        }else{
+            return 0;
+        }
     }
 }
