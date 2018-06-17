@@ -319,4 +319,24 @@ public class GenerationServiceImpl implements GenerationService {
         cal.setTime(date);
         return cal;
     }
+
+    public void setRegisteredVehicleDAO(RegisteredVehicleDAO registeredVehicleDAO) {
+        this.registeredVehicleDAO = registeredVehicleDAO;
+    }
+
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
+
+    public void setBillService(BillService billService) {
+        this.billService = billService;
+    }
+
+    public void setBillDAO(BillDAO billDAO) {
+        this.billDAO = billDAO;
+    }
+
+    public void setRegionService(RegionService regionService) {
+        this.regionService = regionService;
+    }
 }

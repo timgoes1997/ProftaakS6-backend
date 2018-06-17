@@ -1,7 +1,10 @@
 package com.github.fontys.trackingsystem.services.beans;
 
+import com.github.fontys.entities.payment.Route;
 import com.github.fontys.entities.tracking.Location;
+import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.helper.PersistenceHelper;
+import com.github.fontys.trackingsystem.services.interfaces.RouteService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,11 +30,13 @@ public class BillGenerationTest {
     }
 
     @Test
-    public void createTransfer() {
-       PersistenceHelper.generateDummyData();
-       List<Location> locationList = PersistenceHelper.getDataGenerator().generateRuhrBerlin();
+    public void generateRoutesBill() {
+        PersistenceHelper.generateDummyData();
+        List<Location> locationList = PersistenceHelper.getDataGenerator().generateRuhrBerlin();
+        RouteService routeService = PersistenceHelper.getRouteService();
+        List<Route> routes = routeService.generateRoutes(locationList, EnergyLabel.A);
 
-
+        assertTrue(routes.size() > 0);
     }
 
 }

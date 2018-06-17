@@ -6,9 +6,7 @@ import com.github.fontys.mock.MockEmailVerificationService;
 import com.github.fontys.trackingsystem.DummyDataGenerator;
 import com.github.fontys.trackingsystem.dao.*;
 import com.github.fontys.trackingsystem.dao.interfaces.*;
-import com.github.fontys.trackingsystem.services.beans.AuthServiceImpl;
-import com.github.fontys.trackingsystem.services.beans.TradeServiceImpl;
-import com.github.fontys.trackingsystem.services.beans.UserServiceImpl;
+import com.github.fontys.trackingsystem.services.beans.*;
 import com.github.fontys.trackingsystem.services.email.EmailTradeServiceImpl;
 import com.github.fontys.trackingsystem.services.file.FileServiceImpl;
 import com.github.fontys.trackingsystem.services.interfaces.AuthService;
@@ -16,8 +14,11 @@ import com.github.fontys.trackingsystem.services.interfaces.AuthService;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.logging.Logger;
 
 public class PersistenceHelper {
+
+    private static final Logger LOGGER = Logger.getLogger(PersistenceHelper.class.getName());
 
     //DAO
     private static AccountDAO accountDAO;
@@ -30,6 +31,8 @@ public class PersistenceHelper {
     private static VehicleDAO vehicleDAO;
     private static RegionDAO regionDAO;
     private static RateDAO rateDAO;
+    private static BorderLocationDAO borderLocationDAO;
+
 
     private static DummyDataGenerator dataGenerator;
     //Services
@@ -37,18 +40,27 @@ public class PersistenceHelper {
     private static AuthServiceImpl authServiceImpl;
     private static UserServiceImpl userServiceImpl;
 
+    private static LocationServiceImpl locationService;
+    private static BillServiceImpl billService;
+    private static GenerationServiceImpl generationService;
+    private static RegionServiceImpl regionService;
+    private static RouteServiceImpl routeService;
 
 
     private static final EntityManager entityManager;
+
     static {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProftaakTest");
         entityManager = emf.createEntityManager();
     }
+
     public static EntityManager getEntityManager() {
         return entityManager;
-    };
+    }
 
-    public static void cleanDataBase(){
+    ;
+
+    public static void cleanDataBase() {
         entityManager.getTransaction().begin();
         entityManager.createQuery("DELETE FROM ACCOUNT").executeUpdate();
         entityManager.createNativeQuery("UPDATE ROUTE_DETAIL SET RATE_ID = null").executeUpdate();
@@ -74,7 +86,7 @@ public class PersistenceHelper {
         entityManager.getTransaction().commit();
     }
 
-    public static void generateDummyData(){
+    public static void generateDummyData() {
         entityManager.getTransaction().begin();
         dataGenerator = new DummyDataGenerator();
         dataGenerator.setAccountDAO(getAccountDAO());
@@ -90,20 +102,28 @@ public class PersistenceHelper {
         entityManager.getTransaction().commit();
     }
 
-    public static DummyDataGenerator getDataGenerator(){
+    public static DummyDataGenerator getDataGenerator() {
         return dataGenerator;
     }
 
-    public static AccountDAO getAccountDAO(){
-        if(accountDAO != null) return accountDAO;
+    public static AccountDAO getAccountDAO() {
+        if (accountDAO != null) return accountDAO;
         AccountDAOImpl accountDAOImpl = new AccountDAOImpl();
         accountDAOImpl.setEntityManager(entityManager);
         accountDAO = accountDAOImpl;
         return accountDAO;
     }
 
+    public static BorderLocationDAO getBorderLocationDAO(){
+        if(borderLocationDAO != null) return borderLocationDAO;
+        BorderLocationDAOImpl borderLocationDAOImpl = new BorderLocationDAOImpl();
+        borderLocationDAOImpl.setEntityManager(entityManager);
+        borderLocationDAO = borderLocationDAOImpl;
+        return borderLocationDAO;
+    }
+
     public static BillDAO getBillDAO() {
-        if(billDAO != null) return billDAO;
+        if (billDAO != null) return billDAO;
         BillDaoImpl billDAOImpl = new BillDaoImpl();
         billDAOImpl.setEntityManager(entityManager);
         billDAO = billDAOImpl;
@@ -111,7 +131,7 @@ public class PersistenceHelper {
     }
 
     public static RateDAO getRateDAO() {
-        if(rateDAO != null) return rateDAO;
+        if (rateDAO != null) return rateDAO;
         RateDAOImpl rateDAOImpl = new RateDAOImpl();
         rateDAOImpl.setEntityManager(entityManager);
         rateDAO = rateDAOImpl;
@@ -119,7 +139,7 @@ public class PersistenceHelper {
     }
 
     public static RegionDAO getRegionDAO() {
-        if(regionDAO != null) return regionDAO;
+        if (regionDAO != null) return regionDAO;
         RegionDAOImpl regionDAOImpl = new RegionDAOImpl();
         regionDAOImpl.setEntityManager(entityManager);
         regionDAO = regionDAOImpl;
@@ -127,7 +147,7 @@ public class PersistenceHelper {
     }
 
     public static LocationDAO getLocationDAO() {
-        if(locationDAO != null) return locationDAO;
+        if (locationDAO != null) return locationDAO;
         LocationDAOImpl locationDAOImpl = new LocationDAOImpl();
         locationDAOImpl.setEntityManager(entityManager);
         locationDAO = locationDAOImpl;
@@ -135,7 +155,7 @@ public class PersistenceHelper {
     }
 
     public static RegisteredVehicleDAO getRegisteredVehicleDAO() {
-        if(registeredVehicleDAO != null) return registeredVehicleDAO;
+        if (registeredVehicleDAO != null) return registeredVehicleDAO;
         RegisteredVehicleDAOImpl registeredVehicleDAOImpl = new RegisteredVehicleDAOImpl();
         registeredVehicleDAOImpl.setEntityManager(entityManager);
         registeredVehicleDAO = registeredVehicleDAOImpl;
@@ -143,7 +163,7 @@ public class PersistenceHelper {
     }
 
     public static TrackedVehicleDAO getTrackedVehicleDAO() {
-        if(trackedVehicleDAO != null) return trackedVehicleDAO;
+        if (trackedVehicleDAO != null) return trackedVehicleDAO;
         TrackedVehicleDAOImpl trackedVehicleDAOImpl = new TrackedVehicleDAOImpl();
         trackedVehicleDAOImpl.setEntityManager(entityManager);
         trackedVehicleDAO = trackedVehicleDAOImpl;
@@ -151,7 +171,7 @@ public class PersistenceHelper {
     }
 
     public static TradeDAO getTradeDAO() {
-        if(tradeDAO != null) return tradeDAO;
+        if (tradeDAO != null) return tradeDAO;
         TradeDAOImpl tradeDAOImpl = new TradeDAOImpl();
         tradeDAOImpl.setEntityManager(entityManager);
         tradeDAO = tradeDAOImpl;
@@ -159,23 +179,23 @@ public class PersistenceHelper {
     }
 
     public static UserDAO getUserDAO() {
-        if(userDAO != null) return userDAO;
-        UserDAOImpl userDAOImpl= new UserDAOImpl();
+        if (userDAO != null) return userDAO;
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
         userDAOImpl.setEntityManager(entityManager);
         userDAO = userDAOImpl;
         return userDAO;
     }
 
     public static VehicleDAO getVehicleDAO() {
-        if(vehicleDAO != null) return vehicleDAO;
+        if (vehicleDAO != null) return vehicleDAO;
         VehicleDAOImpl vehicleDAOImpl = new VehicleDAOImpl();
         vehicleDAOImpl.setEntityManager(entityManager);
         vehicleDAO = vehicleDAOImpl;
         return vehicleDAO;
     }
 
-    public static TradeServiceImpl getTradeService(){
-        if(tradeServiceImpl != null) return tradeServiceImpl;
+    public static TradeServiceImpl getTradeService() {
+        if (tradeServiceImpl != null) return tradeServiceImpl;
         tradeServiceImpl = new TradeServiceImpl();
         tradeServiceImpl.setUserDAO(getUserDAO());
         tradeServiceImpl.setRegisteredVehicleDAO(getRegisteredVehicleDAO());
@@ -189,8 +209,8 @@ public class PersistenceHelper {
         return tradeServiceImpl;
     }
 
-    private static UserServiceImpl getUserService(){
-        if(userServiceImpl != null) return userServiceImpl;
+    public static UserServiceImpl getUserService() {
+        if (userServiceImpl != null) return userServiceImpl;
         userServiceImpl = new UserServiceImpl();
         userServiceImpl.setAccountDAO(getAccountDAO());
         userServiceImpl.setEmailRecoveryService(new MockEmailRecoveryService());
@@ -200,21 +220,72 @@ public class PersistenceHelper {
         return userServiceImpl;
     }
 
-    private static AuthServiceImpl getAuthService(){
-        if(authServiceImpl != null) return authServiceImpl;
+    public static AuthServiceImpl getAuthService() {
+        if (authServiceImpl != null) return authServiceImpl;
         authServiceImpl = new AuthServiceImpl();
-        authServiceImpl.setAccountDAO(accountDAO);
-        authServiceImpl.setUserDAO(userDAO);
+        authServiceImpl.setAccountDAO(getAccountDAO());
+        authServiceImpl.setUserDAO(getUserDAO());
         return authServiceImpl;
     }
 
-    public static FileServiceImpl getFileService(){
+    public static BillServiceImpl getBillService() {
+        if(billService != null) return billService;
+        billService = new BillServiceImpl();
+        billService.setAccountDAO(getAccountDAO());
+        billService.setBillDAO(getBillDAO());
+        billService.setVehicleDAO(getVehicleDAO());
+        billService.setLocationService(getLocationService());
+        billService.setRegionService(getRegionService());
+        return billService;
+
+    }
+
+    public static RegionServiceImpl getRegionService() {
+        if (regionService != null) return regionService;
+        regionService = new RegionServiceImpl();
+        regionService.setLogger(LOGGER);
+        regionService.setRateDAO(getRateDAO());
+        regionService.setRegionDAO(getRegionDAO());
+        regionService.setUserDAO(getUserDAO());
+        regionService.setBorderLocationDAO(getBorderLocationDAO());
+        return regionService;
+    }
+
+    public static RouteServiceImpl getRouteService(){
+        if(routeService != null) return routeService;
+        routeService = new RouteServiceImpl();
+        routeService.setRegionService(getRegionService());
+        routeService.setGenerationService(getGenerationService());
+        return routeService;
+    }
+
+    public static GenerationServiceImpl getGenerationService() {
+        if(generationService != null) return generationService;
+        generationService = new GenerationServiceImpl();
+        generationService.setBillDAO(getBillDAO());
+        generationService.setBillService(getBillService());
+        generationService.setLocationService(getLocationService());
+        generationService.setRegionService(getRegionService());
+        generationService.setRegisteredVehicleDAO(getRegisteredVehicleDAO());
+        return generationService;
+    }
+
+    public static LocationServiceImpl getLocationService() {
+        if (locationService != null) return locationService;
+        locationService = new LocationServiceImpl();
+        locationService.setRegisteredVehicleDAO(getRegisteredVehicleDAO());
+        locationService.setTrackedVehicleDAO(getTrackedVehicleDAO());
+        return locationService;
+    }
+
+
+    public static FileServiceImpl getFileService() {
         FileServiceImpl fileService = new FileServiceImpl();
         fileService.setLogger();
         return fileService;
     }
 
-    public static EmailTradeServiceImpl getEmailTradeService(){
+    public static EmailTradeServiceImpl getEmailTradeService() {
         return new EmailTradeServiceImpl();
     }
 }

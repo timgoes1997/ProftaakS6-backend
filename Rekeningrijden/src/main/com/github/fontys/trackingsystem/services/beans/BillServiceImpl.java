@@ -330,4 +330,12 @@ public class BillServiceImpl extends RestrictedServiceImpl implements BillServic
     public void setVehicleDAO(VehicleDAO vehicleDAO) {
         this.vehicleDAO = vehicleDAO;
     }
+
+    public void setRegionService(RegionService regionService) {
+        this.regionService = regionService;
+    }
+
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
 }

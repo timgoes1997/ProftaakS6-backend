@@ -127,7 +127,7 @@ public class RegionServiceImpl implements RegionService {
         }
 
         if(authorizer == null || !userDAO.exists(authorizer.getId())){
-            logger.warning("This needs to be checked and throw an error, for now ignore for testing purposes");
+            logger.warning("This needs to be checked and throw an error, for now ignore for testing purposes"); //TODO: throw an error
         }
 
         for(Rate rate : rates){
@@ -311,5 +311,25 @@ public class RegionServiceImpl implements RegionService {
             }
         }
         return mostRecentlyAdded;
+    }
+
+    public void setRegionDAO(RegionDAO regionDAO) {
+        this.regionDAO = regionDAO;
+    }
+
+    public void setRateDAO(RateDAO rateDAO) {
+        this.rateDAO = rateDAO;
+    }
+
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public void setBorderLocationDAO(BorderLocationDAO borderLocationDAO) {
+        this.borderLocationDAO = borderLocationDAO;
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
     }
 }

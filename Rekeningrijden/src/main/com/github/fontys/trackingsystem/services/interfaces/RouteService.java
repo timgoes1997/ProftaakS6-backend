@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface RouteService {
-    List<Route> generateRoute(List<Location> locations, EnergyLabel energyLabel);
+    List<Route> generateRoutes(List<Location> locations, EnergyLabel energyLabel);
     Route generateSingleRoute(List<Location> locations, EnergyLabel energyLabel);
     List<RouteDetail> generateRouteDetails(List<Location> locations, EnergyLabel energyLabel);
     RouteDetail generateSingleRouteDetails(List<Location> locations, Rate rate);

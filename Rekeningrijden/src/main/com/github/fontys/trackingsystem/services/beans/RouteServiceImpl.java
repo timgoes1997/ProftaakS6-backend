@@ -19,8 +19,8 @@ import java.util.*;
 public class RouteServiceImpl implements RouteService {
 
     private static long GENERATION_ROUTE_STEP = 15;
-    private static long MILLIS_TO_SECONDS = 1000L;
-    private static long SECONDS_TO_MINUTES = 60L;
+    private static long MILLIS_TO_SECONDS = 1000;
+    private static long SECONDS_TO_MINUTES = 60;
 
     @Inject
     private RegionService regionService;
@@ -76,7 +76,7 @@ public class RouteServiceImpl implements RouteService {
                 currentRouteDetailsLocations.add(locI);
                 currentRouteDetailsLocations.add(locJ);
                 routeDetails.add(generateSingleRouteDetails(currentRouteDetailsLocations, rateLocI));
-                currentRouteDetailsLocations.clear();
+                currentRouteDetailsLocations = new ArrayList<>();
             }
         }
         return routeDetails;
@@ -95,7 +95,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List<Route> generateRoute(List<Location> locations, EnergyLabel energyLabel) {
+    public List<Route> generateRoutes(List<Location> locations, EnergyLabel energyLabel) {
         List<Route> routes = new ArrayList<>();
         List<Location> currentLocationsRoute = new ArrayList<>();
 
@@ -107,9 +107,15 @@ public class RouteServiceImpl implements RouteService {
 
             if (differenceIsGreaterOrEquals(GENERATION_ROUTE_STEP, locI, locJ) && currentLocationsRoute.size() > 1) {
                 routes.add(generateSingleRoute(currentLocationsRoute, energyLabel));
-                currentLocationsRoute.clear();
+                currentLocationsRoute = new ArrayList<>();
+            }
+
+            if(j == locations.size() - 1){
+                currentLocationsRoute.add(locJ);
+                routes.add(generateSingleRoute(currentLocationsRoute, energyLabel));
             }
         }
+
         return routes;
     }
 
@@ -125,11 +131,24 @@ public class RouteServiceImpl implements RouteService {
         Calendar timeI = i.getTime();
         Calendar timeJ = j.getTime();
 
-        return (timeJ.getTimeInMillis() - timeI.getTimeInMillis()) / (MILLIS_TO_SECONDS * SECONDS_TO_MINUTES);
+        long timeDifference = timeJ.getTimeInMillis() - timeI.getTimeInMillis();
+        long secondDifference = timeDifference / MILLIS_TO_SECONDS;
+        long minuteDifference = secondDifference / SECONDS_TO_MINUTES;
+
+        return minuteDifference;
     }
 
     @Override
     public boolean differenceIsGreaterOrEquals(long differenceMinutes, Location i, Location j) {
-        return differenceMinutes > getTimeDifferenceMinutes(i, j);
+        return getTimeDifferenceMinutes(i, j) >= differenceMinutes;
+    }
+
+
+    public void setRegionService(RegionService regionService) {
+        this.regionService = regionService;
+    }
+
+    public void setGenerationService(GenerationService generationService) {
+        this.generationService = generationService;
     }
 }

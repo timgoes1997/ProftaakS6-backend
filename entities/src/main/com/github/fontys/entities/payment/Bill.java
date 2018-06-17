@@ -95,6 +95,12 @@ public class Bill implements Serializable {
     @OneToMany
     private List<Bill> montlyBills;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "BILL_ROUTES",
+            joinColumns = { @JoinColumn(name="BILL_ID", referencedColumnName="ID")},
+            inverseJoinColumns = { @JoinColumn(name="ROUTE_ID", referencedColumnName="ID")})
+    private List<Route> billRoutes; // must be ordered consecutively
+
     public Bill() {
         this.discriminator = 0;
     }
