@@ -84,13 +84,13 @@ public class GenerationServiceImpl implements GenerationService {
         // Get the EULocations within the hosts country
         ForeignRoute euForeignRoute = routeEngine.determineHomeRoute(euLocations, registeredVehicle.getLicensePlate());
         List<List<EULocation>> euLocationsDomestic = euForeignRoute.getTrips();
-        for(List<EULocation> locations: euLocationsDomestic) {
+        for (List<EULocation> locations : euLocationsDomestic) {
             locations.sort(EULocation::compareTo);
         }
 
         // Calculate distance of domestic route
         double distanceInKilometers = 0.0d;
-        for(List<EULocation> locations:  euLocationsDomestic){
+        for (List<EULocation> locations : euLocationsDomestic) {
             distanceInKilometers += calculateDistance(locations);
         }
 
@@ -151,19 +151,20 @@ public class GenerationServiceImpl implements GenerationService {
         Map<String, ForeignRoute> routeMap = routeEngine.determineForeignRoutes(euLocations, registeredVehicle.getLicensePlate());
         try {
             routeEngine.sendRoutesToTheirCountry(routeMap);
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
 
         // Domestic route //
         // Get the EULocations within the hosts country
         ForeignRoute euForeignRoute = routeEngine.determineHomeRoute(euLocations, registeredVehicle.getLicensePlate());
         List<List<EULocation>> euLocationsDomestic = euForeignRoute.getTrips();
-        for(List<EULocation> locations: euLocationsDomestic) {
+        for (List<EULocation> locations : euLocationsDomestic) {
             locations.sort(EULocation::compareTo);
         }
 
         // Calculate distance of domestic route
         double distanceInKilometers = 0.0d;
-        for(List<EULocation> locations:  euLocationsDomestic){
+        for (List<EULocation> locations : euLocationsDomestic) {
             distanceInKilometers += calculateDistance(locations);
         }
 
@@ -266,14 +267,28 @@ public class GenerationServiceImpl implements GenerationService {
         return distanceInKilometers;
     }
 
+    @Override
+    public double getDistance(List<Location> locations) {
+        double distance = 0.0d;
+        for (int i = locations.size() - 2, j = locations.size() - 1; i > 0; i--, j--) {
+            distance += distanceCalculator.getDistance(
+                    locations.get(i).getLat(),
+                    locations.get(i).getLat(),
+                    locations.get(j).getLat(),
+                    locations.get(j).getLon());
+        }
+        return distance;
+    }
+
     /**
      * Calculates the price based upon the given locations. Might need to change to trips etc.
+     *
      * @param locations
      * @return
      */
-    public BigDecimal calculatePrice(List<Location> locations, EnergyLabel energyLabel){
+    public BigDecimal calculatePrice(List<Location> locations, EnergyLabel energyLabel) {
         BigDecimal price = new BigDecimal(0).setScale(3, BigDecimal.ROUND_HALF_UP);
-        for(int i = locations.size() - 2, j = locations.size() -1; i > 0; i--, j--){
+        for (int i = locations.size() - 2, j = locations.size() - 1; i > 0; i--, j--) {
             Rate rate = regionService.getRate(locations.get(i), energyLabel);
             double distanceInKilometers = distanceCalculator.getDistance(
                     locations.get(i).getLat(),

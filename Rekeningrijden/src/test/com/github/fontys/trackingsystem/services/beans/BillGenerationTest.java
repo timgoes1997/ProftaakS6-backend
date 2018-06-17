@@ -31,7 +31,7 @@ public class BillGenerationTest {
        PersistenceHelper.generateDummyData();
        List<Location> locationList = PersistenceHelper.getDataGenerator().generateRuhrBerlin();
 
-       
+
     }
 
 }

@@ -43,6 +43,15 @@ public class Route {
             inverseJoinColumns = { @JoinColumn(name="DETAIL_ID", referencedColumnName="ID")})
     private List<RouteDetail> routeDetails; // must be ordered consecutively
 
+    public Route(Calendar startTime, Calendar endTime, List<Location> locations, double distance, BigDecimal price, List<RouteDetail> routeDetails) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.locations = locations;
+        this.distance = distance;
+        this.price = price;
+        this.routeDetails = routeDetails;
+    }
+
     public Route(Calendar startTime, Calendar endTime, List<Location> locations, double distance, BigDecimal price) {
         this.startTime = startTime;
         this.endTime = endTime;

@@ -1,6 +1,9 @@
 package com.github.fontys.trackingsystem.services.interfaces;
 
+import com.github.fontys.entities.tracking.Location;
+
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public interface GenerationService {
@@ -10,4 +13,6 @@ public interface GenerationService {
     void handleLastRoute(String startDate, String endDate, String license) throws IOException, TimeoutException;
 
     void generateBillByLastMonthsRouteBills(long registeredVehicleId) throws IOException;
+
+    double getDistance(List<Location> locations);
 }
