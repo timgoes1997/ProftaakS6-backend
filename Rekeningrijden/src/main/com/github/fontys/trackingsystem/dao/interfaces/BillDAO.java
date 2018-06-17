@@ -1,6 +1,7 @@
 package com.github.fontys.trackingsystem.dao.interfaces;
 
 import com.github.fontys.entities.payment.Bill;
+import com.github.fontys.entities.payment.ForeignBill;
 
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface BillDAO {
     List<Bill> findByVehicleId(int vehicleId);
 
     List<Bill> getAll();
+
+    List<ForeignBill> getAllForeignBill();
+
+    List<Bill> getAllCountryBill();
 }

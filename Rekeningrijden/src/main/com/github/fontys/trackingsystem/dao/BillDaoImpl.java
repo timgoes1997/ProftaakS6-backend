@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.dao;
 
+import com.github.fontys.entities.payment.ForeignBill;
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.entities.payment.Bill;
 
@@ -66,6 +67,20 @@ public class BillDaoImpl implements BillDAO {
     public List<Bill> getAll() {
         TypedQuery<Bill> query =
                 em.createNamedQuery(Bill.FIND_ALL, Bill.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<ForeignBill> getAllForeignBill() {
+        TypedQuery<ForeignBill> query =
+                em.createNamedQuery(ForeignBill.FIND_BYTYPE, ForeignBill.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Bill> getAllCountryBill() {
+        TypedQuery<Bill> query =
+                em.createNamedQuery(Bill.FIND_BYTYPE, Bill.class);
         return query.getResultList();
     }
 

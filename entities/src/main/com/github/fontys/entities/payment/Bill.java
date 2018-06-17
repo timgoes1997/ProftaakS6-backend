@@ -32,7 +32,13 @@ import java.util.List;
 
         @NamedQuery(name = Bill.FIND_BYOWNERID,
                 query = "SELECT b FROM BILL b WHERE b.registeredVehicle.customer.id=:ownerid"),
+
+        @NamedQuery(name = Bill.FIND_BYTYPE,
+                query = "SELECT b FROM BILL b WHERE b.discriminator=0"),
 })
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="TYPE", discriminatorType = DiscriminatorType.INTEGER)
+@DiscriminatorValue("0")
 public class Bill implements Serializable {
 
     // ======================================
@@ -44,6 +50,7 @@ public class Bill implements Serializable {
     public static final String FIND_BYVEHICLEID = "Bill.findByVehicleId";
     public static final String FIND_BYSTATUS = "Bill.findByStatus";
     public static final String FIND_BYOWNERID = "Bill.findByOwnerId";
+    public static final String FIND_BYTYPE = "Bill.findByType";
 
     // ======================================
     // =             Fields              =
@@ -82,11 +89,14 @@ public class Bill implements Serializable {
     @Column(name = "ISENDOFMONTHBILL")
     private boolean isEndOfMonthBill;
 
+    @Column(name = "TYPE")
+    protected int discriminator;
+
     @OneToMany
     private List<Bill> montlyBills;
 
     public Bill() {
-
+        this.discriminator = 0;
     }
 
     public Bill(RegisteredVehicle registeredVehicle,
@@ -105,6 +115,7 @@ public class Bill implements Serializable {
         this.status = paymentStatus;
         this.mileage = mileage;
         this.isEndOfMonthBill = isEndOfMonthBill;
+        this.discriminator = 0;
     }
 
     @JsonIgnore
@@ -136,7 +147,6 @@ public class Bill implements Serializable {
         return startDate;
     }
 
-
     public Calendar getCalendarEndDate() {
         return endDate;
     }
@@ -151,6 +161,12 @@ public class Bill implements Serializable {
 
     public BigDecimal getAlreadyPaid() {
         return alreadyPaid;
+    }
+
+    public int getDiscriminator() { return discriminator; }
+
+    public void setDiscriminator(int discriminator) {
+        this.discriminator = discriminator;
     }
 
     public void setAlreadyPaid(BigDecimal alreadyPaid) {

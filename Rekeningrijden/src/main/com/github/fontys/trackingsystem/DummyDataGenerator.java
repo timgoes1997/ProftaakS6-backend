@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem;
 
+import com.github.fontys.entities.payment.ForeignBill;
 import com.github.fontys.entities.payment.Rate;
 import com.github.fontys.entities.region.BorderLocation;
 import com.github.fontys.entities.region.Region;
@@ -137,6 +138,19 @@ public class DummyDataGenerator {
                     1000,
                     false
             );
+
+            if(i == 0){
+                ForeignBill foreignBill = new ForeignBill(
+                        rv,
+                        new BigDecimal(i * 213),
+                        new BigDecimal(i * 437),
+                        startdate,
+                        endDate,
+                        PaymentStatus.OPEN,
+                        3200,
+                        false, "NL");
+                em.persist(foreignBill);
+            }
 
             em.persist(b);
             accountDAO.create(account);

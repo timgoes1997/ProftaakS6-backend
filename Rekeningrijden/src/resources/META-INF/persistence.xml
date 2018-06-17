@@ -13,6 +13,7 @@
         <class>com.github.fontys.entities.user.Role</class>
 
         <class>com.github.fontys.entities.payment.Bill</class>
+        <class>com.github.fontys.entities.payment.ForeignBill</class>
         <class>com.github.fontys.entities.payment.PaymentStatus</class>
         <class>com.github.fontys.entities.payment.Rate</class>
 
