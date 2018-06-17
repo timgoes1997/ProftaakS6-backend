@@ -1,5 +1,7 @@
 package com.github.fontys.trackingsystem.services.beans;
 
+import com.github.fontys.entities.payment.Rate;
+import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.entities.payment.Bill;
@@ -10,6 +12,7 @@ import com.github.fontys.trackingsystem.services.interfaces.LocationService;
 import com.github.fontys.entities.tracking.DistanceCalculator;
 import com.github.fontys.entities.tracking.Location;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
+import com.github.fontys.trackingsystem.services.interfaces.RegionService;
 import com.nonexistentcompany.lib.RouteEngine;
 import com.nonexistentcompany.lib.domain.EULocation;
 import com.nonexistentcompany.lib.domain.ForeignRoute;
@@ -36,6 +39,9 @@ public class GenerationServiceImpl implements GenerationService {
 
     @Inject
     private BillDAO billDAO;
+
+    @Inject
+    private RegionService regionService;
 
     private RouteEngine routeEngine = new RouteEngine("DE");
 
@@ -258,6 +264,26 @@ public class GenerationServiceImpl implements GenerationService {
         }
 
         return distanceInKilometers;
+    }
+
+    /**
+     * Calculates the price based upon the given locations. Might need to change to trips etc.
+     * @param locations
+     * @return
+     */
+    public BigDecimal calculatePrice(List<Location> locations, EnergyLabel energyLabel){
+        BigDecimal price = new BigDecimal(0).setScale(3, BigDecimal.ROUND_HALF_UP);
+        for(int i = locations.size() - 2, j = locations.size() -1; i > 0; i--, j--){
+            Rate rate = regionService.getRate(locations.get(i), energyLabel);
+            double distanceInKilometers = distanceCalculator.getDistance(
+                    locations.get(i).getLat(),
+                    locations.get(i).getLat(),
+                    locations.get(j).getLat(),
+                    locations.get(j).getLon());
+            BigDecimal locationPrice = rate.getKilometerPrice().multiply(new BigDecimal(distanceInKilometers));
+            price = price.add(locationPrice);
+        }
+        return price;
     }
 
     public List<EULocation> convertLocationsToEULocations(String license, List<Location> locations) {
