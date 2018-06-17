@@ -31,6 +31,7 @@ public class PersistenceHelper {
     private static RegionDAO regionDAO;
     private static RateDAO rateDAO;
 
+    private static DummyDataGenerator dataGenerator;
     //Services
     private static TradeServiceImpl tradeServiceImpl;
     private static AuthServiceImpl authServiceImpl;
@@ -75,7 +76,7 @@ public class PersistenceHelper {
 
     public static void generateDummyData(){
         entityManager.getTransaction().begin();
-        DummyDataGenerator dataGenerator = new DummyDataGenerator();
+        dataGenerator = new DummyDataGenerator();
         dataGenerator.setAccountDAO(getAccountDAO());
         dataGenerator.setBillDAO(getBillDAO());
         dataGenerator.setRegisteredVehicleDAO(getRegisteredVehicleDAO());
@@ -87,6 +88,10 @@ public class PersistenceHelper {
         dataGenerator.setEm(entityManager);
         dataGenerator.init();
         entityManager.getTransaction().commit();
+    }
+
+    public static DummyDataGenerator getDataGenerator(){
+        return dataGenerator;
     }
 
     public static AccountDAO getAccountDAO(){
