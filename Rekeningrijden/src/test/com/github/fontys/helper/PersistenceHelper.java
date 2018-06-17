@@ -50,7 +50,10 @@ public class PersistenceHelper {
     public static void cleanDataBase(){
         entityManager.getTransaction().begin();
         entityManager.createQuery("DELETE FROM ACCOUNT").executeUpdate();
+        entityManager.createNativeQuery("UPDATE ROUTE_DETAIL SET RATE_ID = null").executeUpdate();
         entityManager.createQuery("DELETE FROM BILL").executeUpdate();
+        entityManager.createQuery("DELETE FROM ROUTE").executeUpdate();
+        entityManager.createQuery("DELETE FROM ROUTE_DETAIL").executeUpdate();
         entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET REGISTERED_VEHICLE = null").executeUpdate();
         entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET LAST_LOCATION = null").executeUpdate();
         entityManager.createNativeQuery("UPDATE TRACKED_VEHICLE SET HARDWARE = null").executeUpdate();

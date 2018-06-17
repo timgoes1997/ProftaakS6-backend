@@ -1,13 +1,10 @@
 package com.github.fontys.trackingsystem;
 
-import com.github.fontys.entities.payment.ForeignBill;
-import com.github.fontys.entities.payment.Rate;
+import com.github.fontys.entities.payment.*;
 import com.github.fontys.entities.region.BorderLocation;
 import com.github.fontys.entities.region.Region;
 import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.*;
-import com.github.fontys.entities.payment.Bill;
-import com.github.fontys.entities.payment.PaymentStatus;
 import com.github.fontys.entities.tracking.Hardware;
 import com.github.fontys.entities.tracking.Location;
 import com.github.fontys.entities.tracking.TrackedVehicle;
@@ -156,6 +153,17 @@ public class DummyDataGenerator {
             accountDAO.create(account);
             em.persist(tv);
         }
+
+        Route route = new Route(Calendar.getInstance(), Calendar.getInstance(), null,  1.0d, new BigDecimal(1.0));
+        em.persist(route);
+        RouteDetail routeDetail = new RouteDetail(Calendar.getInstance(), Calendar.getInstance(), 0.7d, new BigDecimal(0.5), rateDAO.findDefaultRates().get(0));
+        RouteDetail routeDetail2 = new RouteDetail(Calendar.getInstance(), Calendar.getInstance(), 0.3d, new BigDecimal(0.5), rateDAO.findDefaultRates().get(1));
+
+        List<RouteDetail> details = new ArrayList<>();
+        details.add(routeDetail);
+        details.add(routeDetail2);
+        route.setRouteDetails(details);
+        em.persist(route);
     }
 
     private void createRegions() {

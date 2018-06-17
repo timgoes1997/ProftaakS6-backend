@@ -16,6 +16,8 @@
         <class>com.github.fontys.entities.payment.ForeignBill</class>
         <class>com.github.fontys.entities.payment.PaymentStatus</class>
         <class>com.github.fontys.entities.payment.Rate</class>
+        <class>com.github.fontys.entities.payment.Route</class>
+        <class>com.github.fontys.entities.payment.RouteDetail</class>
 
         <class>com.github.fontys.entities.region.Region</class>
         <class>com.github.fontys.entities.region.BorderLocation</class>
