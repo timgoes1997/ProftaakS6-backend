@@ -61,7 +61,6 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public List<RouteDetail> generateRouteDetails(List<Location> locations, EnergyLabel energyLabel) {
-
         List<RouteDetail> routeDetails = new ArrayList<>();
         Set<Location> currentRouteDetailsLocations = new HashSet<>();
         for (int i = 0, j = 1; j < locations.size(); i++, j++) {
