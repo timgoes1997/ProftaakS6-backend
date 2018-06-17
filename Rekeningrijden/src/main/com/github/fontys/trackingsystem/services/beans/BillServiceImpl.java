@@ -282,7 +282,7 @@ public class BillServiceImpl extends RestrictedServiceImpl implements BillServic
         return // Can access all bills
                 accessAllBillsAllowed() || // OR
                         // Owns this bill
-                        ((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId();
+                        ((User) currentUser).getId() == b.getRegisteredVehicle().getCustomer().getId();
     }
 
 
