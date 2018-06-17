@@ -271,7 +271,7 @@ public class GenerationServiceImpl implements GenerationService {
     public double getDistance(List<Location> locations) {
         locations.sort(Comparator.comparing(Location::getTime));
         double distance = 0.0d;
-        for (int i = locations.size() - 2, j = locations.size() - 1; i > 0; i--, j--) {
+        for (int i = locations.size() - 2, j = locations.size() - 1; i >= 0; i--, j--) {
             distance += distanceCalculator.getDistance(
                     locations.get(i).getLat(),
                     locations.get(i).getLon(),
