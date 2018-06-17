@@ -32,7 +32,15 @@ public class BillDaoImpl implements BillDAO {
     }
 
     @Override
-    public Bill find(int id) {
+    public boolean exists(long id) {
+        TypedQuery<Bill> query =
+                em.createNamedQuery(Bill.FIND_BYID, Bill.class);
+        query.setParameter("id", id);
+        return query.getResultList().size() > 0;
+    }
+
+    @Override
+    public Bill find(long id) {
         TypedQuery<Bill> query =
                 em.createNamedQuery(Bill.FIND_BYID, Bill.class);
         query.setParameter("id", id);
@@ -56,7 +64,7 @@ public class BillDaoImpl implements BillDAO {
     }
 
     @Override
-    public List<Bill> findByVehicleId(int vehicleId) {
+    public List<Bill> findByVehicleId(long vehicleId) {
         TypedQuery<Bill> query =
                 em.createNamedQuery(Bill.FIND_BYVEHICLEID, Bill.class);
         query.setParameter("id", vehicleId);

@@ -63,6 +63,10 @@ public class LocationServiceImpl implements LocationService {
             throw new BadRequestException();
         }
 
+       return getLocationsBetweenXXXByVehicleLicense(license, start, end);
+    }
+
+    private List<Location> getLocationsBetweenXXXByVehicleLicense(String license, Date startdate, Date enddate) {
         List<Location> locations;
 
         // Get the vehicle ID, then get all locations with the vehicle with that ID
@@ -79,7 +83,7 @@ public class LocationServiceImpl implements LocationService {
                 Location l = locIter.next();
                 Date currentLocationDate = l.getTime().getTime();
                 // if the date of the location falls outside the specified dates, remove the location
-                if (currentLocationDate.before(start) || currentLocationDate.after(end)) {
+                if (currentLocationDate.before(startdate) || currentLocationDate.after(enddate)) {
                     locIter.remove();
                 }
             }
@@ -103,6 +107,11 @@ public class LocationServiceImpl implements LocationService {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return getLocationsBetweenXXXByVehicleLicense(format, license, startdate, enddate);
 
+    }
+
+    @Override
+    public List<Location> getLocationsBetweenTimesByVehicleLicense(String license, Date startdate, Date enddate) {
+        return getLocationsBetweenXXXByVehicleLicense(license, startdate, enddate);
     }
 
     @Override

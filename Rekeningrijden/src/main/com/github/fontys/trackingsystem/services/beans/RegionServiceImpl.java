@@ -18,10 +18,7 @@ import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class RegionServiceImpl implements RegionService {
@@ -268,6 +265,18 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public List<Region> getWithinRegions(Location location) {
         return getWithinRegions(location.getLat(), location.getLon());
+    }
+
+    @Override
+    public List<Rate> getRates(List<Location> locations, EnergyLabel energyLabel) {
+        Set<Rate> rates = new HashSet<>();
+        for(Location location : locations){
+            Rate rate = getRate(location,energyLabel);
+            if(rate != null){
+                rates.add(rate);
+            }
+        }
+        return new ArrayList<>(rates);
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.github.fontys.trackingsystem.services.beans;
 
+import com.github.fontys.entities.payment.Rate;
+import com.github.fontys.entities.tracking.Location;
+import com.github.fontys.entities.vehicle.EnergyLabel;
+import com.github.fontys.entities.vehicle.RegisteredVehicle;
 import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.entities.security.base.ESUser;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
@@ -13,6 +17,8 @@ import com.github.fontys.entities.user.Account;
 import com.github.fontys.entities.user.Role;
 import com.github.fontys.entities.user.User;
 import com.github.fontys.entities.vehicle.Vehicle;
+import com.github.fontys.trackingsystem.services.interfaces.LocationService;
+import com.github.fontys.trackingsystem.services.interfaces.RegionService;
 
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -28,6 +34,12 @@ public class BillServiceImpl extends RestrictedServiceImpl implements BillServic
     @Inject
     @CurrentESUser
     private ESUser currentUser;
+
+    @Inject
+    private RegionService regionService;
+
+    @Inject
+    private LocationService locationService;
 
     @Inject
     private BillDAO billDAO;
@@ -270,16 +282,36 @@ public class BillServiceImpl extends RestrictedServiceImpl implements BillServic
         return // Can access all bills
                 accessAllBillsAllowed() || // OR
                         // Owns this bill
-                ((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId();
+                        ((User) currentUser).getId() != b.getRegisteredVehicle().getCustomer().getId();
     }
 
+
+    @Override
+    public List<Rate> getRates(long id) {
+        if (!billDAO.exists(id)) {
+            throw new NotFoundException("Couldn't find given bill");
+        }
+
+        Bill b = billDAO.find(id);
+        List<Location> billLocations = locationService.getLocationsBetweenTimesByVehicleLicense(
+                b.getLicense(),
+                b.getCalendarStartDate().getTime(),
+                b.getCalendarEndDate().getTime());
+
+        RegisteredVehicle registeredVehicle = b.getRegisteredVehicle();
+        if (registeredVehicle != null) {
+            return regionService.getRates(billLocations, b.getRegisteredVehicle().getVehicle().getEnergyLabel());
+        } else {
+            return regionService.getRates(billLocations, EnergyLabel.H);
+        }
+    }
 
     @Override
     public Role getCurrentPrivilege() {
         return (Role) currentUser.getPrivilege();
     }
 
-    private boolean accessAllBillsAllowed(){
+    private boolean accessAllBillsAllowed() {
         return getDefaultAccessPrivileges();
     }
 

@@ -12,13 +12,15 @@ public interface BillDAO {
 
     void remove(Bill bill);
 
-    Bill find(int id);
+    boolean exists(long id);
+
+    Bill find(long id);
 
     List<Bill> findByOwnerId(Long ownerId);
 
     List<Bill> findByStatus(String status);
 
-    List<Bill> findByVehicleId(int vehicleId);
+    List<Bill> findByVehicleId(long vehicleId);
 
     List<Bill> getAll();
 

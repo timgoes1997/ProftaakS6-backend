@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.entities.payment.Rate;
 import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.trackingsystem.services.interfaces.BillService;
@@ -127,4 +128,13 @@ public class BillBean {
     public List<Bill> getCurrentUserBills() {
         return billService.getCurrentUserBills();
     }
+
+    @GET
+    //@EasySecurity(requiresUser = true) TODO: uncomment
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/rates/{id}")
+    public List<Rate> getBillRates(@PathParam("id") long id) {
+        return billService.getRates(id);
+    }
+
 }

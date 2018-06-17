@@ -2,6 +2,7 @@ package com.github.fontys.trackingsystem.services.interfaces;
 
 import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.entities.payment.PaymentStatus;
+import com.github.fontys.entities.payment.Rate;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ public interface BillService {
     List<Bill> getBillsByVehicleId(int vehicleId);
 
     Bill createBill(Bill bill);
+
+    List<Rate> getRates(long id);
 
     List<Bill> getBillsBetweenDatesByVehicleId(long registeredVehicleId, String startDate, String endDate, boolean excludeTotalBill);
 
