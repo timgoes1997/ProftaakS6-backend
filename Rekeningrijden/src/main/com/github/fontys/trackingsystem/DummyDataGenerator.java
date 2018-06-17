@@ -204,10 +204,10 @@ public class DummyDataGenerator {
     }
 
     private List<BorderLocation> getBorderBerlin() {
-        BorderLocation r1 = new BorderLocation(13.25d, 52.6d, 1L);
-        BorderLocation r2 = new BorderLocation(13.25d, 52.4d, 2L);
-        BorderLocation r3 = new BorderLocation(13.6d, 52.4d, 3L);
-        BorderLocation r4 = new BorderLocation(13.6d, 52.6d, 4L);
+        BorderLocation r1 = new BorderLocation(52.6d,13.25d, 1L);
+        BorderLocation r2 = new BorderLocation(52.4d, 13.25d, 2L);
+        BorderLocation r3 = new BorderLocation(52.4d, 13.6d, 3L);
+        BorderLocation r4 = new BorderLocation(52.6d, 13.6d, 4L);
         List<BorderLocation> squareBorderBerlin = new ArrayList<BorderLocation>();
         squareBorderBerlin.add(r1);
         squareBorderBerlin.add(r2);
@@ -217,10 +217,10 @@ public class DummyDataGenerator {
     }
 
     private List<BorderLocation> getBorderRuhr() {
-        BorderLocation r1 = new BorderLocation(6.5d, 51.7d, 1L);
-        BorderLocation r2 = new BorderLocation(6.5d, 50.4d, 2L);
-        BorderLocation r3 = new BorderLocation(7.8d, 50.4d, 3L);
-        BorderLocation r4 = new BorderLocation(7.8d, 52.5d, 4L);
+        BorderLocation r1 = new BorderLocation(51.7d, 6.5d,  1L);
+        BorderLocation r2 = new BorderLocation(50.4d,  6.5d, 2L);
+        BorderLocation r3 = new BorderLocation(50.4d,  7.8d, 3L);
+        BorderLocation r4 = new BorderLocation(52.5d, 7.8d, 4L);
         List<BorderLocation> squareBorderBerlin = new ArrayList<BorderLocation>();
         squareBorderBerlin.add(r1);
         squareBorderBerlin.add(r2);

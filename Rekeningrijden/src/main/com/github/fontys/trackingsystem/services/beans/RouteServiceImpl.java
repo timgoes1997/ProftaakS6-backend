@@ -63,7 +63,7 @@ public class RouteServiceImpl implements RouteService {
     public List<RouteDetail> generateRouteDetails(List<Location> locations, EnergyLabel energyLabel) {
 
         List<RouteDetail> routeDetails = new ArrayList<>();
-        List<Location> currentRouteDetailsLocations = new ArrayList<>();
+        Set<Location> currentRouteDetailsLocations = new HashSet<>();
         for (int i = 0, j = 1; j < locations.size(); i++, j++) {
             Location locI = locations.get(i);
             Location locJ = locations.get(j);
@@ -75,10 +75,16 @@ public class RouteServiceImpl implements RouteService {
             } else {
                 currentRouteDetailsLocations.add(locI);
                 currentRouteDetailsLocations.add(locJ);
-                routeDetails.add(generateSingleRouteDetails(currentRouteDetailsLocations, rateLocI));
-                currentRouteDetailsLocations = new ArrayList<>();
+                routeDetails.add(generateSingleRouteDetails(new ArrayList<>(currentRouteDetailsLocations), rateLocI));
+                currentRouteDetailsLocations = new HashSet<>();
+            }
+
+            if(j == locations.size() - 1){
+                currentRouteDetailsLocations.add(locJ);
+                routeDetails.add(generateSingleRouteDetails(new ArrayList<>(currentRouteDetailsLocations), rateLocI));
             }
         }
+
         return routeDetails;
     }
 

@@ -88,4 +88,24 @@ public class RegionTest {
         assertTrue(inOrder.get(2).getVerticeId() == 3L);
         assertTrue(inOrder.get(3).getVerticeId() == 4L);
     }
+
+    @Test
+    public void isInBerlinTest(){
+        BorderLocation r1 = new BorderLocation(52.6d,13.25d, 1L);
+        BorderLocation r2 = new BorderLocation(52.4d, 13.25d, 2L);
+        BorderLocation r3 = new BorderLocation(52.4d, 13.6d, 3L);
+        BorderLocation r4 = new BorderLocation(52.6d, 13.6d, 4L);
+        List<BorderLocation> squareBorderBerlin = new ArrayList<BorderLocation>();
+        squareBorderBerlin.add(r1);
+        squareBorderBerlin.add(r2);
+        squareBorderBerlin.add(r3);
+        squareBorderBerlin.add(r4);
+
+        Region square = new Region("square");
+        square.setBorderPoints(squareBorderBerlin);
+
+        Location test = new Location(52.554425, 13.467784, Calendar.getInstance());
+
+        assertTrue(square.isWithinRegion(test));
+    }
 }
