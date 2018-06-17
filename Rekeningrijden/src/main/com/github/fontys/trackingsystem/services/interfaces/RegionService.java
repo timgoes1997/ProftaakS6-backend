@@ -35,7 +35,11 @@ public interface RegionService {
     List<Rate> getRegionRates(String regionName);
     List<Rate> getRegionRates(Region region);
     List<Rate> getDefaultRates();
-    Rate getRate(Location location);
+    Rate getRate(Location location, EnergyLabel energyLabel);
+    Rate getRate(EnergyLabel energyLabel, List<Rate> rates);
+    Rate getCurrentRate(Region region, EnergyLabel energyLabel);
+    Rate getCurrentDefaultRate(EnergyLabel energyLabel);
+
 
     List<Region> getWithinRegions(Location location);
     List<Region> getWithinRegions(double x, double y);

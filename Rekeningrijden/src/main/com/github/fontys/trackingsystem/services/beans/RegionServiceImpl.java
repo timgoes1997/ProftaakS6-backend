@@ -201,8 +201,7 @@ public class RegionServiceImpl implements RegionService {
         }
 
         Region region = regionDAO.find(regionName);
-        List<Rate> rates = rateDAO.findRates(region);
-        return rates;
+        return rateDAO.findRates(region);
     }
 
     @Override
@@ -230,8 +229,40 @@ public class RegionServiceImpl implements RegionService {
     }
 
     @Override
-    public Rate getRate(Location location) {
-        return null;
+    public Rate getCurrentDefaultRate(EnergyLabel energyLabel) {
+        return getRate(energyLabel, getDefaultRates());
+    }
+
+    @Override
+    public Rate getRate(Location location, EnergyLabel energyLabel) {
+        //TODO: check if in germany, or it needs to happen somewhere else
+        Region region = getWithinRegion(location);
+        if(region != null){
+            return getCurrentRate(region, energyLabel);
+        }else{
+            return getCurrentDefaultRate(energyLabel);
+        }
+    }
+
+    @Override
+    public Rate getCurrentRate(Region region, EnergyLabel energyLabel) {
+        if(region == null){
+            throw new NotAcceptableException("Region cannot be null to get rates");
+        }
+        return getRate(energyLabel, getRegionRates(region));
+    }
+
+    @Override
+    public Rate getRate(EnergyLabel energyLabel, List<Rate> rates) {
+        Rate currentRate = null;
+        for (Rate r: rates) {
+            if(r.isInRate(energyLabel)){
+                if(currentRate == null || r.getAddedDate().after(currentRate.getAddedDate())){
+                    currentRate = r;
+                }
+            }
+        }
+        return currentRate;
     }
 
     @Override
