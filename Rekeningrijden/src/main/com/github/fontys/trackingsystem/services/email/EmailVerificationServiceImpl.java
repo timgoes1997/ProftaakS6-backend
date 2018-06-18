@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.services.email;
 
+import com.github.fontys.base.Globals;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailVerificationService;
 import com.github.fontys.entities.user.Account;
@@ -59,7 +60,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
             messageBody.setText(System.lineSeparator()
                     + "Please use this verification link to verify your account:"
                     + System.lineSeparator()
-                    + "http://"+ InetAddress.getLocalHost().getHostAddress()+"/verify.html?token=" + acc.getUser().getVerifyLink());
+                    + "http://"+ Globals.IP+"/verify.html?token=" + acc.getUser().getVerifyLink());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()

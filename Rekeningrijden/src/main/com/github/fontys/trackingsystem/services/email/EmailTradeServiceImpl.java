@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.services.email;
 
+import com.github.fontys.base.Globals;
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailTradeService;
 import com.github.fontys.entities.transfer.Transfer;
 
@@ -43,7 +44,7 @@ public class EmailTradeServiceImpl implements EmailTradeService{
                     + System.lineSeparator()
                     + "If that was you please click on the following link:"
                     + System.lineSeparator()
-                    + "http://" + InetAddress.getLocalHost().getHostAddress() + "/login.html?token=" + transfer.getTransferToken());
+                    + "http://" + Globals.IP + "/login.html?token=" + transfer.getTransferToken());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()

@@ -72,7 +72,9 @@ public class TrackedVehicle implements Serializable {
     }
 
     public synchronized void setLastLocation(Location lastLocation) {
-        getLocations().add(lastLocation);
+        if (this.lastLocation != null) {
+            getLocations().add(this.lastLocation);
+        }
         this.lastLocation = lastLocation;
     }
 

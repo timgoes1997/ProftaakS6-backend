@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.services.email;
 
+import com.github.fontys.base.Globals;
 import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.services.email.interfaces.EmailRecoveryService;
 import com.github.fontys.entities.user.Account;
@@ -57,7 +58,7 @@ public class EmailRecoveryServiceImpl implements EmailRecoveryService{
                     + "You have requested a password recovery, please click on the following link to enter your new password:"
                     + System.lineSeparator()
                     + System.lineSeparator()
-                    + "http://"+ InetAddress.getLocalHost().getHostAddress()+"/recovery.html?token=" + acc.getRecoveryLink());
+                    + "http://"+ Globals.IP +"/recovery.html?token=" + acc.getRecoveryLink());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()
