@@ -7,10 +7,12 @@ import com.github.fontys.entities.payment.Route;
 import com.github.fontys.entities.payment.RouteDetail;
 import com.github.fontys.entities.tracking.Location;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
+import com.github.fontys.international.IntegrationService;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.services.interfaces.BillGenerationService;
 import com.github.fontys.trackingsystem.services.interfaces.LocationService;
 import com.github.fontys.trackingsystem.services.interfaces.RouteService;
+import com.nonexistentcompany.lib.RouteEngine;
 import com.nonexistentcompany.lib.domain.RichRoute;
 import com.nonexistentcompany.lib.domain.RichRouteDetail;
 
@@ -37,6 +39,9 @@ public class BillGenerationServiceImpl implements BillGenerationService {
     private RouteService routeService;
 
     @Inject
+    private IntegrationService integrationService;
+
+    @Inject
     private Logger logger;
 
     @PostConstruct
@@ -61,6 +66,8 @@ public class BillGenerationServiceImpl implements BillGenerationService {
         List<Route> routes = routeService.generateRoutes(locations, registeredVehicle.getVehicle().getEnergyLabel());
 
         //EU gebeuren moet hier nog.
+        RouteEngine engine = integrationService.getEngine();
+
         Bill domesticRouteBill = new Bill(
                 registeredVehicle,
                 routeService.getTotalPriceRoutes(routes),
