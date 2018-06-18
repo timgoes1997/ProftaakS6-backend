@@ -64,7 +64,6 @@ public class IntegrationService {
 
                 logger.info(route.getOrigin());
 
-                List<Rate> rates = new ArrayList<>();
                 List<List<EULocation>> tripLocations = route.getTrips();
 
                 for (List<EULocation> locations : tripLocations) {
@@ -72,7 +71,7 @@ public class IntegrationService {
                 }
 
                 List<Location> locations = routeService.convertEULocationsToLocation(route.getId(), tripLocations);
-                List<Route> routes = routeService.generateRoutes(locations, EnergyLabel.H);
+                List<Route> routes = routeService.generateRoutes(locations, EnergyLabel.B);
                 BigDecimal price = routeService.getTotalPriceRoutes(routes);
                 double distance = routeService.getTotalDistanceRoutes(routes);
 
