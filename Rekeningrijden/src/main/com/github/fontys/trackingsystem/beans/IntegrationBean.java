@@ -1,10 +1,18 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.entities.payment.Rate;
+import com.github.fontys.entities.payment.Route;
+import com.github.fontys.entities.payment.RouteDetail;
+import com.github.fontys.entities.tracking.Location;
+import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.international.RouteTransformerGermany;
+import com.github.fontys.trackingsystem.services.interfaces.RouteService;
 import com.nonexistentcompany.lib.RouteEngine;
 import com.nonexistentcompany.lib.RouteTransformer;
+import com.nonexistentcompany.lib.domain.EULocation;
 import com.nonexistentcompany.lib.domain.ForeignRoute;
 import com.nonexistentcompany.lib.domain.RichRoute;
+import com.nonexistentcompany.lib.domain.RichRouteDetail;
 import com.nonexistentcompany.lib.queue.RichRouteHandler;
 import com.nonexistentcompany.lib.queue.RouteHandler;
 
@@ -13,6 +21,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
@@ -22,6 +33,9 @@ public class IntegrationBean {
 
     private RouteTransformer routeTransformer;
     private RouteEngine engine;
+
+    @Inject
+    private RouteService routeService;
 
     @Inject
     private Logger logger;
@@ -38,7 +52,53 @@ public class IntegrationBean {
         engine = new RouteEngine("DE");
 
         // region Listen for cars driven
-        routeTransformer = new RouteTransformerGermany();
+        routeTransformer = new RouteTransformer() {
+            @Override
+            public RichRoute generateRichRoute(ForeignRoute route, String ownCountry) {
+                // Vats in percentages
+                int vats = 21;
+
+                logger.info(route.getOrigin());
+
+                List<Rate> rates = new ArrayList<>();
+                List<List<EULocation>> tripLocations = route.getTrips();
+
+                for (List<EULocation> locations : tripLocations) {
+                    locations.sort(EULocation::compareTo);
+                }
+
+                List<Location> locations = routeService.convertEULocationsToLocation(route.getId(), tripLocations);
+                List<Route> routes = routeService.generateRoutes(locations, EnergyLabel.H);
+                BigDecimal price = routeService.getTotalPriceRoutes(routes);
+                double distance = routeService.getTotalDistanceRoutes(routes);
+
+                logger.info(price.toString());
+                logger.info(String.valueOf(distance));
+
+                List<RichRouteDetail> routeDetails = new ArrayList<>();
+                for (Route r : routes) {
+                    for (RouteDetail rd : r.getRouteDetails()) {
+                        routeDetails.add(new RichRouteDetail(
+                                rd.getRate().getKilometerPrice().doubleValue(),
+                                "RouteDetails",
+                                rd.getStartTime().getTimeInMillis() / 1000,
+                                rd.getEndTime().getTimeInMillis() / 1000
+                        ));
+                    }
+                }
+
+                RichRoute r = new RichRoute(
+                        route.getId(),
+                        route.getOrigin(),
+                        price.doubleValue(),
+                        (int) distance,
+                        vats,
+                        routeDetails);
+
+                logger.info(r.toString());
+                return r;
+            }
+        };
 
         // Define a handler for incoming routes
         RouteHandler routeHandler = new RouteHandler() {

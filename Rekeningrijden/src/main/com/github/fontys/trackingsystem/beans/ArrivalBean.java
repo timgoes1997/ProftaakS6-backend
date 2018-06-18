@@ -32,9 +32,6 @@ public class ArrivalBean {
     @Inject
     private GenerationService generationService;
 
-    private RouteTransformer routeTransformer = new RouteTransformerGermany();
-    private RouteEngine engine = new RouteEngine("DE");
-
     @POST
 //    @EasySecurity(requiresUser = true)
     @Produces(MediaType.APPLICATION_JSON)

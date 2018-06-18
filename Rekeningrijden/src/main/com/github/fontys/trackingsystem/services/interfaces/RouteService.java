@@ -5,6 +5,7 @@ import com.github.fontys.entities.payment.Route;
 import com.github.fontys.entities.payment.RouteDetail;
 import com.github.fontys.entities.tracking.Location;
 import com.github.fontys.entities.vehicle.EnergyLabel;
+import com.nonexistentcompany.lib.domain.EULocation;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,4 +24,8 @@ public interface RouteService {
 
     long getTimeDifferenceMinutes(Location i, Location j);
     boolean differenceIsGreaterOrEquals(long differenceMinutes, Location i, Location j);
+
+    List<EULocation> convertLocationsToEULocations(String license, List<Location> locations);
+
+    List<Location> convertEULocationsToLocation(String id, List<List<EULocation>> euLocations);
 }

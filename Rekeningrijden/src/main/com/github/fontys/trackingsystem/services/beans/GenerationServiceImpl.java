@@ -55,7 +55,7 @@ public class GenerationServiceImpl implements GenerationService {
 
     @Override
     public void generateBill(long registeredVehicleId, Calendar startDate, Calendar endDate) {
-        if(!registeredVehicleDAO.exists(registeredVehicleId)){
+        if (!registeredVehicleDAO.exists(registeredVehicleId)) {
             throw new NotFoundException("Couldn't find registered vehicle");
         }
 
@@ -88,7 +88,7 @@ public class GenerationServiceImpl implements GenerationService {
 
     @Override
     public void regenerateBill(long billId) {
-        if(!billDAO.exists(billId)){
+        if (!billDAO.exists(billId)) {
             throw new NotFoundException("Given bill was not found!");
         }
 
@@ -136,7 +136,7 @@ public class GenerationServiceImpl implements GenerationService {
                 endDateString);
 
         // Convert routes to EULocations
-        List<EULocation> euLocations = convertLocationsToEULocations(
+        List<EULocation> euLocations = routeService.convertLocationsToEULocations(
                 registeredVehicle.getLicensePlate(),
                 lastMonthsLocations);
 
@@ -209,7 +209,7 @@ public class GenerationServiceImpl implements GenerationService {
                 endDateString);
 
         // Convert last route from Location objects to EULocations objects
-        List<EULocation> euLocations = convertLocationsToEULocations(registeredVehicle.getLicensePlate(),
+        List<EULocation> euLocations = routeService.convertLocationsToEULocations(registeredVehicle.getLicensePlate(),
                 route);
 
         // Foreign route //
@@ -365,19 +365,6 @@ public class GenerationServiceImpl implements GenerationService {
             price = price.add(locationPrice);
         }
         return price;
-    }
-
-    public List<EULocation> convertLocationsToEULocations(String license, List<Location> locations) {
-        List<EULocation> euLocations = new ArrayList<>();
-        if (locations != null) {
-            for (Location l : locations) {
-                long unixTime = l.getTime().getTimeInMillis() / 1000;
-                euLocations.add(new EULocation(l.getLat(), l.getLon(), unixTime));
-            }
-        }
-        // Sort the EULocations list
-        euLocations.sort(EULocation::compareTo);
-        return euLocations;
     }
 
     public static Calendar convertDateToCalendar(Date date) {

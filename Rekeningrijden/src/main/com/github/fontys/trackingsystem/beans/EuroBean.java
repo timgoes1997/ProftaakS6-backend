@@ -41,7 +41,7 @@ public class EuroBean {
     @Inject
     private GenerationService generationService;
 
-    private RouteTransformer routeTransformer = new RouteTransformerGermany();
+    private RouteTransformer routeTransformer;
     private RouteEngine engine = new RouteEngine("DE");
 
     @POST

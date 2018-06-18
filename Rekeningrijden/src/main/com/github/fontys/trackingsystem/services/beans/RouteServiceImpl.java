@@ -9,6 +9,7 @@ import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.trackingsystem.services.interfaces.GenerationService;
 import com.github.fontys.trackingsystem.services.interfaces.RegionService;
 import com.github.fontys.trackingsystem.services.interfaces.RouteService;
+import com.nonexistentcompany.lib.domain.EULocation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -164,6 +165,39 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public boolean differenceIsGreaterOrEquals(long differenceMinutes, Location i, Location j) {
         return getTimeDifferenceMinutes(i, j) >= differenceMinutes;
+    }
+
+    @Override
+    public List<EULocation> convertLocationsToEULocations(String license, List<Location> locations) {
+        List<EULocation> euLocations = new ArrayList<>();
+        if (locations != null) {
+            for (Location l : locations) {
+                long unixTime = l.getTime().getTimeInMillis() / 1000;
+                euLocations.add(new EULocation(l.getLat(), l.getLon(), unixTime));
+            }
+        }
+        // Sort the EULocations list
+        euLocations.sort(EULocation::compareTo);
+        return euLocations;
+    }
+
+    @Override
+    public List<Location> convertEULocationsToLocation(String id, List<List<EULocation>> euLocations){
+        List<Location> locations = new ArrayList<>();
+        if(euLocations != null){
+            for(List<EULocation> trip : euLocations){
+                for(EULocation euLocation : trip) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(euLocation.getTimestamp() * 1000);
+                    locations.add(new Location(
+                            euLocation.getLat(),
+                            euLocation.getLng(),
+                            calendar));
+                }
+            }
+        }
+        locations.sort(Comparator.comparing(Location::getTime));
+        return locations;
     }
 
 
