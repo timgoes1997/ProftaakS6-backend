@@ -40,6 +40,14 @@ public class RegisteredVehicleDAOImpl implements RegisteredVehicleDAO {
     }
 
     @Override
+    public boolean exists(String license) {
+        TypedQuery<RegisteredVehicle> query =
+                em.createNamedQuery(RegisteredVehicle.FIND_BYLICENSEPLATE, RegisteredVehicle.class);
+        query.setParameter("licensePlate", license);
+        return query.getResultList().size() > 0;
+    }
+
+    @Override
     public RegisteredVehicle find(long id) {
         TypedQuery<RegisteredVehicle> query =
                 em.createNamedQuery(RegisteredVehicle.FIND_BYID, RegisteredVehicle.class);

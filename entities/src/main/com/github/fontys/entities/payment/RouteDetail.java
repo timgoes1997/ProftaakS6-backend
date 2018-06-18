@@ -41,6 +41,13 @@ public class RouteDetail {
         this.rate = rate;
     }
 
+    public RouteDetail(Calendar startTime, Calendar endTime, double distance, BigDecimal price){
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.distance = distance;
+        this.price = price;
+    }
+
     public RouteDetail() {
     }
 

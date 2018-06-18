@@ -191,6 +191,35 @@ public class BillServiceImpl extends RestrictedServiceImpl implements BillServic
     }
 
     @Override
+    public List<Bill> getBillsBetweenDatesByVehicleId(long registeredVehicleId, Calendar startDate, Calendar endDate) {
+
+        List<Bill> bills = this.getBillsByVehicleId((int) registeredVehicleId);
+
+        // filter the map on date, if the map is not empty
+        if (!bills.isEmpty()) {
+            Iterator<Bill> locIter = bills.iterator();
+
+            // Remove bills that don't fall between start and enddate
+            while (locIter.hasNext()) {
+                Bill b = locIter.next();
+                Date billStartDate = b.getCalendarStartDate().getTime();
+                Date billEndDate = b.getCalendarEndDate().getTime();
+
+                // if the date of the Bill falls outside the specified dates, remove the Bill
+                if (billStartDate.before(startDate.getTime()) ||
+                        billStartDate.after(endDate.getTime()) ||
+                        billEndDate.before(startDate.getTime()) ||
+                        billEndDate.after(endDate.getTime())) {
+                    locIter.remove();
+                }
+            }
+            //Sort the list by dates
+            bills.sort(Comparator.comparing(Bill::getCalendarStartDate));
+        }
+        return bills;
+    }
+
+    @Override
     public List<Bill> getBillsByStatus(String status) {
         if (getPaymentStatusByString(status) != null) {
             throw new BadRequestException("Invalid payment status given");

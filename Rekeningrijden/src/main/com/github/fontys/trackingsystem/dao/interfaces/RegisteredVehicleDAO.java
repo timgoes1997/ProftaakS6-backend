@@ -13,6 +13,8 @@ public interface RegisteredVehicleDAO {
 
     boolean exists(long id);
 
+    boolean exists(String license);
+
     RegisteredVehicle find(long id);
 
     RegisteredVehicle findByLicense(String license);

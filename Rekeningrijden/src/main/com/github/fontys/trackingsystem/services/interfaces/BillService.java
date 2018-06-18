@@ -4,6 +4,7 @@ import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.entities.payment.PaymentStatus;
 import com.github.fontys.entities.payment.Rate;
 
+import java.util.Calendar;
 import java.util.List;
 
 public interface BillService {
@@ -18,6 +19,7 @@ public interface BillService {
     List<Rate> getRates(long id);
 
     List<Bill> getBillsBetweenDatesByVehicleId(long registeredVehicleId, String startDate, String endDate, boolean excludeTotalBill);
+    List<Bill> getBillsBetweenDatesByVehicleId(long registeredVehicleId, Calendar startDate, Calendar endDate);
 
     List<Bill> getBillsByStatus(String status);
     Bill getBillByID(int id);

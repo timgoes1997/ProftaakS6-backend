@@ -8,4 +8,8 @@ public interface BillGenerationService {
     void generateBill(long registeredVehicleId, Calendar startDate, Calendar endDate);
     void regenerateBill(long billId);
     void receiveRichRouteForBill(RichRoute richRoute);
+
+    Calendar getFirstOfLastMonth();
+
+    Calendar getLastOfLastMonth();
 }

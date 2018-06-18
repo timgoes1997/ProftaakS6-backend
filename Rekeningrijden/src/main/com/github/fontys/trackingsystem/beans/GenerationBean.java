@@ -44,7 +44,7 @@ public class GenerationBean {
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/new/monthly/bill/{registeredvehicleid}")
     public Response generateBillFor(@PathParam("registeredvehicleid") long registeredVehicleId) throws IOException, TimeoutException {
-        billGenerationService.generateBill(1, Calendar.getInstance(), Calendar.getInstance());
+        billGenerationService.generateBill(1,billGenerationService.getFirstOfLastMonth(), billGenerationService.getLastOfLastMonth());
         return Response.ok().build();
     }
 
