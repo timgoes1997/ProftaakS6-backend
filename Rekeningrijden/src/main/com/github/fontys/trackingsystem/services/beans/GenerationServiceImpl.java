@@ -332,20 +332,6 @@ public class GenerationServiceImpl implements GenerationService {
         return distanceInKilometers;
     }
 
-    @Override
-    public double getDistance(List<Location> locations) {
-        locations.sort(Comparator.comparing(Location::getTime));
-        double distance = 0.0d;
-        for (int i = locations.size() - 2, j = locations.size() - 1; i >= 0; i--, j--) {
-            distance += distanceCalculator.getDistance(
-                    locations.get(i).getLat(),
-                    locations.get(i).getLon(),
-                    locations.get(j).getLat(),
-                    locations.get(j).getLon());
-        }
-        return distance;
-    }
-
     /**
      * Calculates the price based upon the given locations. Might need to change to trips etc.
      *

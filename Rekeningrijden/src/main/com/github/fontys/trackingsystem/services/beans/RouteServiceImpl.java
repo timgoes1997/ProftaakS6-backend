@@ -26,9 +26,6 @@ public class RouteServiceImpl implements RouteService {
     @Inject
     private RegionService regionService;
 
-    @Inject
-    private GenerationService generationService;
-
     @Override
     public Route generateSingleRoute(List<Location> locations, EnergyLabel energyLabel) {
         locations.sort(Comparator.comparing(Location::getTime));
@@ -90,7 +87,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public RouteDetail generateSingleRouteDetails(List<Location> locations, Rate rate) {
-        double distance = generationService.getDistance(locations);
+        double distance = getDistance(locations);
         BigDecimal price = rate.getKilometerPrice().multiply(new BigDecimal(distance)).setScale(2, BigDecimal.ROUND_HALF_UP);
         return new RouteDetail(
                 locations.get(0).getTime(),
@@ -123,6 +120,20 @@ public class RouteServiceImpl implements RouteService {
         }
 
         return routes;
+    }
+
+    @Override
+    public double getDistance(List<Location> locations) {
+        locations.sort(Comparator.comparing(Location::getTime));
+        double distance = 0.0d;
+        for (int i = locations.size() - 2, j = locations.size() - 1; i >= 0; i--, j--) {
+            distance += DistanceCalculator.getDistance(
+                    locations.get(i).getLat(),
+                    locations.get(i).getLon(),
+                    locations.get(j).getLat(),
+                    locations.get(j).getLon());
+        }
+        return distance;
     }
 
     @Override
@@ -200,12 +211,7 @@ public class RouteServiceImpl implements RouteService {
         return locations;
     }
 
-
     public void setRegionService(RegionService regionService) {
         this.regionService = regionService;
-    }
-
-    public void setGenerationService(GenerationService generationService) {
-        this.generationService = generationService;
     }
 }

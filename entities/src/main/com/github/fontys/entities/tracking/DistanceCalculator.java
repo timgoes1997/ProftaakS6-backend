@@ -4,15 +4,15 @@ import java.lang.*;
 
 public class DistanceCalculator
 {
-    String unit = "K";
+    private static final String unit = "K";
 
-    public double getDistance(double lat1, double lon1, double lat2, double lon2) {
+    public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
-        if (this.unit == "K") {
+        if (unit == "K") {
             dist = dist * 1.609344;
         } else if (unit == "N") {
             dist = dist * 0.8684;
@@ -24,7 +24,7 @@ public class DistanceCalculator
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     /*::	This function converts decimal degrees to radians						 :*/
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    private double deg2rad(double deg) {
+    private static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
 

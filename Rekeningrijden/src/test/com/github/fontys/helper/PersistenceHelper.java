@@ -255,7 +255,6 @@ public class PersistenceHelper {
         if(routeService != null) return routeService;
         routeService = new RouteServiceImpl();
         routeService.setRegionService(getRegionService());
-        routeService.setGenerationService(getGenerationService());
         return routeService;
     }
 
