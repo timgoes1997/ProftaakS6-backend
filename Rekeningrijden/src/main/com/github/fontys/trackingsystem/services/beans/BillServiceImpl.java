@@ -175,7 +175,7 @@ public class BillServiceImpl extends RestrictedServiceImpl implements BillServic
                 }
 
                 // If the Bill is an endOfMonthBill while excludeTotalBill == true, remove the Bill
-                if (excludeTotalBill == true && b.isEndOfMonthBill() == true) {
+                if (excludeTotalBill && b.isEndOfMonthBill()) {
                     locIter.remove();
                 }
             }

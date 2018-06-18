@@ -112,6 +112,27 @@ public class Bill implements Serializable {
                 Calendar endDate,
                 PaymentStatus paymentStatus,
                 double mileage,
+                boolean isEndOfMonthBill,
+                List<Route> routes) {
+        this.registeredVehicle = registeredVehicle;
+        this.price = price;
+        this.alreadyPaid = alreadyPaid;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = paymentStatus;
+        this.mileage = mileage;
+        this.isEndOfMonthBill = isEndOfMonthBill;
+        this.billRoutes = routes;
+        this.discriminator = 0;
+    }
+
+    public Bill(RegisteredVehicle registeredVehicle,
+                BigDecimal price,
+                BigDecimal alreadyPaid,
+                Calendar startDate,
+                Calendar endDate,
+                PaymentStatus paymentStatus,
+                double mileage,
                 boolean isEndOfMonthBill) {
         this.registeredVehicle = registeredVehicle;
         this.price = price;
@@ -247,5 +268,13 @@ public class Bill implements Serializable {
 
     public List<Bill> getMontlyBills() {
         return this.montlyBills;
+    }
+
+    public List<Route> getBillRoutes() {
+        return billRoutes;
+    }
+
+    public void setBillRoutes(List<Route> billRoutes) {
+        this.billRoutes = billRoutes;
     }
 }

@@ -11,6 +11,8 @@ public interface RegisteredVehicleDAO {
 
     void remove(RegisteredVehicle registeredVehicle);
 
+    boolean exists(long id);
+
     RegisteredVehicle find(long id);
 
     RegisteredVehicle findByLicense(String license);

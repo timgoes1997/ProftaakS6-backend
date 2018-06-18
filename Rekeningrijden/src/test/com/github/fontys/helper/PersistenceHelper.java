@@ -267,6 +267,8 @@ public class PersistenceHelper {
         generationService.setLocationService(getLocationService());
         generationService.setRegionService(getRegionService());
         generationService.setRegisteredVehicleDAO(getRegisteredVehicleDAO());
+        generationService.setRouteService(getRouteService());
+        generationService.setLogger(LOGGER);
         return generationService;
     }
 

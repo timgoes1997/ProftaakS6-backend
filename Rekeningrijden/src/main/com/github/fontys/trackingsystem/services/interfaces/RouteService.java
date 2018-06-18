@@ -18,6 +18,9 @@ public interface RouteService {
     BigDecimal getTotalPriceRouteDetails(List<RouteDetail> routeDetails);
     double getTotalDistanceRouteDetails(List<RouteDetail> routeDetails);
 
+    BigDecimal getTotalPriceRoutes(List<Route> routes);
+    double getTotalDistanceRoutes(List<Route> routes);
+
     long getTimeDifferenceMinutes(Location i, Location j);
     boolean differenceIsGreaterOrEquals(long differenceMinutes, Location i, Location j);
 }

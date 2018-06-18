@@ -1,30 +1,30 @@
 package com.github.fontys.trackingsystem.services.beans;
 
 import com.github.fontys.entities.payment.Rate;
+import com.github.fontys.entities.payment.Route;
 import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.trackingsystem.dao.interfaces.BillDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.entities.payment.PaymentStatus;
-import com.github.fontys.trackingsystem.services.interfaces.BillService;
-import com.github.fontys.trackingsystem.services.interfaces.GenerationService;
-import com.github.fontys.trackingsystem.services.interfaces.LocationService;
+import com.github.fontys.trackingsystem.services.interfaces.*;
 import com.github.fontys.entities.tracking.DistanceCalculator;
 import com.github.fontys.entities.tracking.Location;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
-import com.github.fontys.trackingsystem.services.interfaces.RegionService;
 import com.nonexistentcompany.lib.RouteEngine;
 import com.nonexistentcompany.lib.domain.EULocation;
 import com.nonexistentcompany.lib.domain.ForeignRoute;
 
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Logger;
 
 public class GenerationServiceImpl implements GenerationService {
 
@@ -43,17 +43,56 @@ public class GenerationServiceImpl implements GenerationService {
     @Inject
     private RegionService regionService;
 
+    @Inject
+    private RouteService routeService;
+
+    @Inject
+    private Logger logger;
+
     private RouteEngine routeEngine = new RouteEngine("DE");
 
     private DistanceCalculator distanceCalculator = new DistanceCalculator();
+
+    @Override
+    public void generateBill(long registeredVehicleId, Calendar startDate, Calendar endDate) {
+        if(!registeredVehicleDAO.exists(registeredVehicleId)){
+            throw new NotFoundException("Couldn't find registered vehicle");
+        }
+
+        RegisteredVehicle registeredVehicle = registeredVehicleDAO.find(registeredVehicleId);
+        List<Location> locations = locationService.getLocationsBetweenTimesByVehicleLicense(
+                registeredVehicle.getLicensePlate(),
+                startDate.getTime(),
+                endDate.getTime());
+
+        List<Route> routes = routeService.generateRoutes(locations, registeredVehicle.getVehicle().getEnergyLabel());
+
+        //EU gebeuren moet hier nog.
+        Bill domesticRouteBill = new Bill(
+                registeredVehicle,
+                routeService.getTotalPriceRoutes(routes),
+                BigDecimal.valueOf(0),
+                startDate,
+                endDate,
+                PaymentStatus.OPEN,
+                routeService.getTotalDistanceRoutes(routes),
+                true,
+                routes);
+
+        // add bill
+        registeredVehicle.getBills().add(domesticRouteBill);
+
+        // persist bill
+        registeredVehicleDAO.edit(registeredVehicle);
+    }
 
     // Returns void since this method will be called by an automated process
     // Called when a Rekeningrijder has stopped driving
     public void generateBillForLastMonthsRoutes(long registeredVehicleId) throws IOException, TimeoutException {
         String current = new java.io.File(".").getCanonicalPath();
-        System.out.println("Current dir:" + current);
+        logger.info("Current dir:" + current);
         String currentDir = System.getProperty("user.dir");
-        System.out.println("Current dir using System:" + currentDir);
+        logger.info("Current dir using System:" + currentDir);
 
         Calendar startDate = getFirstOfLastMonth();
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -190,9 +229,9 @@ public class GenerationServiceImpl implements GenerationService {
 
     public void generateBillByLastMonthsRouteBills(long registeredVehicleId) throws IOException {
         String current = new java.io.File(".").getCanonicalPath();
-        System.out.println("Current dir:" + current);
+        logger.info("Current dir:" + current);
         String currentDir = System.getProperty("user.dir");
-        System.out.println("Current dir using System:" + currentDir);
+        logger.info("Current dir using System:" + currentDir);
 
         Calendar startDate = getFirstOfLastMonth();
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -339,5 +378,17 @@ public class GenerationServiceImpl implements GenerationService {
 
     public void setRegionService(RegionService regionService) {
         this.regionService = regionService;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
+    public void setRouteService(RouteService routeService) {
+        this.routeService = routeService;
     }
 }

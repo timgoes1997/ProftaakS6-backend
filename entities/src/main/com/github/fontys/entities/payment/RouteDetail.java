@@ -33,12 +33,6 @@ public class RouteDetail {
     @JoinColumn(name = "RATE_ID")
     private Rate rate;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "ROUTE_DETAIL_RATE",
-            joinColumns = { @JoinColumn(name="ROUTE_ID", referencedColumnName="ID")},
-            inverseJoinColumns = { @JoinColumn(name="DETAIL_ID", referencedColumnName="ID")})
-    private List<RouteDetail> detailList; // must be ordered consecutively
-
     public RouteDetail(Calendar startTime, Calendar endTime, double distance, BigDecimal price, Rate rate) {
         this.startTime = startTime;
         this.endTime = endTime;

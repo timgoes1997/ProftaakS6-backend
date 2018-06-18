@@ -124,6 +124,24 @@ public class RouteServiceImpl implements RouteService {
         return routes;
     }
 
+    @Override
+    public BigDecimal getTotalPriceRoutes(List<Route> routes) {
+        BigDecimal price = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
+        for (Route route : routes) {
+            price = price.add(route.getPrice());
+        }
+        return price;
+    }
+
+    @Override
+    public double getTotalDistanceRoutes(List<Route> routes) {
+        double distance = 0.0d;
+        for (Route route : routes) {
+            distance += route.getDistance();
+        }
+        return distance;
+    }
+
     /**
      * Gets the difference in minutes between locations
      *
