@@ -121,15 +121,15 @@ public class IntegrationService {
             engine.listenForRoutesInMyCountry(routeHandler);
             // endregion Listen for cars driven
 
-            // region Listen for new rich routes
-            engine.listenForRichRoutes(new RichRouteHandler() {
-                @Override
-                public void handleRichRoute(RichRoute richRoute) {
-                    logger.info(richRoute.toString());
-                    billGenerationService.receiveRichRouteForBill(richRoute);
-                }
-            });
-            // endregion Listen for new payment requests
+//            // region Listen for new rich routes
+//            engine.listenForRichRoutes(new RichRouteHandler() {
+//                @Override
+//                public void handleRichRoute(RichRoute richRoute) {
+//                    logger.info(richRoute.toString());
+//                    billGenerationService.receiveRichRouteForBill(richRoute);
+//                }
+//            });
+////             endregion Listen for new payment requests
 
         } catch (IOException | TimeoutException e) {
             e.printStackTrace();
