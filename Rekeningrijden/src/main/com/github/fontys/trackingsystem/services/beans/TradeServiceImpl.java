@@ -2,6 +2,7 @@ package com.github.fontys.trackingsystem.services.beans;
 
 import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.entities.security.base.ESUser;
+import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.TradeDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
@@ -17,6 +18,7 @@ import com.github.fontys.entities.user.User;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -41,6 +43,9 @@ public class TradeServiceImpl implements TradeService {
 
     @Inject
     private UserDAO userDAO;
+
+    @Inject
+    private AccountDAO accountDAO;
 
     @Inject
     private UserService userService;
@@ -120,7 +125,8 @@ public class TradeServiceImpl implements TradeService {
         if (transfer.getOwnerToTransferTo() != null) {
             throw new NotAllowedException("Token has already been used by a user");
         }
-        User persistent = userDAO.find(user.getId());
+        Account a = accountDAO.findByEmail(user.getEmail());
+        User persistent = a.getUser();
         transfer.setOwnerToTransferTo(persistent);
         tradeDAO.edit(transfer);
         return persistent.getAccount();

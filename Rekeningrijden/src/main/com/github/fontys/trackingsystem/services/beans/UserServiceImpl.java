@@ -162,8 +162,10 @@ public class UserServiceImpl implements UserService {
 
         boolean mailHasBeenChanged = false;
         if (email != null && !email.isEmpty()) {
-            acc.setEmail(email);
-            mailHasBeenChanged = true;
+            if (email != acc.getEmail()) {
+                acc.setEmail(email);
+                mailHasBeenChanged = true;
+            }
         }
         if (address != null && !address.isEmpty()) {
             user.setAddress(address);
