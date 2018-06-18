@@ -38,7 +38,13 @@ public class IntegrationBean {
         engine = new RouteEngine("DE");
 
         // region Listen for cars driven
-        routeTransformer = new RouteTransformerGermany();
+        routeTransformer = new RouteTransformer() {
+            @Override
+            public RichRoute generateRichRoute(ForeignRoute route, String ownCountry) {
+                logger.info(" Hello");
+                return null;
+            }
+        };
 
         // Define a handler for incoming routes
         RouteHandler routeHandler = new RouteHandler() {
