@@ -86,6 +86,32 @@ public class GenerationServiceImpl implements GenerationService {
         registeredVehicleDAO.edit(registeredVehicle);
     }
 
+    @Override
+    public void regenerateBill(long billId) {
+        if(!billDAO.exists(billId)){
+            throw new NotFoundException("Given bill was not found!");
+        }
+
+        Bill bill = billDAO.find(billId);
+        List<Location> locations = locationService.getLocationsBetweenTimesByVehicleLicense(
+                bill.getRegisteredVehicle().getLicensePlate(),
+                bill.getCalendarStartDate().getTime(),
+                bill.getCalendarEndDate().getTime());
+
+        List<Route> routes = routeService.generateRoutes(
+                locations,
+                bill.getRegisteredVehicle().
+                        getVehicle().
+                        getEnergyLabel());
+
+        //Foreign country calculation shizzle
+
+        bill.setPrice(routeService.getTotalPriceRoutes(routes));
+        bill.setMileage(routeService.getTotalDistanceRoutes(routes));
+        bill.setBillRoutes(routes);
+        billDAO.edit(bill);
+    }
+
     // Returns void since this method will be called by an automated process
     // Called when a Rekeningrijder has stopped driving
     public void generateBillForLastMonthsRoutes(long registeredVehicleId) throws IOException, TimeoutException {

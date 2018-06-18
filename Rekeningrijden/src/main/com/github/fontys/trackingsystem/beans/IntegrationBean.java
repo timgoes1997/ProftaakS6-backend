@@ -44,8 +44,8 @@ public class IntegrationBean {
         RouteHandler routeHandler = new RouteHandler() {
             @Override
             public void handleRoute(ForeignRoute route) throws IOException, TimeoutException {
-                System.out.println(String.format("Got a new route from %s!", route.getOrigin()));
-                System.out.println(String.format("Route details: '%s'", route));
+                logger.info(String.format("Got a new route from %s!", route.getOrigin()));
+                logger.info(String.format("Route details: '%s'", route));
 
 //                // Transform route into route with rates
                 RichRoute richRoute = routeTransformer.generateRichRoute(route, engine.getCountry());
@@ -62,7 +62,7 @@ public class IntegrationBean {
             RichRouteHandler richRouteHandler = new RichRouteHandler() {
                 @Override
                 public void handleRichRoute(RichRoute richRoute) {
-                    System.out.println(richRoute.toString());
+                    logger.info(richRoute.toString());
                 }
             };
 

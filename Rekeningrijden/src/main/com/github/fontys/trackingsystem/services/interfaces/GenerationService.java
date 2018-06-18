@@ -17,6 +17,7 @@ public interface GenerationService {
     void generateBillByLastMonthsRouteBills(long registeredVehicleId) throws IOException;
 
     void generateBill(long registeredVehicleId, Calendar startDate, Calendar endDate);
+    void regenerateBill(long billId);
 
     double getDistance(List<Location> locations);
 }
