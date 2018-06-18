@@ -1,4 +1,4 @@
-package com.github.fontys.trackingsystem.beans;
+package com.github.fontys.international;
 
 import com.github.fontys.entities.payment.Rate;
 import com.github.fontys.entities.payment.Route;
@@ -6,6 +6,7 @@ import com.github.fontys.entities.payment.RouteDetail;
 import com.github.fontys.entities.tracking.Location;
 import com.github.fontys.entities.vehicle.EnergyLabel;
 import com.github.fontys.international.RouteTransformerGermany;
+import com.github.fontys.trackingsystem.services.interfaces.BillGenerationService;
 import com.github.fontys.trackingsystem.services.interfaces.RouteService;
 import com.nonexistentcompany.lib.RouteEngine;
 import com.nonexistentcompany.lib.RouteTransformer;
@@ -29,13 +30,16 @@ import java.util.logging.Logger;
 
 @Startup
 @Singleton
-public class IntegrationBean {
+public class IntegrationService {
 
     private RouteTransformer routeTransformer;
     private RouteEngine engine;
 
     @Inject
     private RouteService routeService;
+
+    @Inject
+    private BillGenerationService billGenerationService;
 
     @Inject
     private Logger logger;
@@ -119,14 +123,13 @@ public class IntegrationBean {
             // endregion Listen for cars driven
 
             // region Listen for new rich routes
-            RichRouteHandler richRouteHandler = new RichRouteHandler() {
+            engine.listenForRichRoutes(new RichRouteHandler() {
                 @Override
                 public void handleRichRoute(RichRoute richRoute) {
                     logger.info(richRoute.toString());
+                    billGenerationService.receiveRichRouteForBill(richRoute);
                 }
-            };
-
-            engine.listenForRichRoutes(richRouteHandler);
+            });
             // endregion Listen for new payment requests
 
         } catch (IOException | TimeoutException e) {
