@@ -43,7 +43,7 @@ public class EmailTradeServiceImpl implements EmailTradeService{
                     + System.lineSeparator()
                     + "If that was you please click on the following link:"
                     + System.lineSeparator()
-                    + "http://" + InetAddress.getLocalHost().getHostAddress() + "/trade.html?token=" + transfer.getTransferToken());
+                    + "http://" + InetAddress.getLocalHost().getHostAddress() + "/login.html?token=" + transfer.getTransferToken());
 
             BodyPart signatureBody = new MimeBodyPart();
             signatureBody.setText(System.lineSeparator()
