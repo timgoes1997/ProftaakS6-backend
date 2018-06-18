@@ -78,12 +78,18 @@ public class IntegrationService {
                 logger.info(price.toString());
                 logger.info(String.valueOf(distance));
 
+
                 List<RichRouteDetail> routeDetails = new ArrayList<>();
                 for (Route r : routes) {
                     for (RouteDetail rd : r.getRouteDetails()) {
+
+                        String description = String.format(
+                                "This trip took '%s' kilometers. With our rate of '%s' per kilometer, the total price is '%s'.",
+                                rd.getDistance(), rd.getRate().getKilometerPrice(), rd.getPrice());
+
                         routeDetails.add(new RichRouteDetail(
                                 rd.getRate().getKilometerPrice().doubleValue(),
-                                "RouteDetails",
+                                description,
                                 rd.getStartTime().getTimeInMillis() / 1000,
                                 rd.getEndTime().getTimeInMillis() / 1000
                         ));
