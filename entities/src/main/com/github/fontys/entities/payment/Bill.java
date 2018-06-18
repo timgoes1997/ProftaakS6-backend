@@ -95,7 +95,7 @@ public class Bill implements Serializable {
     @OneToMany
     private List<Bill> montlyBills;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "BILL_ROUTES",
             joinColumns = { @JoinColumn(name="BILL_ID", referencedColumnName="ID")},
             inverseJoinColumns = { @JoinColumn(name="ROUTE_ID", referencedColumnName="ID")})
