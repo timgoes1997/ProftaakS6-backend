@@ -20,7 +20,6 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAcceptableException;
 import java.util.logging.Logger;
 
-@Stateless
 public class UserServiceImpl implements UserService {
 
     @Inject

@@ -5,6 +5,7 @@ import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.entities.payment.Bill;
 import com.github.fontys.trackingsystem.services.interfaces.BillService;
 
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -30,7 +31,7 @@ import java.util.List;
 //		+ RETURN
 //			{billnr, licenseplate, price, status, month}
 
-@Stateless
+@Stateful
 @Path("/bills")
 public class BillBean {
 
