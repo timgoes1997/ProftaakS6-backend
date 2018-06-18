@@ -20,7 +20,6 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAcceptableException;
 import java.util.logging.Logger;
 
-@Stateless
 public class UserServiceImpl implements UserService {
 
     @Inject
@@ -117,6 +116,7 @@ public class UserServiceImpl implements UserService {
             if (userAccount == null) {
                 throw new InternalServerErrorException("Server had a problem while creating a user account");
             }
+            createdUser.setAccount(account);
             createdUser.setVerifyLink(emailVerificationService.generateVerificationLink(createdUser));
             userDAO.edit(createdUser);
             emailVerificationService.sendVerificationMail(userAccount);
@@ -162,8 +162,10 @@ public class UserServiceImpl implements UserService {
 
         boolean mailHasBeenChanged = false;
         if (email != null && !email.isEmpty()) {
-            acc.setEmail(email);
-            mailHasBeenChanged = true;
+            if (email != acc.getEmail()) {
+                acc.setEmail(email);
+                mailHasBeenChanged = true;
+            }
         }
         if (address != null && !address.isEmpty()) {
             user.setAddress(address);

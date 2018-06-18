@@ -2,6 +2,7 @@ package com.github.fontys.trackingsystem.services.beans;
 
 import com.github.fontys.security.annotations.inject.CurrentESUser;
 import com.github.fontys.entities.security.base.ESUser;
+import com.github.fontys.trackingsystem.dao.interfaces.AccountDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.RegisteredVehicleDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.TradeDAO;
 import com.github.fontys.trackingsystem.dao.interfaces.UserDAO;
@@ -16,7 +17,9 @@ import com.github.fontys.entities.user.Account;
 import com.github.fontys.entities.user.User;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -41,6 +44,9 @@ public class TradeServiceImpl implements TradeService {
 
     @Inject
     private UserDAO userDAO;
+
+    @Inject
+    private AccountDAO accountDAO;
 
     @Inject
     private UserService userService;
@@ -120,7 +126,8 @@ public class TradeServiceImpl implements TradeService {
         if (transfer.getOwnerToTransferTo() != null) {
             throw new NotAllowedException("Token has already been used by a user");
         }
-        User persistent = userDAO.find(user.getId());
+        Account a = accountDAO.findByEmail(user.getEmail());
+        User persistent = a.getUser();
         transfer.setOwnerToTransferTo(persistent);
         tradeDAO.edit(transfer);
         return persistent.getAccount();
@@ -130,15 +137,23 @@ public class TradeServiceImpl implements TradeService {
     public Transfer acceptTransfer(long id) {
         Transfer transfer = getTransfer(id);
         User cur = (User)currentUser;
+
+
+
         if(Objects.equals(transfer.getCurrentOwner().getId(), cur.getId())){
             return acceptTransferCurrentOwner(transfer);
         }
+
         if(transfer.getOwnerToTransferTo() == null){
             throw new BadRequestException("Nieuwe eigenaar is niet aangemaakt");
         }
+
         if(Objects.equals(transfer.getOwnerToTransferTo().getId(), cur.getId())){
             return acceptTransferNewOwner(transfer);
         }
+
+
+
         return transfer;
     }
 
@@ -206,8 +221,10 @@ public class TradeServiceImpl implements TradeService {
                 && Objects.equals(transfer.getCurrentOwner().getId(), ((User) currentUser).getId())) {
             transfer.acceptedCurrentOwner();
             tradeDAO.edit(transfer);
+            completeTransfer(transfer.getId());
             return transfer;
-        } else {
+        }
+        else {
             throw new NotAllowedException("You are not allowed to accept this transfer");
         }
     }
@@ -253,7 +270,7 @@ public class TradeServiceImpl implements TradeService {
             throw new NotFoundException("There are no vehicles for transfer with given id");
         }
 
-        if (transfer.getStatus() == TransferStatus.ConfirmedOwnership
+        if (transfer.getStatus() == TransferStatus.AcceptedCurrentOwner
                 && Objects.equals(transfer.getCurrentOwner().getId(), ((User) currentUser).getId())) {
             registeredVehicle.setCustomer(transfer.getOwnerToTransferTo());
             registeredVehicle.setProofOfOwnership(transfer.getProofOfOwnership());

@@ -8,6 +8,7 @@ import com.github.fontys.entities.vehicle.Vehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -17,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.List;
 
-@Stateless
+@Stateful
 @Path("/vehicles")
 public class VehicleBean {
 

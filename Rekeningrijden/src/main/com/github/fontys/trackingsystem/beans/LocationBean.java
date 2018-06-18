@@ -4,6 +4,7 @@ import com.github.fontys.security.annotations.interceptors.EasySecurity;
 import com.github.fontys.trackingsystem.services.interfaces.LocationService;
 import com.github.fontys.entities.tracking.Location;
 
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -12,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Stateless
+@Stateful
 @Path("/location")
 public class LocationBean {
 
