@@ -23,7 +23,7 @@ public class BillGenerationServiceImpl implements BillGenerationService {
 
     @Override
     public void generateBill(long registeredVehicleId, Calendar startDate, Calendar endDate) {
-
+        logger.info("Generating");
     }
 
     @Override

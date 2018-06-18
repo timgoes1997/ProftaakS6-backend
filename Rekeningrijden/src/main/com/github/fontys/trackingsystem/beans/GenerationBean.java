@@ -1,5 +1,6 @@
 package com.github.fontys.trackingsystem.beans;
 
+import com.github.fontys.trackingsystem.services.interfaces.BillGenerationService;
 import com.github.fontys.trackingsystem.services.interfaces.GenerationService;
 
 import javax.ejb.Stateless;
@@ -9,6 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
 
 @Stateless
@@ -16,7 +18,10 @@ import java.util.concurrent.TimeoutException;
 public class GenerationBean {
 
     @Inject
-    GenerationService generationService;
+    private GenerationService generationService;
+
+    @Inject
+    private BillGenerationService billGenerationService;
 
     @POST
     @Produces({MediaType.APPLICATION_JSON})
@@ -34,4 +39,13 @@ public class GenerationBean {
         generationService.generateBillByLastMonthsRouteBills(registeredVehicleId);
         return Response.ok().build();
     }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/new/monthly/bill/{registeredvehicleid}")
+    public Response generateBillFor(@PathParam("registeredvehicleid") long registeredVehicleId) throws IOException, TimeoutException {
+        billGenerationService.generateBill(1, Calendar.getInstance(), Calendar.getInstance());
+        return Response.ok().build();
+    }
+
 }

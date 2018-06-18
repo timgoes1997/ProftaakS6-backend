@@ -137,4 +137,7 @@ public class IntegrationService {
         }
     }
 
+    public RouteEngine getEngine() {
+        return engine;
+    }
 }
