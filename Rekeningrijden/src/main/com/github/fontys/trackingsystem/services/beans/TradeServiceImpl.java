@@ -17,6 +17,7 @@ import com.github.fontys.entities.user.Account;
 import com.github.fontys.entities.user.User;
 import com.github.fontys.entities.vehicle.RegisteredVehicle;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -136,15 +137,23 @@ public class TradeServiceImpl implements TradeService {
     public Transfer acceptTransfer(long id) {
         Transfer transfer = getTransfer(id);
         User cur = (User)currentUser;
+
+
+
         if(Objects.equals(transfer.getCurrentOwner().getId(), cur.getId())){
             return acceptTransferCurrentOwner(transfer);
         }
+
         if(transfer.getOwnerToTransferTo() == null){
             throw new BadRequestException("Nieuwe eigenaar is niet aangemaakt");
         }
+
         if(Objects.equals(transfer.getOwnerToTransferTo().getId(), cur.getId())){
             return acceptTransferNewOwner(transfer);
         }
+
+
+
         return transfer;
     }
 
@@ -212,8 +221,10 @@ public class TradeServiceImpl implements TradeService {
                 && Objects.equals(transfer.getCurrentOwner().getId(), ((User) currentUser).getId())) {
             transfer.acceptedCurrentOwner();
             tradeDAO.edit(transfer);
+            completeTransfer(transfer.getId());
             return transfer;
-        } else {
+        }
+        else {
             throw new NotAllowedException("You are not allowed to accept this transfer");
         }
     }
@@ -259,7 +270,7 @@ public class TradeServiceImpl implements TradeService {
             throw new NotFoundException("There are no vehicles for transfer with given id");
         }
 
-        if (transfer.getStatus() == TransferStatus.ConfirmedOwnership
+        if (transfer.getStatus() == TransferStatus.AcceptedCurrentOwner
                 && Objects.equals(transfer.getCurrentOwner().getId(), ((User) currentUser).getId())) {
             registeredVehicle.setCustomer(transfer.getOwnerToTransferTo());
             registeredVehicle.setProofOfOwnership(transfer.getProofOfOwnership());
